@@ -1,0 +1,505 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ----------------------------------------------------
+// 1. IDENTITY DOMAIN
+// ----------------------------------------------------
+
+model User {
+  id            String    @id @default(uuid())
+  ine           String?   @unique // Identifiant National de l'Étudiant (ex: N0123456789)
+  email         String?   @unique
+  phoneNumber   String?   @unique
+  passwordHash  String
+  status        String    @default("ACTIVE") // PENDING, ACTIVE, SUSPENDED
+  isSuspended   Boolean   @default(false)
+  suspensionReason String?
+  suspendedUntil DateTime?
+  points        Int       @default(0)        // Gamification points, e.g. 320 pts
+  emailVerified Boolean   @default(false)
+  phoneVerified Boolean   @default(false)
+  verificationOtp String?
+  verificationOtpExpiresAt DateTime?
+  failedLoginAttempts Int @default(0)
+  lockedUntil   DateTime?
+  lastLoginAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Notification Preferences ("s'il accepte")
+  notifyEmailAll      Boolean @default(true)
+  notifyOnPurchase    Boolean @default(true)
+  notifyOnSale        Boolean @default(true)
+  notifyOnDownload    Boolean @default(true)
+  notifyOnPublish     Boolean @default(true)
+  notifyOnWithdrawal  Boolean @default(true)
+
+  profile             Profile?
+  isSuperAdmin     Boolean   @default(false)
+  roles               UserRole[]
+  resources           AcademicResource[]
+  orders              Order[]
+  entitlements        Entitlement[]
+  wallet              Wallet?
+  acceptances         AgreementAcceptance[]
+  reviews             Review[]
+  contributorRevenues RevenueDistribution[]
+  notifications       EmailNotification[]
+  activities          ActivityLog[]
+}
+
+model Profile {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName       String
+  lastName        String
+  displayName     String
+  avatarUrl       String
+  bio             String?
+  countryCode     String   @default("BF")
+  region          String?  @default("Centre")
+  city            String?  @default("Ouagadougou")
+  address         String?
+  filiere         String?
+  filiereId       String?
+  filiereRef      Filiere?     @relation(fields: [filiereId], references: [id])
+  institutionId   String?
+  institution     Institution? @relation(fields: [institutionId], references: [id])
+  facultyId       String?
+  faculty         Faculty?     @relation(fields: [facultyId], references: [id])
+  academicLevelId String?
+  academicLevel   AcademicLevel? @relation(fields: [academicLevelId], references: [id])
+  isMajorPromo    Boolean  @default(false)
+  isDelegate      Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Role {
+  id          String     @id @default(uuid())
+  code        String     @unique // STUDENT, CONTRIBUTOR, DELEGATE, MODERATOR, ADMIN
+  name        String
+  description String?
+  users       UserRole[]
+}
+
+model UserRole {
+  id         String   @id @default(uuid())
+  userId     String
+  roleId     String
+  assignedAt DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role       Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roleId])
+}
+
+// ----------------------------------------------------
+// 2. ACADEMIC DOMAIN
+// ----------------------------------------------------
+
+model Country {
+  id           String        @id @default(uuid())
+  isoCode      String        @unique // "BF", "CI", "SN", "ML"
+  name         String        // "Burkina Faso"
+  phoneCode    String        // "+226"
+  flagEmoji    String        // "🇧🇫"
+  institutions Institution[]
+}
+
+model Institution {
+  id                  String             @id @default(uuid())
+  countryId           String
+  country             Country            @relation(fields: [countryId], references: [id])
+  name                String             // "Université Joseph KI-ZERBO"
+  shortName           String             // "UJKZ (Ouaga 1)"
+  type                String             @default("PUBLIC_UNIVERSITY")
+  category            String             @default("UNIVERSITE_PUBLIQUE") // UNIVERSITE_PUBLIQUE, UNIVERSITE_PRIVEE, GRANDE_ECOLE, INSTITUT_SUPERIEUR
+  region              String             @default("Centre") // Centre, Hauts-Bassins, Centre-Ouest, etc.
+  city                String             @default("Ouagadougou")
+  logoUrl             String?
+  websiteUrl          String?
+  activeStudentsCount Int                @default(1420)
+  isLive              Boolean            @default(true)
+  isArchived          Boolean            @default(false)
+  faculties           Faculty[]
+  resources           AcademicResource[]
+  profiles            Profile[]
+}
+
+model Faculty {
+  id              String             @id @default(uuid())
+  institutionId   String
+  institution     Institution        @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  name            String             // "Sciences Économiques & de Gestion"
+  code            String             // "SEG", "LAC", "SEA", "SDS", "SJP"
+  iconName        String             @default("school")
+  logoUrl         String?
+  description     String?
+  activeDocsCount Int                @default(0)
+  isArchived      Boolean            @default(false)
+  filieres        Filiere[]
+  resources       AcademicResource[]
+  profiles        Profile[]
+}
+
+model Filiere {
+  id            String             @id @default(uuid())
+  facultyId     String
+  faculty       Faculty            @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+  name          String             // "Informatique & Réseaux", "Droit Privé", etc.
+  code          String             // "INFO", "DRT", etc.
+  degreeLevel   String             @default("LICENCE") // LICENCE, MASTER, DOCTORAT, BTS, INGENIEUR
+  description   String?
+  isArchived    Boolean            @default(false)
+  resources     AcademicResource[]
+  profiles      Profile[]
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+}
+
+model AcademicLevel {
+  id        String             @id @default(uuid())
+  code      String             @unique // "L1", "L2", "L3", "M1", "M2"
+  label     String             // "Licence 1"
+  rank      Int                @default(1)
+  resources AcademicResource[]
+  profiles  Profile[]
+}
+
+// ----------------------------------------------------
+// 3. RESOURCE & MEDIA DOMAIN (POLYMORPHIC)
+// ----------------------------------------------------
+
+model AcademicResource {
+  id              String        @id @default(uuid())
+  authorId        String
+  author          User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  institutionId   String
+  institution     Institution   @relation(fields: [institutionId], references: [id])
+  facultyId       String
+  faculty         Faculty       @relation(fields: [facultyId], references: [id])
+  filiereId       String?
+  filiere         Filiere?      @relation(fields: [filiereId], references: [id])
+  academicLevelId String
+  academicLevel   AcademicLevel @relation(fields: [academicLevelId], references: [id])
+
+  title           String        // "L1 Linguistique Générale - Corrigé Examen S1"
+  slug            String        @unique
+  description     String
+  resourceType    String        // EXAM_CORRECTION, COURSE_NOTES, TUTORIAL_SHEET, SUMMARY_MEMO, OFFICIAL_EXAM, THESE_SOUTENANCE, MEMOIRE_MASTER, CONCOURS_TEST, FORMATION_ATELIER
+  moduleName      String        // "Linguistique Générale"
+  academicYear    String        @default("2024-2025")
+  semester        String        @default("S1")
+  urgencyBanner   String?       // e.g. "Session Rattrapage & Partiels 2025 • UJKZ Ouaga"
+  badgeQuality    String?       // "Vérifié A+", "Vérifié Commu", "Officiel"
+
+  isCertified     Boolean       @default(false)
+  isTrending      Boolean       @default(false)
+  pageCount       Int           @default(1)
+  ratingAverage   Float         @default(5.0)
+  ratingCount     Int           @default(0)
+  downloadsCount  Int           @default(0)
+  viewsCount      Int           @default(0)
+  thumbnailUrl    String
+
+  // Validation & Workflow Admin (24h SLA + Rappel étudiant)
+  validationStatus String       @default("APPROVED") // PENDING, APPROVED, REJECTED
+  validationNote   String?
+  submittedAt      DateTime     @default(now())
+  validatedAt      DateTime?
+  validatedBy      String?
+  reminderCount    Int          @default(0)
+  lastReminderAt   DateTime?
+  priorityScore    Int          @default(1)
+
+  // Visibilité & Archivage (Auteur & Admin)
+  isArchived       Boolean      @default(false)
+  visibility       String       @default("PUBLIC") // PUBLIC, UNLISTED, PRIVATE
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  media           Media[]
+  accessPolicy    AccessPolicy?
+  contactChannel  ContactChannel?
+  orders          Order[]
+  entitlements    Entitlement[]
+  reviews         Review[]
+}
+
+model Media {
+  id               String           @id @default(uuid())
+  resourceId       String
+  resource         AcademicResource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  mediaType        String           // PDF, AUDIO, VIDEO, IMAGE, ARCHIVE
+  originalFilename String           // "Correction_Examen_2025.pdf"
+  storagePath      String           // Path or public URL
+  mimeType         String           // "application/pdf", "audio/mpeg"
+  sizeBytes        Int              // e.g. 2516582
+  durationSeconds  Int?             // For audio/video, e.g. 522
+  previewUrl       String?          // Blur/watermarked teaser
+  isMasterFile     Boolean          @default(false)
+  orderIndex       Int              @default(0)
+  labelBadge       String?          // e.g. "100% lisible", "Aperçu 30s", "Ultra HD"
+  description      String?
+  createdAt        DateTime         @default(now())
+}
+
+// ----------------------------------------------------
+// 4. ACCESS, MONETIZATION & IN-PERSON CONTACT
+// ----------------------------------------------------
+
+model AccessPolicy {
+  id              String           @id @default(uuid())
+  resourceId      String           @unique
+  resource        AcademicResource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  mode            String           // FREE, PAID, IN_PERSON
+  priceAmount     Int              @default(0) // in FCFA, e.g. 500
+  currency        String           @default("XOF")
+  platformFeeRate Float            @default(0.15) // 15%
+  contributorRate Float            @default(0.85) // 85%
+  allowOffline    Boolean          @default(true)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model ContactChannel {
+  id              String           @id @default(uuid())
+  resourceId      String           @unique
+  resource        AcademicResource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  channelType     String           @default("WHATSAPP") // WHATSAPP, PHONE, IN_PERSON
+  phoneNumber     String           // e.g. "+22670123456"
+  meetingLocation String?          // e.g. "Amphi A aujourd'hui de 16h à 18h"
+  meetingSchedule String?          // e.g. "Demain à 16h30"
+  groupMaxMembers Int?             // e.g. 8
+  templateMessage String?
+  isEnabled       Boolean          @default(true)
+}
+
+model Entitlement {
+  id             String           @id @default(uuid())
+  userId         String
+  resourceId     String
+  orderId        String?
+  downloadToken  String           @unique
+  tokenExpiresAt DateTime
+  downloadCount  Int              @default(0)
+  isRevoked      Boolean          @default(false)
+  createdAt      DateTime         @default(now())
+
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resource       AcademicResource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  order          Order?           @relation(fields: [orderId], references: [id])
+}
+
+// ----------------------------------------------------
+// 5. COMMERCE & FINANCIAL LEDGER
+// ----------------------------------------------------
+
+model Order {
+  id           String           @id @default(uuid())
+  orderNumber  String           @unique // e.g. "CF-2025-08492"
+  buyerId      String
+  resourceId   String
+  grossAmount  Int              // in FCFA
+  currency     String           @default("XOF")
+  status       String           @default("PENDING_PAYMENT") // PENDING_PAYMENT, PAID, CANCELLED
+  createdAt    DateTime         @default(now())
+  paidAt       DateTime?
+
+  buyer        User             @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+  resource     AcademicResource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  payments     Payment[]
+  distribution RevenueDistribution?
+  entitlements Entitlement[]
+}
+
+model Payment {
+  id                    String   @id @default(uuid())
+  orderId               String
+  method                String   // CAMPUS_WALLET, ORANGE_MONEY, MOOV_MONEY, CASH_HANDOVER
+  amount                Int
+  payerPhone            String?  // e.g. "76 45 88 12"
+  operatorTransactionId String?  // External OM/Moov reference
+  status                String   @default("INITIATED") // INITIATED, SUCCESS, FAILED
+  createdAt             DateTime @default(now())
+
+  order                 Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+model RevenueDistribution {
+  id                String   @id @default(uuid())
+  orderId           String   @unique
+  contributorId     String
+  grossAmount       Int      // 500
+  platformAmount    Int      // 75 (15%)
+  contributorAmount Int      // 425 (85%)
+  isSettled         Boolean  @default(true)
+  settledAt         DateTime @default(now())
+
+  order             Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  contributor       User     @relation(fields: [contributorId], references: [id])
+}
+
+model Wallet {
+  id               String        @id @default(uuid())
+  userId           String        @unique
+  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  availableBalance Int           @default(0) // in FCFA, e.g. 28500
+  pendingBalance   Int           @default(0)
+  currency         String        @default("XOF")
+  status           String        @default("ACTIVE")
+  cfPayId          String        @unique @default(uuid())
+  updatedAt        DateTime      @updatedAt
+  entries          LedgerEntry[]
+  withdrawals      Withdrawal[]
+}
+
+model LedgerEntry {
+  id           String   @id @default(uuid())
+  walletId     String
+  entryType    String   // SALE_REVENUE, PLATFORM_COMMISSION, WITHDRAWAL, TOP_UP, ORDER_PURCHASE
+  direction    String   // CREDIT, DEBIT
+  amount       Int      // Positive value in FCFA
+  balanceAfter Int      // Running balance
+  referenceId  String   // Order ID or Withdrawal ID
+  description  String   // Detailed ledger line
+  createdAt    DateTime @default(now())
+
+  wallet       Wallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
+}
+
+model Withdrawal {
+  id                     String    @id @default(uuid())
+  walletId               String
+  amount                 Int       // in FCFA, e.g. 10000
+  method                 String    // ORANGE_MONEY, MOOV_MONEY
+  destinationPhone       String    // e.g. "+226 70 12 34 12"
+  status                 String    @default("COMPLETED") // REQUESTED, PROCESSING, COMPLETED, FAILED
+  processedAt            DateTime? @default(now())
+  createdAt              DateTime  @default(now())
+
+  wallet                 Wallet    @relation(fields: [walletId], references: [id], onDelete: Cascade)
+}
+
+// ----------------------------------------------------
+// 6. CONTRACT & COMPLIANCE DOMAIN
+// ----------------------------------------------------
+
+model Agreement {
+  id             String             @id @default(uuid())
+  code           String             @unique // "CONTRIBUTOR_CHARTER"
+  title          String             // "Contrat Contributeur Certifié"
+  currentVersion String             @default("2.1")
+  versions       AgreementVersion[]
+}
+
+model AgreementVersion {
+  id              String                @id @default(uuid())
+  agreementId     String
+  version         String                // "v2.1"
+  contentMarkdown String
+  contentHash     String                // SHA-256
+  effectiveAt     DateTime              @default(now())
+  agreement       Agreement             @relation(fields: [agreementId], references: [id], onDelete: Cascade)
+  acceptances     AgreementAcceptance[]
+}
+
+model AgreementAcceptance {
+  id                 String           @id @default(uuid())
+  userId             String
+  agreementVersionId String
+  resourceId         String?
+  ipAddress          String?          @default("197.239.12.44")
+  userAgent          String?
+  acceptedAt         DateTime         @default(now())
+
+  user               User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  version            AgreementVersion @relation(fields: [agreementVersionId], references: [id], onDelete: Cascade)
+}
+
+// ----------------------------------------------------
+// 7. SOCIAL & COMMUNITY REVIEWS
+// ----------------------------------------------------
+
+model Review {
+  id         String           @id @default(uuid())
+  resourceId String
+  userId     String
+  rating     Int              @default(5)
+  comment    String
+  isVerified Boolean          @default(true)
+  createdAt  DateTime         @default(now())
+
+  resource   AcademicResource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ----------------------------------------------------
+// 8. AUDIT & EMAIL NOTIFICATIONS ENGINE
+// ----------------------------------------------------
+
+model EmailNotification {
+  id          String   @id @default(uuid())
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipient   String   // Destination email
+  subject     String
+  eventType   String   // AUTH_OTP, ORDER_PURCHASED, RESOURCE_SOLD, RESOURCE_PUBLISHED, DOCUMENT_DOWNLOADED, WALLET_WITHDRAWAL
+  contentHtml String
+  status      String   @default("SENT") // SENT, SIMULATED, FAILED
+  provider    String   @default("SMTP") // SMTP, GMAIL, MOCK_LOCAL
+  messageId   String?
+  error       String?
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+// ----------------------------------------------------
+// 9. ADMINISTRATION & PRICING REGULATION DOMAIN
+// ----------------------------------------------------
+
+model PricingCeilingRule {
+  id              String   @id @default(uuid())
+  title           String   // e.g. "Plafond Général Corrigés d'Examens L1-L3"
+  documentType    String?  // THESE_SOUTENANCE, MEMOIRE_MASTER, CORRIGE_DEVOIR, COURS_SYNTHESE, CONCOURS_TEST, FORMATION_ATELIER, ALL
+  mediaFormat     String?  // PDF, AUDIO, VIDEO, BUNDLE, ALL
+  minPrice        Int      @default(0)     // FCFA
+  maxPrice        Int      @default(2000)  // Plafond strict FCFA
+  suggestedPrice  Int      @default(500)   // Prix recommandé FCFA
+  
+  institutionId   String?  // Scoped to specific university or null (all)
+  facultyId       String?  // Scoped to specific UFR or null (all)
+  filiereId       String?  // Scoped to specific filière or null (all)
+  targetUserId    String?  // Scoped to specific student or null (all)
+  
+  isActive        Boolean  @default(true)
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// ----------------------------------------------------
+// 10. USER ACTIVITY & AUDIT DOMAIN
+// ----------------------------------------------------
+
+model ActivityLog {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action      String   // LOGIN, PROFILE_UPDATE, RESOURCE_PURCHASED, RESOURCE_PUBLISHED, PASSWORD_CHANGED, SETTINGS_UPDATED, REMINDER_SENT
+  title       String   // e.g. "Connexion réussie", "Achat document : Macroéconomie L2", "Publication soumise à validation"
+  category    String   @default("GENERAL") // SECURITY, ACADEMIC, COMMERCE, SETTINGS
+  metadata    String?  // JSON or details
+  ipAddress   String?
+  createdAt   DateTime @default(now())
+}
+

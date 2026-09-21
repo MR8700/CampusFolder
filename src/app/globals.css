@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #faf8ff;
+    color: #131b2e;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+
+  body {
+    overscroll-behavior-y: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* RÈGLE TYPOGRAPHIQUE ACADÉMIQUE : 
+     1. Interligne de 2 (ou équivalent)
+     2. Texte justifié partout sur la plateforme
+     3. 8pts d'espacement entre les paragraphes
+  */
+  p, 
+  article, 
+  blockquote, 
+  .academic-text, 
+  .prose p,
+  main p,
+  section p,
+  aside p,
+  div > p,
+  .text-justify-platform {
+    text-align: justify !important;
+    text-justify: inter-word !important;
+    line-height: 2 !important; /* Interligne 2 (double interligne) */
+    margin-bottom: 8pt !important; /* 8pts entre les paragraphes */
+    hyphens: auto;
+  }
+
+  /* Espacement précis de 8pts entre paragraphes consécutifs */
+  p + p,
+  article + article,
+  blockquote + blockquote {
+    margin-top: 8pt !important;
+  }
+
+  /* Annulation de la marge inférieure sur le dernier paragraphe d'un conteneur */
+  p:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  /* Préservation du positionnement compact pour les éléments d'interface (boutons, navigation, badges) */
+  button p, 
+  nav p,
+  .badge p,
+  .btn-text,
+  .no-justify,
+  .truncate {
+    text-align: inherit !important;
+    line-height: inherit !important;
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+}
+
+/* Classes utilitaires académiques normalisées */
+.text-justified-academic {
+  text-align: justify !important;
+  text-justify: inter-word !important;
+  line-height: 2 !important;
+  margin-bottom: 8pt !important;
+  hyphens: auto !important;
+}
+
+.interligne-2 {
+  line-height: 2 !important;
+  text-align: justify !important;
+  text-justify: inter-word !important;
+  margin-bottom: 8pt !important;
+}
+
+.paragraphe-8pt {
+  margin-bottom: 8pt !important;
+}
+
+/* Custom scrollbar hide for mobile feel */
+::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Material Symbols configuration */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1 !important;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+}

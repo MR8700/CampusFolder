@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100%;margin:0;padding:0;background-color:#faf8ff;}body{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-tertiary-container": "#49da9f", "surface-container-highest": "#dae2fd", "primary-fixed": "#a9f3c5", "on-secondary-fixed-variant": "#7f2b00", "outline-variant": "#bfc9c0", "error-container": "#ffdad6", "secondary-fixed": "#ffdbce", "tertiary": "#00422b", "on-tertiary-fixed-variant": "#005236", "on-error-container": "#93000a", "on-secondary": "#ffffff", "error": "#ba1a1a", "surface-tint": "#226b47", "primary-fixed-dim": "#8ed6aa", "background": "#faf8ff", "on-surface": "#131b2e", "on-background": "#131b2e", "inverse-primary": "#8ed6aa", "surface-container-high": "#e2e7ff", "tertiary-container": "#005c3e", "on-tertiary-fixed": "#002113", "surface-dim": "#d2d9f4", "secondary": "#a73a00", "primary-container": "#0d5c3a", "on-secondary-container": "#571a00", "outline": "#707971", "on-error": "#ffffff", "inverse-surface": "#283044", "on-primary-container": "#8ad2a7", "on-primary": "#ffffff", "tertiary-fixed": "#6ffbbe", "surface-container": "#eaedff", "surface": "#faf8ff", "secondary-fixed-dim": "#ffb599", "surface-variant": "#dae2fd", "on-surface-variant": "#404942", "inverse-on-surface": "#eef0ff", "primary": "#004328", "surface-container-low": "#f2f3ff", "on-secondary-fixed": "#370e00", "tertiary-fixed-dim": "#4edea3", "on-tertiary": "#ffffff", "secondary-container": "#fd651e", "surface-container-lowest": "#ffffff", "on-primary-fixed": "#002111", "surface-bright": "#faf8ff", "on-primary-fixed-variant": "#005232" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter-desktop": "1.5rem", "space-lg": "1rem", "space-xs": "0.25rem", "margin": "1rem", "gutter": "1rem", "space-sm": "0.5rem", "space-md": "0.75rem", "margin-desktop": "2rem", "space-xl": "1.5rem" }, fontFamily: { "label-sm": ["Plus Jakarta Sans"], "headline-xl-mobile": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "headline-xl": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "price-display": ["Plus Jakarta Sans"] }, fontSize: { "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "700" }], "headline-xl-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "800" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.03em", "fontWeight": "800" }], "headline-md": ["20px", { "lineHeight": "26px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "500" }], "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-lg-mobile": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "label-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "700" }], "price-display": ["18px", { "lineHeight": "22px", "letterSpacing": "-0.01em", "fontWeight": "800" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0 flex-1"><button aria-label="Retour" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface active:scale-95 transition-transform shrink-0" onclick="history.back()" type="button"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><img alt="Logo" class="h-7 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCz191Bgd7B1zV8TJ1Rpd2CrVnFu4EDisPBvrQ8PScKL3khzSj5hTrXkr3mksAaKxE8vr9kiIn0v_iM75fBr-L-r7Omp4oapW5gAsz22kxhvY3jA1WGbkx_FF-7Ty3anpX0dktyOmnGriSsmyqA51j7feXvREwgh9DcP4_NHf67YdxQNQ5mfPGTs4cTLgb-_0YBiKCXWIGBK5m3Bna7Ir-lb2XM_2iuVLpQKZ01vvdsUH2V9KZamGUmDw"/><h1 class="font-headline-md text-headline-md text-on-surface truncate min-w-0 leading-tight">Détails Document</h1></div><div class="flex items-center gap-space-xs shrink-0"><button aria-label="Partager" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">share</span></button><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary-container/20 shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNwJTG0v54RwD7UUqMI_atE_M6fpKZQNZV3-pdR9x_yJ06ODzApjk-6EFLKJUr8Q9KCGak2lGdZWB4Mxdvv-sEJraukiI9ijsoREFfNF9rFBlhjUuXVigqGyQeJomUDcO8jGGQhF9ZTWfGdUhOOlTxJndURth7xwR0e32FHp8AtjGNegjwcZ3ltYnu_KXO1kYlDi_pG5_3ZKDu6gENZiQdFMSvSCvF-3sVhLuxbjGukUDHT54rYktNZw"/></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-safe bg-surface"><div class="flex flex-col w-full pb-12">
+<!-- Top Highlight Banner / Urgency badge -->
+<div class="px-margin pt-space-md">
+<div class="bg-surface-container-low rounded-xl p-space-md flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="flex h-2.5 w-2.5 rounded-full bg-secondary-container animate-pulse shrink-0"></span>
+<p class="font-label-md text-label-md text-on-surface truncate">Session Rattrapage &amp; Partiels 2025 • UJKZ Ouaga</p>
+</div>
+<span class="font-label-sm text-label-sm bg-surface-container-highest text-primary px-2 py-0.5 rounded-full shrink-0">Vérifié A+</span>
+</div>
+</div>
+<!-- Resource Title & Author Card -->
+<section class="px-margin mt-space-md flex flex-col gap-space-sm">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-primary-container text-on-primary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">school</span>
+        L1 Lettres &amp; Sciences Humaines
+      </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-secondary-fixed text-on-secondary-fixed-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">folder_zip</span>
+        Pack 3 Médias
+      </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+        Certifié UJKZ
+      </span>
+</div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-extrabold tracking-tight">
+      Corrigé Examen &amp; Synthèse Linguistique Générale (L1)
+    </h2>
+<!-- Author Profile Strip -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="relative shrink-0">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="Close up portrait of Moussa, a sharp African university student smiling warmly with glasses on, wearing a patterned collared shirt in bright natural outdoor campus courtyard lighting, high realism" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqw4Rqz6DkCcqV7-yJey0ewO4g_KDREzxvhZjeaF_x2uuOKdfn4SZIKtAtH_D8KQjzgwm3Wy4OZl6aYIkcKUou3aYOYUPugqS_KN_RznR01JFCNh0K6GpChxpa52X-aISol9AN07n9dyZC5x9A7MB0aZp1tpv_SoOFC5D1AtSz-ZPQKKjM4Zt2K-YJNvcLHPT199E_v33TlSXwn9Z3EGQ2WwP2V6SHKctPCjgkoacvdCJWctvk9gP9NQ"/>
+<div class="absolute -bottom-1 -right-1 bg-secondary-container text-on-secondary w-5 h-5 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-[13px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<h3 class="font-label-lg text-label-lg text-on-surface truncate">Moussa O.</h3>
+<span class="material-symbols-outlined text-primary text-[16px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Majore de promo 2024 • UJKZ Ouagadougou</p>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="font-label-sm text-label-sm text-secondary font-bold">★ 4.9</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">(142 étudiants certifiés)</span>
+</div>
+</div>
+</div>
+<button class="shrink-0 px-3 py-1.5 rounded-lg bg-surface-container text-primary font-label-md text-label-md hover:bg-surface-container-high transition-colors active:scale-95" type="button">
+        Profil
+      </button>
+</div>
+</section>
+<!-- Visual Preview Carousel with Watermark/Frosted Paywall -->
+<section class="mt-space-lg">
+<div class="px-margin flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[20px]">visibility</span>
+<h4 class="font-headline-md text-headline-md text-on-surface">Aperçu interactif</h4>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Page 1 sur 14</span>
+</div>
+<div class="px-margin">
+<div class="relative w-full rounded-2xl overflow-hidden bg-surface-container-lowest shadow-md">
+<!-- Document Preview Canvas -->
+<div class="relative h-80 w-full overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover filter blur-[2px] scale-105 select-none pointer-events-none" data-alt="A clean academic handwritten and typed linguistics exam paper note titled Linguistique Generale Examen Session 1 with phonetics IPA charts syntax tree diagrams and green professor corrections on grid notebook paper, soft ambient light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnleFEQlJt-dnss1cLqHYIsNjS6BplHmwvWLGH2nWX6e7mryDrah1CR5gtCBNyRhxI05vsY4vQG-G2ye9O9_YWFdGOaNHwKs2-aKxbWa18-wLYErNZnxpMfEKOdR4LgaLkCLThibmYxzu90mzUOVdk0G6zBIEOfciI0t27Mdr68ZMMcQXfew8xE2OvcweZuzA7M8YlbAmP8KtODtsxps_UzNnxn9gpL-1ISJksp9xwl8PP77k0tAAS8g"/>
+<!-- Gradient Scrim for readable overlay -->
+<div class="absolute inset-0 bg-gradient-to-b from-surface/20 via-surface-tint/20 to-surface/90"></div>
+<!-- Academic watermark stamp -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-25 -rotate-12">
+<div class="border-4 border-dashed border-primary px-6 py-2 rounded-2xl text-center">
+<span class="font-headline-xl-mobile text-headline-xl-mobile font-extrabold uppercase text-primary tracking-widest">CAMPUS CERTIFIÉ</span>
+<p class="font-label-sm text-label-sm text-primary">COPYRIGHT UJKZ 2025 • ANTI-PLAGIAT</p>
+</div>
+</div>
+<!-- Teaser Highlight Floating Badge -->
+<div class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">auto_stories</span>
+<span class="font-label-sm text-label-sm text-on-surface">Extrait Exercice 1 : Phonétique combinatoire</span>
+</div>
+<!-- Interactive Peeking Card Overlay -->
+<div class="absolute inset-x-3 bottom-3 bg-surface-container-lowest/95 backdrop-blur-xl p-space-md rounded-xl shadow-md flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">lock</span>
+<span class="font-label-lg text-label-lg text-on-surface">13 pages restantes verrouillées</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary bg-secondary-fixed px-2 py-0.5 rounded-md">Déblocage direct</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Inclus : Arbre syntaxique complet, méthode de transcription API, et questions types probables pour le rattrapage.
+            </p>
+</div>
+</div>
+<!-- Carousel navigation tabs -->
+<div class="p-space-sm bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="w-6 h-2 rounded-full bg-primary inline-block"></span>
+<span class="w-2 h-2 rounded-full bg-outline-variant inline-block"></span>
+<span class="w-2 h-2 rounded-full bg-outline-variant inline-block"></span>
+<span class="w-2 h-2 rounded-full bg-outline-variant inline-block"></span>
+</div>
+<button class="text-primary font-label-md text-label-md flex items-center gap-1 active:opacity-75" type="button">
+            Feuilleter l'index
+            <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Polymorphic Media Bundle Showcase -->
+<section class="px-margin mt-space-xl flex flex-col gap-space-md">
+<div>
+<div class="flex items-center justify-between">
+<h4 class="font-headline-md text-headline-md text-on-surface">Contenu du Pack (3 Fichiers)</h4>
+<span class="font-label-sm text-label-sm text-primary font-bold bg-primary-fixed px-2.5 py-0.5 rounded-full">Prêt hors-ligne</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+        Ce dossier combine cours rédigé, mémo oral et schéma haute définition.
+      </p>
+</div>
+<!-- Media Item 1: Master PDF -->
+<div class="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-11 h-11 rounded-xl bg-error-container text-on-error-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">picture_as_pdf</span>
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm bg-error-container text-on-error-container px-1.5 py-0.5 rounded font-bold uppercase">PDF</span>
+<p class="font-label-lg text-label-lg text-on-surface truncate">Correction_Examen_2025.pdf</p>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">14 pages • 2.4 Mo • Annotations en couleur</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary shrink-0" title="Inclus">check_circle</span>
+</div>
+<div class="bg-surface-container-low px-3 py-2 rounded-lg flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm">
+<span class="flex items-center gap-1.5 truncate">
+<span class="material-symbols-outlined text-[16px] text-primary">psychology</span>
+          Astuces barème &amp; pièges des profs
+        </span>
+<span class="font-label-sm text-label-sm text-primary shrink-0">100% lisible</span>
+</div>
+</div>
+<!-- Media Item 2: Interactive Audio Player -->
+<div class="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-11 h-11 rounded-xl bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">graphic_eq</span>
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm bg-tertiary-fixed text-on-tertiary-fixed px-1.5 py-0.5 rounded font-bold uppercase">AUD</span>
+<p class="font-label-lg text-label-lg text-on-surface truncate">Vocal_Points_Clefs_Amphi.mp3</p>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Explication 8 min 42 s • Moussa en direct</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm bg-surface-container text-on-surface-variant px-2 py-0.5 rounded-full shrink-0">Aperçu 30s</span>
+</div>
+<!-- Animated Audio Waveform & Control Bar -->
+<div class="bg-surface-container-low p-space-sm rounded-xl flex flex-col gap-2">
+<div class="flex items-center gap-3">
+<button aria-label="Jouer extrait audio" class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0 shadow-sm active:scale-95 transition-transform" id="audio-play-btn" type="button">
+<span class="material-symbols-outlined text-[22px]" id="audio-icon">play_arrow</span>
+</button>
+<!-- Mock dynamic waveform bars -->
+<div class="flex-1 flex items-center justify-between gap-[3px] h-8 px-1">
+<div class="w-1 bg-primary/70 rounded-full h-3 transition-all duration-300"></div>
+<div class="w-1 bg-primary rounded-full h-6 transition-all duration-300"></div>
+<div class="w-1 bg-primary rounded-full h-4 transition-all duration-300"></div>
+<div class="w-1 bg-primary/90 rounded-full h-7 transition-all duration-300"></div>
+<div class="w-1 bg-primary rounded-full h-5 transition-all duration-300"></div>
+<div class="w-1 bg-primary/80 rounded-full h-8 transition-all duration-300"></div>
+<div class="w-1 bg-primary rounded-full h-4 transition-all duration-300"></div>
+<div class="w-1 bg-primary/60 rounded-full h-6 transition-all duration-300"></div>
+<div class="w-1 bg-outline-variant rounded-full h-3"></div>
+<div class="w-1 bg-outline-variant rounded-full h-5"></div>
+<div class="w-1 bg-outline-variant rounded-full h-7"></div>
+<div class="w-1 bg-outline-variant rounded-full h-4"></div>
+<div class="w-1 bg-outline-variant rounded-full h-6"></div>
+<div class="w-1 bg-outline-variant rounded-full h-3"></div>
+<div class="w-1 bg-outline-variant rounded-full h-4"></div>
+<div class="w-1 bg-outline-variant rounded-full h-2"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant shrink-0 tabular-nums">00:30 / 08:42</span>
+</div>
+<div class="flex items-center justify-between px-1">
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-tertiary">mic</span>
+            "Écoutez bien l'explication sur la morphologie dérivationnelle..."
+          </p>
+</div>
+</div>
+</div>
+<!-- Media Item 3: Diagram Photo -->
+<div class="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-11 h-11 rounded-xl bg-secondary-fixed text-on-secondary-fixed-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">schema</span>
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm bg-secondary-fixed text-on-secondary-fixed-variant px-1.5 py-0.5 rounded font-bold uppercase">JPG</span>
+<p class="font-label-lg text-label-lg text-on-surface truncate">Synthese_Arbre_Syntaxique.jpg</p>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Ultra HD 3840x2160 • Prise de vue tableau amphi</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary shrink-0">check_circle</span>
+</div>
+<div class="relative rounded-xl overflow-hidden h-32 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="A clean high contrast chalkboard syntax tree diagram showing generative linguistics parse branching with colored chalk in green and amber at a West African university amphitheater lecture hall" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUeNOmRkjhIiWurH8UEA2THc-a8167rdsJQaSzMPhb1qOkmrkgcVtLq-x1EXSQrQoXxsEI3zPah1qxfYSbOC89FM0OSUk3PcXu8HKJ9gtrGL3NcpCaNKwP_dglqVV-jR6jao8gBIsCf6Qp_e2mC_QhoKxnobPFXgX2bXdcDMU1n1ZASAIbjjgVG5srkdIhRXIrRzvrdwMtbRMcLRxGFQjAoGxYyXEnBTQ-Q086Ti_jSNtCfFpZX9FpPA"/>
+<div class="absolute inset-0 bg-inverse-surface/40 flex items-center justify-center">
+<div class="bg-surface-container-lowest/90 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[16px]">zoom_in</span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">Cliquer pour zoom HD</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Interactive Direct Campus Support Switch (WhatsApp Study Circle) -->
+<section class="px-margin mt-space-xl">
+<div class="bg-surface-container-low rounded-2xl p-space-md shadow-sm">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-full bg-[#DCFCE7] text-[#15803D] flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">groups</span>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface">Mode Présentiel &amp; WhatsApp</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Besoin d'aide en direct sur le campus UJKZ ?</p>
+</div>
+</div>
+<!-- Toggle Micro Switch -->
+<label class="relative inline-flex items-center cursor-pointer shrink-0 mt-1">
+<input checked="" class="sr-only peer" id="whatsapp-toggle" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container"></div>
+</label>
+</div>
+<div class="mt-space-md p-space-sm bg-surface-container-lowest rounded-xl flex items-center justify-between gap-space-sm" id="whatsapp-detail-box">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-2 h-2 rounded-full bg-[#15803D] animate-ping"></div>
+<p class="font-body-sm text-body-sm text-on-surface truncate">
+            Moussa dispo Amphi A aujourd'hui de 16h à 18h
+          </p>
+</div>
+<button class="shrink-0 font-label-sm text-label-sm text-[#15803D] bg-[#DCFCE7] px-2.5 py-1 rounded-md font-bold hover:bg-[#bbf7d0] transition-colors" type="button">
+          Rejoindre le cercle
+        </button>
+</div>
+</div>
+</section>
+<!-- Intellectual Property & Guarantee Badge -->
+<section class="px-margin mt-space-md">
+<div class="bg-surface-container-lowest p-space-md rounded-2xl flex items-center gap-space-sm shadow-sm">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center shrink-0 text-primary">
+<span class="material-symbols-outlined text-[22px]">verified_user</span>
+</div>
+<div class="min-w-0">
+<h5 class="font-label-lg text-label-lg text-on-surface">Déclaration originale certifiée</h5>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">
+          Ressource déposée par l'auteur • Conforme au programme L1 Lettres 2024-2025
+        </p>
+</div>
+</div>
+</section>
+<!-- Student Reviews Mini Strip -->
+<section class="px-margin mt-space-xl flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<h4 class="font-headline-md text-headline-md text-on-surface">Avis des camarades</h4>
+<span class="font-label-md text-label-md text-secondary font-bold">★ 4.9/5</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">38 retours</span>
+</div>
+<div class="flex flex-col gap-space-sm">
+<!-- Review 1 -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md text-on-surface">Fatimata S. (L1)</span>
+<span class="font-label-sm text-label-sm text-primary bg-primary-fixed px-1.5 py-0.2 rounded">Achat vérifié</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Il y a 2h</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface">
+          "Le vocal m'a sauvée pour l'analyse des morphèmes ! J'ai validé ma session avec 14.5. Merci Moussa."
+        </p>
+</div>
+<!-- Review 2 -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md text-on-surface">Arnaud K. (UJKZ)</span>
+<span class="font-label-sm text-label-sm text-primary bg-primary-fixed px-1.5 py-0.2 rounded">Achat vérifié</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Hier</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface">
+          "Paiement Orange Money direct et téléchargement instantané sans bug de connexion."
+        </p>
+</div>
+</div>
+</section>
+<!-- Sticky Monetization & Purchase Drawer Zone -->
+<div class="sticky bottom-0 left-0 right-0 z-40 mt-space-xl p-margin bg-surface-container-lowest/95 backdrop-blur-xl shadow-xl">
+<div class="max-w-md mx-auto flex flex-col gap-space-sm">
+<!-- Price & Guarantee Row -->
+<div class="flex items-center justify-between">
+<div>
+<div class="flex items-baseline gap-1.5">
+<span class="font-price-display text-price-display text-secondary font-black">500 FCFA</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">(~0,76 €)</span>
+</div>
+<p class="font-label-sm text-label-sm text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">bolt</span> Accès illimité à vie
+          </p>
+</div>
+<div class="flex items-center gap-1.5">
+<!-- Direct Mobile Money Badges -->
+<span class="font-label-sm text-label-sm bg-orange-100 text-orange-800 px-2 py-1 rounded-md font-bold">Orange Money</span>
+<span class="font-label-sm text-label-sm bg-blue-100 text-blue-800 px-2 py-1 rounded-md font-bold">Moov</span>
+</div>
+</div>
+<!-- Action Buttons Grid -->
+<div class="flex items-center gap-space-sm">
+<!-- Main Purchase Action -->
+<button class="flex-1 h-12 bg-secondary-container text-on-secondary rounded-xl font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-md active:scale-98 transition-all" id="unlock-btn" type="button">
+<span class="material-symbols-outlined text-[20px]">download</span>
+<span>Débloquer &amp; Télécharger</span>
+</button>
+<!-- Secondary WhatsApp Direct Share/Chat -->
+<button aria-label="Échanger avec Moussa sur WhatsApp" class="w-12 h-12 rounded-xl bg-[#DCFCE7] text-[#15803D] flex items-center justify-center shrink-0 shadow-sm active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[24px]">chat</span>
+</button>
+</div>
+<!-- Safety & Offline Notice -->
+<p class="text-center font-body-sm text-body-sm text-on-surface-variant flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-outline">lock</span>
+        Paiement mobile instantané • Pas de carte bancaire requise
+      </p>
+</div>
+</div>
+</div>
+<script>
+  // Simple micro-interaction for the audio preview button
+  const playBtn = document.getElementById('audio-play-btn');
+  const playIcon = document.getElementById('audio-icon');
+  let isPlaying = false;
+
+  if (playBtn && playIcon) {
+    playBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        playIcon.textContent = 'pause';
+        playBtn.classList.add('animate-pulse');
+      } else {
+        playIcon.textContent = 'play_arrow';
+        playBtn.classList.remove('animate-pulse');
+      }
+    });
+  }
+
+  // Toggle presential / study group info
+  const toggle = document.getElementById('whatsapp-toggle');
+  const detailBox = document.getElementById('whatsapp-detail-box');
+  if (toggle && detailBox) {
+    toggle.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        detailBox.classList.remove('hidden');
+      } else {
+        detailBox.classList.add('hidden');
+      }
+    });
+  }
+
+  // Unlock button dynamic press feedback
+  const unlockBtn = document.getElementById('unlock-btn');
+  if (unlockBtn) {
+    unlockBtn.addEventListener('click', () => {
+      const originalText = unlockBtn.innerHTML;
+      unlockBtn.innerHTML = `
+        <span class="material-symbols-outlined text-[20px] animate-spin">sync</span>
+        <span>Connexion Orange/Moov...</span>
+      `;
+      setTimeout(() => {
+        unlockBtn.innerHTML = `
+          <span class="material-symbols-outlined text-[20px]">check_circle</span>
+          <span>Redirection Sécurisée...</span>
+        `;
+        setTimeout(() => {
+          unlockBtn.innerHTML = originalText;
+        }, 1800);
+      }, 1200);
+    });
+  }
+</script></main></body></html>

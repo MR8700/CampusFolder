@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100%;margin:0;padding:0;background-color:#faf8ff;}body{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-tertiary-container": "#49da9f", "surface-container-highest": "#dae2fd", "primary-fixed": "#a9f3c5", "on-secondary-fixed-variant": "#7f2b00", "outline-variant": "#bfc9c0", "error-container": "#ffdad6", "secondary-fixed": "#ffdbce", "tertiary": "#00422b", "on-tertiary-fixed-variant": "#005236", "on-error-container": "#93000a", "on-secondary": "#ffffff", "error": "#ba1a1a", "surface-tint": "#226b47", "primary-fixed-dim": "#8ed6aa", "background": "#faf8ff", "on-surface": "#131b2e", "on-background": "#131b2e", "inverse-primary": "#8ed6aa", "surface-container-high": "#e2e7ff", "tertiary-container": "#005c3e", "on-tertiary-fixed": "#002113", "surface-dim": "#d2d9f4", "secondary": "#a73a00", "primary-container": "#0d5c3a", "on-secondary-container": "#571a00", "outline": "#707971", "on-error": "#ffffff", "inverse-surface": "#283044", "on-primary-container": "#8ad2a7", "on-primary": "#ffffff", "tertiary-fixed": "#6ffbbe", "surface-container": "#eaedff", "surface": "#faf8ff", "secondary-fixed-dim": "#ffb599", "surface-variant": "#dae2fd", "on-surface-variant": "#404942", "inverse-on-surface": "#eef0ff", "primary": "#004328", "surface-container-low": "#f2f3ff", "on-secondary-fixed": "#370e00", "tertiary-fixed-dim": "#4edea3", "on-tertiary": "#ffffff", "secondary-container": "#fd651e", "surface-container-lowest": "#ffffff", "on-primary-fixed": "#002111", "surface-bright": "#faf8ff", "on-primary-fixed-variant": "#005232" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter-desktop": "1.5rem", "space-lg": "1rem", "space-xs": "0.25rem", "margin": "1rem", "gutter": "1rem", "space-sm": "0.5rem", "space-md": "0.75rem", "margin-desktop": "2rem", "space-xl": "1.5rem" }, fontFamily: { "label-sm": ["Plus Jakarta Sans"], "headline-xl-mobile": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "headline-xl": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "price-display": ["Plus Jakarta Sans"] }, fontSize: { "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "700" }], "headline-xl-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "800" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.03em", "fontWeight": "800" }], "headline-md": ["20px", { "lineHeight": "26px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "500" }], "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-lg-mobile": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "label-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "700" }], "price-display": ["18px", { "lineHeight": "22px", "letterSpacing": "-0.01em", "fontWeight": "800" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0 flex-1"><button aria-label="Retour" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface active:scale-95 transition-transform shrink-0" onclick="history.back()" type="button"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><img alt="Logo" class="h-7 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCz191Bgd7B1zV8TJ1Rpd2CrVnFu4EDisPBvrQ8PScKL3khzSj5hTrXkr3mksAaKxE8vr9kiIn0v_iM75fBr-L-r7Omp4oapW5gAsz22kxhvY3jA1WGbkx_FF-7Ty3anpX0dktyOmnGriSsmyqA51j7feXvREwgh9DcP4_NHf67YdxQNQ5mfPGTs4cTLgb-_0YBiKCXWIGBK5m3Bna7Ir-lb2XM_2iuVLpQKZ01vvdsUH2V9KZamGUmDw"/><h1 class="font-headline-md text-headline-md text-on-surface truncate min-w-0 leading-tight">Paiement Mobile</h1></div><div class="flex items-center gap-space-xs shrink-0"><button aria-label="Partager" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">share</span></button><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary-container/20 shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNwJTG0v54RwD7UUqMI_atE_M6fpKZQNZV3-pdR9x_yJ06ODzApjk-6EFLKJUr8Q9KCGak2lGdZWB4Mxdvv-sEJraukiI9ijsoREFfNF9rFBlhjUuXVigqGyQeJomUDcO8jGGQhF9ZTWfGdUhOOlTxJndURth7xwR0e32FHp8AtjGNegjwcZ3ltYnu_KXO1kYlDi_pG5_3ZKDu6gENZiQdFMSvSCvF-3sVhLuxbjGukUDHT54rYktNZw"/></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-safe bg-surface"><div class="flex flex-col w-full pb-8">
+<!-- Dynamic Context Notification Banner -->
+<div class="px-margin pt-space-md">
+<div class="bg-primary-fixed/40 rounded-xl p-space-md flex items-center gap-space-sm shadow-sm">
+<span class="material-symbols-outlined text-primary text-[22px] shrink-0" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<div class="min-w-0 flex-1">
+<p class="font-label-md text-label-md text-primary font-bold">Session d'achat sécurisée (UJKZ - Ouaga 1)</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Cryptage SSL 256 bits • Livraison instantanée</p>
+</div>
+<span class="bg-primary text-on-primary text-label-sm font-label-sm px-2 py-0.5 rounded-full shrink-0">Direct</span>
+</div>
+</div>
+<!-- Resource Summary Bento Card -->
+<div class="px-margin mt-space-md">
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md relative overflow-hidden">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center text-primary shrink-0 relative overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A clean photorealistic study guide cover and official university exam sheet with French linguistics phonetics notes laid on a wooden desk under morning West African sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBR5q8kbaCxRoRd5wfwRsqRdc23gKTloWjSLpDdB8QYuGSSL7e8YEWZM1w8O0TwigGy3FOB8RfcXcNnlBgFx1bNeig9M2yImiScfilRXtR3a-OiwsZ4lcV8ByNLrRRTuAJ3QZfyDWURg1FDUkG9l_SJ7SpZDhRs524mF3-hPERvX678k2gHjzKM0yLNUiokzrIw3HHlhdWljZ8FO7N1-N6kfEyLgLUVnQJ9v7dXttsbN2B2ueHZB0tGw"/>
+</div>
+<div class="min-w-0 flex-1">
+<div class="flex items-center gap-space-xs mb-0.5">
+<span class="bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded text-label-sm font-label-sm uppercase">L1 Lettres</span>
+<span class="bg-primary/10 text-primary px-1.5 py-0.5 rounded text-label-sm font-label-sm font-semibold">Corrigé Type</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface line-clamp-1">Corrigé Examen Linguistique Générale L1</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">school</span>
+              Pr. K. Ouédraogo • Session 2023
+            </p>
+</div>
+</div>
+</div>
+<!-- Included Media Assets Bar -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">folder_open</span>
+<span class="font-label-md text-label-md text-on-surface">3 médias inclus :</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="inline-flex items-center gap-1 bg-surface-container-highest px-2 py-0.5 rounded text-label-sm font-label-sm text-on-surface">
+<span class="material-symbols-outlined text-[13px] text-error">picture_as_pdf</span>
+            PDF (12p)
+          </span>
+<span class="inline-flex items-center gap-1 bg-surface-container-highest px-2 py-0.5 rounded text-label-sm font-label-sm text-on-surface">
+<span class="material-symbols-outlined text-[13px] text-primary">mic</span>
+            Audio
+          </span>
+<span class="inline-flex items-center gap-1 bg-secondary-fixed text-on-secondary-fixed px-2 py-0.5 rounded text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[13px]">check_circle</span>
+            Barème
+          </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Payment Selection Module -->
+<div class="px-margin mt-space-xl">
+<div class="flex items-center justify-between mb-space-sm">
+<h3 class="font-headline-md text-headline-md text-on-surface">Mode de règlement</h3>
+<span class="font-label-sm text-label-sm text-primary flex items-center gap-1 bg-primary-fixed/40 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[14px]">bolt</span> Sans frais
+      </span>
+</div>
+<!-- Options List -->
+<div class="flex flex-col gap-space-sm" id="payment-accordion">
+<!-- 1. Campus Wallet (Recommended / One-Click) -->
+<div class="payment-method-card bg-surface-container-lowest rounded-xl p-space-md shadow-sm transition-all duration-200 cursor-pointer" data-method="wallet" onclick="selectPayment('wallet')">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-md">
+<div class="w-11 h-11 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm">
+<span class="material-symbols-outlined text-[24px]">account_balance_wallet</span>
+</div>
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-body-lg text-on-surface font-bold">Solde Portefeuille Campus</span>
+<span class="bg-primary text-on-primary px-1.5 py-0.5 rounded-full text-label-sm font-label-sm font-bold scale-90">1-Clic</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Solde dispo : <strong class="text-primary font-bold">2 400 FCFA</strong></p>
+</div>
+</div>
+<div class="radio-indicator w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[16px] hidden checkmark">check</span>
+</div>
+</div>
+<div class="hidden mt-space-md pt-space-sm bg-surface-container-low p-space-sm rounded-lg" id="wallet-details">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Nouveau solde restant :</span>
+<span class="text-on-surface font-bold">1 900 FCFA</span>
+</div>
+<p class="font-body-sm text-body-sm text-primary-container mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">flash_on</span>
+            Déblocage instantané sur votre bibliothèque sans délai.
+          </p>
+</div>
+</div>
+<!-- 2. Orange Money Burkina -->
+<div class="payment-method-card bg-surface-container-lowest rounded-xl p-space-md shadow-sm transition-all duration-200 cursor-pointer" data-method="orange" onclick="selectPayment('orange')">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-md">
+<div class="w-11 h-11 rounded-xl bg-secondary-container flex items-center justify-center text-white shadow-sm font-black text-[15px] tracking-tight">
+              OM
+            </div>
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-body-lg text-on-surface font-bold">Orange Money Burkina</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Paiement OTP ou push direct +226</p>
+</div>
+</div>
+<div class="radio-indicator w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[16px] hidden checkmark">check</span>
+</div>
+</div>
+<!-- Orange Input drawer -->
+<div class="hidden mt-space-md pt-space-xs flex flex-col gap-space-sm" id="orange-details">
+<label class="font-label-md text-label-md text-on-surface-variant">Numéro Orange Money (Burkina Faso)</label>
+<div class="flex items-center bg-surface-container-low rounded-lg px-space-md py-space-sm gap-space-sm">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">+226</span>
+<input class="bg-transparent font-headline-md text-body-lg text-on-surface flex-1 outline-none placeholder:text-outline" id="orange-phone" maxlength="11" placeholder="76 XX XX XX" type="tel" value="76 45 88 12"/>
+<span class="material-symbols-outlined text-primary text-[20px]">phone_android</span>
+</div>
+<p class="font-body-sm text-body-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">info</span>
+            Composez *144*4*6# si vous demandez un code OTP d'autorisation.
+          </p>
+</div>
+</div>
+<!-- 3. Moov Money Flooz -->
+<div class="payment-method-card bg-surface-container-lowest rounded-xl p-space-md shadow-sm transition-all duration-200 cursor-pointer" data-method="moov" onclick="selectPayment('moov')">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-md">
+<div class="w-11 h-11 rounded-xl bg-surface-tint flex items-center justify-center text-white shadow-sm font-black text-[13px] tracking-tighter">
+              MOOV
+            </div>
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-body-lg text-on-surface font-bold">Moov Money (Flooz)</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Prompt USSD direct sur votre écran</p>
+</div>
+</div>
+<div class="radio-indicator w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[16px] hidden checkmark">check</span>
+</div>
+</div>
+<div class="hidden mt-space-md pt-space-xs flex flex-col gap-space-sm" id="moov-details">
+<label class="font-label-md text-label-md text-on-surface-variant">Numéro Moov Africa (+226)</label>
+<div class="flex items-center bg-surface-container-low rounded-lg px-space-md py-space-sm gap-space-sm">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">+226</span>
+<input class="bg-transparent font-headline-md text-body-lg text-on-surface flex-1 outline-none placeholder:text-outline" maxlength="11" placeholder="60 XX XX XX" type="tel"/>
+<span class="material-symbols-outlined text-primary-container text-[20px]">sim_card</span>
+</div>
+<p class="font-body-sm text-body-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">touch_app</span>
+            Une invite push USSD apparaîtra automatiquement pour valider votre code PIN.
+          </p>
+</div>
+</div>
+<!-- 4. Cash / Peer Handover Mode (WhatsApp Author link) -->
+<div class="payment-method-card bg-surface-container-lowest rounded-xl p-space-md shadow-sm transition-all duration-200 cursor-pointer" data-method="in-person" onclick="selectPayment('in-person')">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-md">
+<div class="w-11 h-11 rounded-xl bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[22px]">diversity_3</span>
+</div>
+<div class="min-w-0 flex-1">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-body-lg text-on-surface font-bold">Remise en main propre</span>
+<span class="bg-surface-container-high text-on-surface px-1.5 py-0.5 rounded text-label-sm font-label-sm">Campus</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Échange physique ou WhatsApp direct</p>
+</div>
+</div>
+<div class="radio-indicator w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[16px] hidden checkmark">check</span>
+</div>
+</div>
+<div class="hidden mt-space-md pt-space-xs flex flex-col gap-space-sm bg-surface-container-low p-space-md rounded-lg" id="in-person-details">
+<div class="flex items-center gap-space-sm">
+<img class="w-9 h-9 rounded-full object-cover shrink-0" data-alt="Portrait photo of a young West African male student wearing glasses and university badge, friendly smile in courtyard of University Ouaga 1 Joseph Ki-Zerbo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDs-KQhh4N5oKQvUef1z-xEqpY3KnGWM6ol4MumL4ryv5gaQA5M4yLVHScqtK47NRP_oPwU39Yf6gC4w-F92uQjdPXu-A_b5VWAcnNbXmTrIiuRyrFtGR5hXwUhIVXX0QOPPL2NAHH9i79DP7J05Na7TaZBC-vZCWhmbJ_MWCzqz5qULiiLMcZ5rgcSEOo1KCxg7Avtk86y63qj5ebKDWYaeQYRqbP-7ageTmEKipoqoXGz1NuanwonCw"/>
+<div class="min-w-0 flex-1">
+<p class="font-label-lg text-label-lg text-on-surface truncate">Mamadou Sawadogo (Auteur L3)</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Lieu habituel : Devant Amphi A</p>
+</div>
+</div>
+<a class="w-full bg-on-tertiary-container/20 text-tertiary font-label-lg text-label-lg py-2.5 rounded-lg flex items-center justify-center gap-2 active:scale-98 transition-transform" href="https://wa.me/22670000000?text=Bonjour,%20je%20souhaite%20r%C3%A9cup%C3%A9rer%20le%20corrig%C3%A9%20de%20linguistique%20L1">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+            Écrire à Mamadou sur WhatsApp
+          </a>
+</div>
+</div>
+</div>
+</div>
+<!-- Transparent Fee Breakdown Section -->
+<div class="px-margin mt-space-lg">
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col gap-space-xs">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Montant ressource pédagogique</span>
+<span class="font-label-md text-label-md text-on-surface">500 FCFA</span>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant flex items-center gap-1">
+          Frais de traitement opérateur
+          <span class="material-symbols-outlined text-[13px] text-outline">help</span>
+</span>
+<span class="font-label-md text-label-md text-primary font-bold">0 FCFA (Offerts)</span>
+</div>
+<div class="h-[1px] bg-surface-container-highest my-1"></div>
+<div class="flex items-center justify-between">
+<span class="font-headline-md text-body-lg text-on-surface font-extrabold">Total net à débiter</span>
+<div class="text-right">
+<span class="font-headline-md text-headline-md text-primary font-extrabold" id="display-total">500 FCFA</span>
+<span class="block font-label-sm text-label-sm text-outline">TVA incluse</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Trust & Guarantee Badges Grid -->
+<div class="px-margin mt-space-md grid grid-cols-2 gap-space-sm">
+<div class="bg-surface-container-lowest rounded-xl p-space-sm flex items-center gap-space-xs shadow-sm">
+<div class="w-8 h-8 rounded-full bg-primary-fixed/60 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[18px]">all_inclusive</span>
+</div>
+<div class="min-w-0">
+<p class="font-label-sm text-label-sm text-on-surface font-bold leading-tight">Accès illimité à vie</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[10px] leading-tight truncate">Toujours synchronisé</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-space-sm flex items-center gap-space-xs shadow-sm">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface shrink-0">
+<span class="material-symbols-outlined text-[18px]">cloud_download</span>
+</div>
+<div class="min-w-0">
+<p class="font-label-sm text-label-sm text-on-surface font-bold leading-tight">Mode hors-ligne</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[10px] leading-tight truncate">Lecture sans datas</p>
+</div>
+</div>
+</div>
+<!-- Major CTA Button Floating Anchor -->
+<div class="px-margin mt-space-lg">
+<button class="w-full bg-primary text-on-primary py-space-md rounded-xl font-label-lg text-label-lg flex items-center justify-center gap-space-sm shadow-lg active:scale-98 transition-all duration-150 relative overflow-hidden group" id="pay-button" onclick="triggerCheckoutFlow()" type="button">
+<!-- Glow & subtle pulse ambient background -->
+<div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="material-symbols-outlined text-[20px] text-primary-fixed animate-pulse">lock</span>
+<span class="font-bold tracking-wide" id="button-label">Confirmer et Payer 500 FCFA</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+<div class="mt-space-xs text-center flex items-center justify-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px] text-primary">verified</span>
+<span class="font-body-sm text-body-sm text-[11px]">Garantie de téléchargement immédiat par token signé</span>
+</div>
+</div>
+<!-- Processing State Modal (Hidden by default) -->
+<div class="hidden fixed inset-0 z-50 bg-inverse-surface/60 backdrop-blur-md flex items-end sm:items-center justify-center p-space-md" id="processing-modal">
+<div class="bg-surface-container-lowest rounded-2xl p-space-xl w-full max-w-sm flex flex-col items-center text-center shadow-2xl relative">
+<div class="relative mb-space-md">
+<div class="w-16 h-16 rounded-full bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[32px] animate-spin">sync</span>
+</div>
+<div class="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-secondary-container text-white flex items-center justify-center text-[12px]">
+<span class="material-symbols-outlined text-[14px]">shield</span>
+</div>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Validation sécurisée en cours...</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-space-lg" id="modal-status-text">
+        Connexion au serveur bancaire et émission du jeton d'accès...
+      </p>
+<div class="w-full bg-surface-container-low rounded-full h-2 overflow-hidden mb-space-md">
+<div class="bg-primary h-full w-1/3 transition-all duration-500 rounded-full" id="progress-fill"></div>
+</div>
+<div class="bg-surface-container-high/60 rounded-lg p-space-sm w-full flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">key</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-left truncate text-[11px]">Token SHA256 : <span class="font-mono text-on-surface font-bold">UJKZ-84920-F7D</span></p>
+</div>
+</div>
+</div>
+<!-- Success Notification Sheet -->
+<div class="hidden px-margin mt-space-md" id="success-banner">
+<div class="bg-primary text-on-primary rounded-xl p-space-md shadow-md flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[28px] text-primary-fixed">check_circle</span>
+<div>
+<h4 class="font-headline-md text-body-lg font-bold">Fichier débloqué avec succès !</h4>
+<p class="font-body-sm text-body-sm text-primary-fixed">Disponible dans votre bibliothèque hors-ligne.</p>
+</div>
+</div>
+<button class="bg-on-primary text-primary px-space-md py-1.5 rounded-lg font-label-md text-label-md font-bold shrink-0 shadow-sm" onclick="window.location.reload()">
+        Ouvrir
+      </button>
+</div>
+</div>
+</div>
+<script>
+  let currentSelectedMethod = 'wallet';
+
+  function selectPayment(method) {
+    currentSelectedMethod = method;
+    const cards = document.querySelectorAll('.payment-method-card');
+    cards.forEach(card => {
+      const isSelected = card.getAttribute('data-method') === method;
+      const indicator = card.querySelector('.radio-indicator');
+      const checkmark = card.querySelector('.checkmark');
+      const cardType = card.getAttribute('data-method');
+      const detailsBox = document.getElementById(cardType + '-details');
+
+      if (isSelected) {
+        card.classList.add('bg-surface-container-high/40');
+        indicator.classList.remove('bg-surface-container-high');
+        indicator.classList.add('bg-primary');
+        if (checkmark) checkmark.classList.remove('hidden');
+        if (detailsBox) detailsBox.classList.remove('hidden');
+      } else {
+        card.classList.remove('bg-surface-container-high/40');
+        indicator.classList.add('bg-surface-container-high');
+        indicator.classList.remove('bg-primary');
+        if (checkmark) checkmark.classList.add('hidden');
+        if (detailsBox) detailsBox.classList.add('hidden');
+      }
+    });
+
+    const btnLabel = document.getElementById('button-label');
+    if (method === 'in-person') {
+      btnLabel.innerText = "Organiser le rendez-vous physique";
+    } else if (method === 'wallet') {
+      btnLabel.innerText = "Débloquer immédiatement • 500 FCFA";
+    } else {
+      btnLabel.innerText = "Confirmer et Payer 500 FCFA";
+    }
+  }
+
+  // Initialize default active option
+  document.addEventListener('DOMContentLoaded', () => {
+    selectPayment('wallet');
+  });
+
+  function triggerCheckoutFlow() {
+    if (currentSelectedMethod === 'in-person') {
+      window.open('https://wa.me/22670000000?text=Bonjour,%20je%20souhaite%20r%C3%A9cup%C3%A9rer%20le%20corrig%C3%A9%20Linguistique%20L1%20en%20main%20propre.', '_blank');
+      return;
+    }
+
+    const modal = document.getElementById('processing-modal');
+    const progressBar = document.getElementById('progress-fill');
+    const modalText = document.getElementById('modal-status-text');
+    modal.classList.remove('hidden');
+
+    if (currentSelectedMethod === 'orange') {
+      modalText.innerText = "Appel USSD sécurisé vers Orange Money (+226)...";
+    } else if (currentSelectedMethod === 'moov') {
+      modalText.innerText = "Notification Push Moov Flooz envoyée à votre smartphone...";
+    } else {
+      modalText.innerText = "Débit direct du solde Portefeuille Campus...";
+    }
+
+    setTimeout(() => {
+      progressBar.style.width = "75%";
+      modalText.innerText = "Clé cryptographique générée. Chiffrement du document...";
+    }, 900);
+
+    setTimeout(() => {
+      progressBar.style.width = "100%";
+      modalText.innerText = "Achat vérifié ! Signature de la licence étudiante...";
+    }, 1800);
+
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      document.getElementById('pay-button').classList.add('hidden');
+      document.getElementById('success-banner').classList.remove('hidden');
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }, 2400);
+  }
+</script></main></body></html>

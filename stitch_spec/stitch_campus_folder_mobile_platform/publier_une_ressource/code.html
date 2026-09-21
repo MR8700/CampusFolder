@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100%;margin:0;padding:0;background-color:#faf8ff;}body{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-tertiary-container": "#49da9f", "surface-container-highest": "#dae2fd", "primary-fixed": "#a9f3c5", "on-secondary-fixed-variant": "#7f2b00", "outline-variant": "#bfc9c0", "error-container": "#ffdad6", "secondary-fixed": "#ffdbce", "tertiary": "#00422b", "on-tertiary-fixed-variant": "#005236", "on-error-container": "#93000a", "on-secondary": "#ffffff", "error": "#ba1a1a", "surface-tint": "#226b47", "primary-fixed-dim": "#8ed6aa", "background": "#faf8ff", "on-surface": "#131b2e", "on-background": "#131b2e", "inverse-primary": "#8ed6aa", "surface-container-high": "#e2e7ff", "tertiary-container": "#005c3e", "on-tertiary-fixed": "#002113", "surface-dim": "#d2d9f4", "secondary": "#a73a00", "primary-container": "#0d5c3a", "on-secondary-container": "#571a00", "outline": "#707971", "on-error": "#ffffff", "inverse-surface": "#283044", "on-primary-container": "#8ad2a7", "on-primary": "#ffffff", "tertiary-fixed": "#6ffbbe", "surface-container": "#eaedff", "surface": "#faf8ff", "secondary-fixed-dim": "#ffb599", "surface-variant": "#dae2fd", "on-surface-variant": "#404942", "inverse-on-surface": "#eef0ff", "primary": "#004328", "surface-container-low": "#f2f3ff", "on-secondary-fixed": "#370e00", "tertiary-fixed-dim": "#4edea3", "on-tertiary": "#ffffff", "secondary-container": "#fd651e", "surface-container-lowest": "#ffffff", "on-primary-fixed": "#002111", "surface-bright": "#faf8ff", "on-primary-fixed-variant": "#005232" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter-desktop": "1.5rem", "space-lg": "1rem", "space-xs": "0.25rem", "margin": "1rem", "gutter": "1rem", "space-sm": "0.5rem", "space-md": "0.75rem", "margin-desktop": "2rem", "space-xl": "1.5rem" }, fontFamily: { "label-sm": ["Plus Jakarta Sans"], "headline-xl-mobile": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "headline-xl": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "price-display": ["Plus Jakarta Sans"] }, fontSize: { "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "700" }], "headline-xl-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "800" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.03em", "fontWeight": "800" }], "headline-md": ["20px", { "lineHeight": "26px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "500" }], "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-lg-mobile": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "label-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "700" }], "price-display": ["18px", { "lineHeight": "22px", "letterSpacing": "-0.01em", "fontWeight": "800" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0 flex-1"><img alt="Logo" class="h-8 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCz191Bgd7B1zV8TJ1Rpd2CrVnFu4EDisPBvrQ8PScKL3khzSj5hTrXkr3mksAaKxE8vr9kiIn0v_iM75fBr-L-r7Omp4oapW5gAsz22kxhvY3jA1WGbkx_FF-7Ty3anpX0dktyOmnGriSsmyqA51j7feXvREwgh9DcP4_NHf67YdxQNQ5mfPGTs4cTLgb-_0YBiKCXWIGBK5m3Bna7Ir-lb2XM_2iuVLpQKZ01vvdsUH2V9KZamGUmDw"/><div class="flex flex-col min-w-0"><span class="font-label-sm text-label-sm uppercase tracking-wider text-primary truncate">Campus Folder</span><div class="flex items-center gap-space-xs"><button class="inline-flex items-center gap-1 bg-surface-container-high/80 px-2 py-0.5 rounded-full text-left truncate min-w-0 max-w-[170px] active:scale-95 transition-transform" type="button"><span class="material-symbols-outlined text-[14px] text-secondary">location_on</span><span class="font-label-sm text-[10px] leading-tight font-semibold text-on-surface truncate">Univ J. KI-ZERBO 🇧🇫</span><span class="material-symbols-outlined text-[12px] text-outline shrink-0">arrow_drop_down</span></button></div></div></div><div class="flex items-center gap-space-xs shrink-0"><button aria-label="Notifications" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary transition-colors relative" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-secondary ring-2 ring-surface"></span></button><a class="w-11 h-11 flex items-center justify-center rounded-full transition-transform active:scale-95" data-path="profil" href="#"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary-container/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNwJTG0v54RwD7UUqMI_atE_M6fpKZQNZV3-pdR9x_yJ06ODzApjk-6EFLKJUr8Q9KCGak2lGdZWB4Mxdvv-sEJraukiI9ijsoREFfNF9rFBlhjUuXVigqGyQeJomUDcO8jGGQhF9ZTWfGdUhOOlTxJndURth7xwR0e32FHp8AtjGNegjwcZ3ltYnu_KXO1kYlDi_pG5_3ZKDu6gENZiQdFMSvSCvF-3sVhLuxbjGukUDHT54rYktNZw"/></a></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-24 bg-surface"><div class="flex flex-col w-full">
+<div class="px-margin pt-space-md pb-space-lg flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">drive_folder_upload</span>
+</span>
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-wider">Création de ressource</span>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-container-high px-2.5 py-1 rounded-full text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px] text-secondary">bolt</span>
+<span>Revue en ~12 min</span>
+</div>
+</div>
+<div class="flex flex-col">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Partager &amp; Valoriser un Document</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Partagez vos polycopiés, audios d'amphi ou fiches et fixez librement votre rétribution en FCFA.</p>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm mt-space-xs">
+<div class="flex items-center justify-between text-on-surface">
+<span class="font-label-md text-label-md text-primary" id="step-indicator-title">Étape 1 sur 4 : Infos académiques</span>
+<span class="font-label-sm text-label-sm text-secondary font-bold" id="step-percentage">25%</span>
+</div>
+<div class="relative w-full h-2 rounded-full bg-surface-container-highest overflow-hidden">
+<div class="h-full bg-primary-container rounded-full transition-all duration-300" id="visual-progress-bar" style="width: 25%;"></div>
+</div>
+<div class="grid grid-cols-4 gap-1 pt-1">
+<button class="py-1 rounded-lg text-center font-label-sm text-[10px] bg-primary-fixed text-on-primary-fixed transition-colors" id="step-pill-1" onclick="goToStep(1)" type="button">1. Contexte</button>
+<button class="py-1 rounded-lg text-center font-label-sm text-[10px] bg-surface-container text-on-surface-variant transition-colors" id="step-pill-2" onclick="goToStep(2)" type="button">2. Médias</button>
+<button class="py-1 rounded-lg text-center font-label-sm text-[10px] bg-surface-container text-on-surface-variant transition-colors" id="step-pill-3" onclick="goToStep(3)" type="button">3. Prix</button>
+<button class="py-1 rounded-lg text-center font-label-sm text-[10px] bg-surface-container text-on-surface-variant transition-colors" id="step-pill-4" onclick="goToStep(4)" type="button">4. Droits</button>
+</div>
+</div>
+</div>
+<form class="flex flex-col gap-space-lg px-margin pb-space-xl" id="academic-publish-form" onsubmit="event.preventDefault(); triggerPublishWorkflow();">
+<section class="flex flex-col gap-space-md" id="step-panel-1">
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center gap-space-xs text-primary">
+<span class="material-symbols-outlined text-[20px]">account_balance</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">1. Cadre universitaire</h2>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface-variant">Campus &amp; Université d'appartenance</label>
+<div class="flex flex-wrap gap-1.5" id="group-univ">
+<button class="univ-chip px-3 py-1.5 rounded-full font-label-sm text-label-sm bg-primary-container text-on-primary shadow-xs transition-transform active:scale-95 flex items-center gap-1" data-value="ujkz" type="button">
+<span class="material-symbols-outlined text-[14px]">check</span>Univ Joseph KI-ZERBO
+            </button>
+<button class="univ-chip px-3 py-1.5 rounded-full font-label-sm text-label-sm bg-surface-container text-on-surface-variant transition-transform active:scale-95" data-value="uts" type="button">
+              Univ Thomas SANKARA
+            </button>
+<button class="univ-chip px-3 py-1.5 rounded-full font-label-sm text-label-sm bg-surface-container text-on-surface-variant transition-transform active:scale-95" data-value="una" type="button">
+              Univ Nazi BONI (Bobo)
+            </button>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface-variant">UFR / Faculté / Spécialité</label>
+<div class="flex flex-wrap gap-1.5" id="group-ufr">
+<button class="ufr-chip px-3 py-1.5 rounded-full font-label-sm text-label-sm bg-surface-container text-on-surface-variant" data-value="droit" type="button">Droit &amp; Sc. Politiques</button>
+<button class="ufr-chip px-3 py-1.5 rounded-full font-label-sm text-label-sm bg-primary-container text-on-primary flex items-center gap-1" data-value="seg" type="button">
+<span class="material-symbols-outlined text-[14px]">check</span>Économie &amp; Gestion (SEG)
+            </button>
+<button class="ufr-chip px-3 py-1.5 rounded-full font-label-sm text-label-sm bg-surface-container text-on-surface-variant" data-value="lac" type="button">Lettres &amp; Arts (LAC)</button>
+<button class="ufr-chip px-3 py-1.5 rounded-full font-label-sm text-label-sm bg-surface-container text-on-surface-variant" data-value="sea" type="button">Sciences Exactes (SEA)</button>
+<button class="ufr-chip px-3 py-1.5 rounded-full font-label-sm text-label-sm bg-surface-container text-on-surface-variant" data-value="sds" type="button">Santé (SDS)</button>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface-variant">Promotion &amp; Niveau d'étude</label>
+<div class="grid grid-cols-4 gap-1.5" id="group-level">
+<button class="level-chip py-2 rounded-lg font-label-md text-label-md text-center bg-surface-container text-on-surface-variant" data-value="L1" type="button">L1</button>
+<button class="level-chip py-2 rounded-lg font-label-md text-label-md text-center bg-surface-container text-on-surface-variant" data-value="L2" type="button">L2</button>
+<button class="level-chip py-2 rounded-lg font-label-md text-label-md text-center bg-primary-container text-on-primary font-bold shadow-xs" data-value="L3" type="button">L3</button>
+<button class="level-chip py-2 rounded-lg font-label-md text-label-md text-center bg-surface-container text-on-surface-variant" data-value="M1" type="button">Master</button>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface-variant">Catégorie pédagogique</label>
+<div class="grid grid-cols-2 gap-2" id="group-type">
+<button class="type-chip p-2.5 rounded-xl bg-primary-fixed text-on-primary-fixed flex items-center gap-2 text-left" data-value="corrige" type="button">
+<span class="material-symbols-outlined text-primary text-[20px]">verified</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold">Corrigé d'Examen</span>
+<span class="font-body-sm text-[11px] opacity-80">Sessions 2020-2024</span>
+</div>
+</button>
+<button class="type-chip p-2.5 rounded-xl bg-surface-container text-on-surface-variant flex items-center gap-2 text-left" data-value="cours" type="button">
+<span class="material-symbols-outlined text-[20px]">menu_book</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold">Polycopié Cours</span>
+<span class="font-body-sm text-[11px] opacity-80">Synthèse complète</span>
+</div>
+</button>
+<button class="type-chip p-2.5 rounded-xl bg-surface-container text-on-surface-variant flex items-center gap-2 text-left" data-value="td" type="button">
+<span class="material-symbols-outlined text-[20px]">draw</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold">Fiche TD / Exercices</span>
+<span class="font-body-sm text-[11px] opacity-80">Travaux dirigés guidés</span>
+</div>
+</button>
+<button class="type-chip p-2.5 rounded-xl bg-surface-container text-on-surface-variant flex items-center gap-2 text-left" data-value="recap" type="button">
+<span class="material-symbols-outlined text-[20px]">psychology</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold">Fiche Mémo</span>
+<span class="font-body-sm text-[11px] opacity-80">Aide-mémoire express</span>
+</div>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface-variant">Titre descriptif du document</label>
+<input class="w-full h-12 px-3 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:bg-surface-container-highest transition-colors" placeholder="Ex. Macroéconomie - Session Unique 2023..." type="text" value="Microéconomie Approfondie - TD &amp; Rattrapages 2023"/>
+</div>
+<button class="mt-2 w-full h-12 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-sm active:scale-98 transition-transform" onclick="goToStep(2)" type="button">
+<span>Continuer vers les Fichiers</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</section>
+<section class="flex flex-col gap-space-md" id="step-panel-2">
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs text-primary">
+<span class="material-symbols-outlined text-[20px]">perm_media</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">2. Médias polymorphiques</h2>
+</div>
+<span class="font-label-sm text-label-sm text-secondary bg-secondary-fixed px-2 py-0.5 rounded-full">Multi-formats acceptés</span>
+</div>
+<div class="flex gap-2">
+<img class="w-16 h-16 rounded-xl object-cover shrink-0" data-alt="West African student studying in a well-lit modern university library at Ouagadougou with textbooks and tablet on wooden desk, ambient soft natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcENNuYhHNFN05IgeO-zQ7dDu21RCnPU3y2Vez00J1NoJE2C4rCGtLZfHEffgHy64OJFeYnHE4KNmcljCa0clgQHKlwOhsuaWe--g1f5wMUn90Yqx04JHuXc85Iq0bg9UQfuNJdoERMwSZ9_xOoLJaUCFlQr0i0o84cN0aWaafk5V-xQUgzhPDjWlFKQradHjsXFS20GLUH16C_Iu1hv8NnQej997E71gLjvrGb40gN-iVEb4bE2qpVg"/>
+<div class="flex flex-col justify-center min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-bold truncate">Pack Pédagogique Tout-en-un</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">Combinez texte, audio d'explication et photos pour maximiser vos ventes et votre réputation.</span>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-4 flex flex-col items-center justify-center text-center gap-2 transition-colors cursor-pointer" onclick="simulateUpload()">
+<div class="w-12 h-12 rounded-full bg-primary-fixed text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[26px]">cloud_upload</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Déposer le PDF Principal</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Glissez ou touchez ici (Max 45 Mo)</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-sm text-[11px] text-primary-container bg-surface-container-lowest px-2.5 py-1 rounded-full shadow-xs">
+<span class="material-symbols-outlined text-[14px]">picture_as_pdf</span>
+            Optimisation compression automatique
+          </span>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<button class="flex flex-col items-center justify-center p-3 rounded-xl bg-surface-container text-on-surface gap-1.5 transition-all active:scale-95 text-center" id="btn-audio-record" onclick="toggleAudioRecord()" type="button">
+<div class="w-9 h-9 rounded-full bg-surface-container-highest text-secondary flex items-center justify-center" id="mic-indicator">
+<span class="material-symbols-outlined text-[20px]">mic</span>
+</div>
+<span class="font-label-sm text-[11px] font-bold">Note Vocale</span>
+<span class="font-body-sm text-[10px] text-on-surface-variant" id="mic-status-label">Microphone</span>
+</button>
+<button class="flex flex-col items-center justify-center p-3 rounded-xl bg-surface-container text-on-surface gap-1.5 transition-all active:scale-95 text-center" type="button">
+<div class="w-9 h-9 rounded-full bg-surface-container-highest text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">videocam</span>
+</div>
+<span class="font-label-sm text-[11px] font-bold">Extrait Amphi</span>
+<span class="font-body-sm text-[10px] text-on-surface-variant">Vidéo 60s max</span>
+</button>
+<button class="flex flex-col items-center justify-center p-3 rounded-xl bg-surface-container text-on-surface gap-1.5 transition-all active:scale-95 text-center" type="button">
+<div class="w-9 h-9 rounded-full bg-surface-container-highest text-tertiary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">photo_library</span>
+</div>
+<span class="font-label-sm text-[11px] font-bold">Manuscrit</span>
+<span class="font-body-sm text-[10px] text-on-surface-variant">Photos nettes</span>
+</button>
+</div>
+<div class="flex flex-col gap-2 pt-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Fichiers attachés (2 prêts)</span>
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-2 min-w-0">
+<span class="px-2 py-0.5 rounded-md font-label-sm text-[10px] bg-error-container text-on-error-container font-bold shrink-0">PDF</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">Micro_Examen_2023_Corrige.pdf</span>
+<span class="font-body-sm text-[10px] text-on-surface-variant">14 pages • 3.2 Mo</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-2 min-w-0">
+<span class="px-2 py-0.5 rounded-md font-label-sm text-[10px] bg-secondary-fixed text-on-secondary-fixed-variant font-bold shrink-0">VOCAL</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">Explication_Exercice_Lagrangien.mp3</span>
+<span class="font-body-sm text-[10px] text-on-surface-variant">03:42 min • 1.1 Mo</span>
+</div>
+</div>
+<button class="w-7 h-7 flex items-center justify-center rounded-full text-error active:bg-error-container" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+<div class="flex gap-2 pt-2">
+<button class="h-12 px-4 rounded-lg bg-surface-container text-on-surface font-label-lg text-label-lg active:scale-98 transition-transform" onclick="goToStep(1)" type="button">
+            Retour
+          </button>
+<button class="flex-1 h-12 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-sm active:scale-98 transition-transform" onclick="goToStep(3)" type="button">
+<span>Passer à la Tarification</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<section class="flex flex-col gap-space-md" id="step-panel-3">
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center gap-space-xs text-primary">
+<span class="material-symbols-outlined text-[20px]">payments</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">3. Monétisation &amp; Partage</h2>
+</div>
+<div class="grid grid-cols-1 gap-2.5" id="pricing-models">
+<div class="p-3.5 rounded-xl bg-surface-container-low cursor-pointer transition-all flex items-start gap-3" id="card-model-gratuit" onclick="selectModel('gratuit')">
+<span class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[20px]">volunteer_activism</span>
+</span>
+<div class="flex flex-col flex-1">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg text-on-surface">100% Gratuit (Entraide)</span>
+<span class="w-4 h-4 rounded-full bg-surface-variant flex items-center justify-center radio-dot"></span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Disponible sans frais pour l'ensemble des camarades de promotion. Boost immédiat de votre réputation étudiante.</p>
+</div>
+</div>
+<div class="p-3.5 rounded-xl bg-primary-fixed text-on-primary-fixed cursor-pointer transition-all flex items-start gap-3 shadow-sm" id="card-model-monetise" onclick="selectModel('monetise')">
+<span class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[20px]">price_check</span>
+</span>
+<div class="flex flex-col flex-1">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg text-on-primary-fixed font-bold">Rémunéré par document</span>
+<span class="w-4 h-4 rounded-full bg-primary flex items-center justify-center radio-dot">
+<span class="w-1.5 h-1.5 rounded-full bg-surface"></span>
+</span>
+</div>
+<p class="font-body-sm text-body-sm opacity-90 mt-0.5">Paiements instantanés via Orange Money &amp; Moov Money avec déblocage sécurisé de l'archive.</p>
+</div>
+</div>
+<div class="p-3.5 rounded-xl bg-surface-container-low cursor-pointer transition-all flex items-start gap-3" id="card-model-presentiel" onclick="selectModel('presentiel')">
+<span class="w-8 h-8 rounded-full bg-surface-container-highest text-secondary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[20px]">handshake</span>
+</span>
+<div class="flex flex-col flex-1">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg text-on-surface">Remise Campus &amp; WhatsApp</span>
+<span class="w-4 h-4 rounded-full bg-surface-variant flex items-center justify-center radio-dot"></span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Rendez-vous physique au kiosque ou amphi, avec lien vers votre groupe d'étude WhatsApp vérifié.</p>
+</div>
+</div>
+</div>
+<div class="bg-surface-container rounded-xl p-space-md flex flex-col gap-space-sm" id="monetization-calculator">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface font-bold">Prix unitaire conseillé (FCFA)</label>
+<div class="flex items-center gap-1 bg-surface-container-lowest px-2 py-1 rounded-lg">
+<input class="w-16 font-price-display text-price-display text-secondary font-bold text-right bg-transparent focus:outline-none" id="input-price" max="10000" min="100" oninput="calculateRevenue(this.value)" step="50" type="number" value="500"/>
+<span class="font-label-sm text-label-sm text-on-surface-variant">FCFA</span>
+</div>
+</div>
+<div class="flex items-center justify-between gap-1 pt-1">
+<button class="flex-1 py-1 rounded-md bg-surface-container-lowest text-on-surface font-label-sm text-[11px]" onclick="setQuickPrice(300)" type="button">300 F</button>
+<button class="flex-1 py-1 rounded-md bg-secondary-fixed text-on-secondary-fixed-variant font-label-sm text-[11px] font-bold" onclick="setQuickPrice(500)" type="button">500 F</button>
+<button class="flex-1 py-1 rounded-md bg-surface-container-lowest text-on-surface font-label-sm text-[11px]" onclick="setQuickPrice(1000)" type="button">1 000 F</button>
+<button class="flex-1 py-1 rounded-md bg-surface-container-lowest text-on-surface font-label-sm text-[11px]" onclick="setQuickPrice(1500)" type="button">1 500 F</button>
+</div>
+<div class="bg-surface-container-lowest rounded-lg p-3 flex flex-col gap-2 mt-1 shadow-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-label-sm text-label-sm text-on-surface">Votre part auteur (85%)</span>
+</div>
+<span class="font-label-lg text-label-lg text-primary font-extrabold" id="author-gain">425 FCFA</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Frais Campus Folder &amp; Telecom (15%)</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant" id="platform-fee">75 FCFA</span>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden flex mt-1">
+<div class="bg-primary-container h-full" id="author-bar" style="width: 85%;"></div>
+<div class="bg-secondary-container h-full" style="width: 15%;"></div>
+</div>
+</div>
+</div>
+<div class="flex gap-2 pt-2">
+<button class="h-12 px-4 rounded-lg bg-surface-container text-on-surface font-label-lg text-label-lg active:scale-98 transition-transform" onclick="goToStep(2)" type="button">
+            Retour
+          </button>
+<button class="flex-1 h-12 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-sm active:scale-98 transition-transform" onclick="goToStep(4)" type="button">
+<span>Valider la Charte</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<section class="flex flex-col gap-space-md" id="step-panel-4">
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center gap-space-xs text-primary">
+<span class="material-symbols-outlined text-[20px]">gavel</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">4. Charte &amp; Propriété</h2>
+</div>
+<div class="bg-surface-container-low rounded-xl p-3.5 flex flex-col gap-2">
+<div class="flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-primary text-[20px]">shield_person</span>
+<span class="font-label-md text-label-md font-bold">Contrat Contributeur Certifié v2.1</span>
+</div>
+<p class="font-body-sm text-[12px] leading-relaxed text-on-surface-variant">
+            En publiant sur Campus Folder, vous garantissez que ces notes, enregistrements et corrigés résultent de votre production ou ont été explicitement autorisés au partage libre. Tout plagiat intégral ou document officiel confidentiel entraîne la suspension immédiate du solde contributeur.
+          </p>
+<div class="flex items-center gap-2 pt-1">
+<span class="font-label-sm text-[10px] text-primary bg-primary-fixed px-2 py-0.5 rounded-md font-bold">Anti-plagiat actif</span>
+<span class="font-label-sm text-[10px] text-secondary bg-secondary-fixed px-2 py-0.5 rounded-md font-bold">Reversement Garanti</span>
+</div>
+</div>
+<label class="flex items-start gap-3 p-3 rounded-xl bg-surface-container cursor-pointer select-none">
+<input class="mt-0.5 w-5 h-5 rounded text-primary-container accent-primary-container focus:ring-0" id="legal-agreement" onchange="toggleCtaState()" required="" type="checkbox"/>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-bold">Engagement sur l'honneur</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant leading-tight">
+              Je certifie être l'auteur principal ou détenir les droits d'exploitation académique conformément à la législation burkinabè et au règlement Campus Folder.
+            </span>
+</div>
+</label>
+<div class="flex items-center gap-3 p-3 rounded-xl bg-surface-container-high">
+<img class="w-10 h-10 rounded-full object-cover shrink-0" data-alt="West African student committee moderator smiling warmly wearing a university badge, friendly academic counseling vibe, clear bright lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcpJ06I2MX2pYy6ZGrzSu0rgMZrq3DNOY2AvY8DYCUI57hgKjdJlt9em_aZGvhwYGy9q3h8E7zN0siGcr4A6S1FIEo4P2fMVpZLw7I6PjS21CLz97Pz7G7Er8FXWrzSm-cepsa4cddXHWhWfM8Mpnc-L38MKC9ER-P9-2Z4c5No8yyZ6CsTD6AK5Oa7Cww5J9Mbs0SB3z_iFcbvYO960qBAcAzfNXJdqPh2-Q5KAYikHE1yajb-AhDrg"/>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-on-surface font-bold truncate">Comité des Pairs Étudiants</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">Une validation express est lancée dès soumission.</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 pt-2">
+<button class="w-full h-14 rounded-xl bg-primary-container text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-md active:scale-98 transition-all opacity-60 pointer-events-none" id="btn-submit-publish" type="submit">
+<span class="material-symbols-outlined text-[22px]">verified_user</span>
+<span>Soumettre à la validation académique</span>
+</button>
+<button class="w-full py-2.5 text-center font-label-md text-label-md text-on-surface-variant active:opacity-75" onclick="goToStep(3)" type="button">
+            Modifier les réglages tarifaires
+          </button>
+</div>
+</div>
+</section>
+</form>
+<div class="fixed inset-0 z-50 bg-inverse-surface/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-margin" id="success-modal">
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg w-full max-w-sm flex flex-col items-center text-center gap-space-md shadow-xl">
+<div class="w-16 h-16 rounded-full bg-primary-fixed text-primary flex items-center justify-center animate-bounce">
+<span class="material-symbols-outlined text-[36px]">check_circle</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="font-headline-md text-headline-md text-on-surface">Ressource en cours d'indexation !</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Félicitations, votre document pédagogique a été envoyé avec succès. Vos pairs sont notifiés à Ouagadougou.</p>
+</div>
+<div class="w-full bg-surface-container-low rounded-xl p-3 flex flex-col gap-1.5 text-left">
+<div class="flex justify-between font-label-sm text-label-sm">
+<span class="text-on-surface-variant">Filière</span>
+<span class="text-on-surface font-bold">L3 Économie &amp; Gestion</span>
+</div>
+<div class="flex justify-between font-label-sm text-label-sm">
+<span class="text-on-surface-variant">Rétribution auteur</span>
+<span class="text-secondary font-bold" id="modal-payout">425 FCFA / achat</span>
+</div>
+</div>
+<a class="w-full h-12 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2 active:scale-98 transition-transform" data-path="explorer" href="#">
+<span>Voir ma bibliothèque</span>
+<span class="material-symbols-outlined text-[18px]">collections_bookmark</span>
+</a>
+</div>
+</div>
+</div>
+<script>
+  let currentStep = 1;
+  let isRecording = false;
+
+  function goToStep(step) {
+    currentStep = step;
+    const bar = document.getElementById('visual-progress-bar');
+    const indicator = document.getElementById('step-indicator-title');
+    const percent = document.getElementById('step-percentage');
+
+    const stepTitles = {
+      1: "Étape 1 sur 4 : Infos académiques",
+      2: "Étape 2 sur 4 : Dépôt multimédia",
+      3: "Étape 3 sur 4 : Prix & Rémunération",
+      4: "Étape 4 sur 4 : Droits & Propriété"
+    };
+
+    const percentages = { 1: '25%', 2: '50%', 3: '75%', 4: '100%' };
+
+    if (bar) bar.style.width = percentages[step];
+    if (indicator) indicator.textContent = stepTitles[step];
+    if (percent) percent.textContent = percentages[step];
+
+    for (let i = 1; i <= 4; i++) {
+      const pill = document.getElementById('step-pill-' + i);
+      if (pill) {
+        if (i === step) {
+          pill.className = 'py-1 rounded-lg text-center font-label-sm text-[10px] bg-primary-fixed text-on-primary-fixed transition-colors font-bold';
+        } else if (i < step) {
+          pill.className = 'py-1 rounded-lg text-center font-label-sm text-[10px] bg-primary-container text-on-primary transition-colors';
+        } else {
+          pill.className = 'py-1 rounded-lg text-center font-label-sm text-[10px] bg-surface-container text-on-surface-variant transition-colors';
+        }
+      }
+    }
+
+    const panels = [1, 2, 3, 4];
+    panels.forEach(p => {
+      const panel = document.getElementById('step-panel-' + p);
+      if (panel) {
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }
+
+  function toggleChip(containerId, activeClass, inactiveClass) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const buttons = container.querySelectorAll('button');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => {
+          b.className = inactiveClass;
+          const check = b.querySelector('.material-symbols-outlined');
+          if (check && check.textContent === 'check') check.remove();
+        });
+        btn.className = activeClass;
+      });
+    });
+  }
+
+  function calculateRevenue(val) {
+    const price = parseInt(val, 10) || 0;
+    const authorVal = Math.round(price * 0.85);
+    const platformVal = price - authorVal;
+
+    const authorGain = document.getElementById('author-gain');
+    const platformFee = document.getElementById('platform-fee');
+    const modalPayout = document.getElementById('modal-payout');
+
+    if (authorGain) authorGain.textContent = authorVal.toLocaleString('fr-FR') + ' FCFA';
+    if (platformFee) platformFee.textContent = platformVal.toLocaleString('fr-FR') + ' FCFA';
+    if (modalPayout) modalPayout.textContent = authorVal.toLocaleString('fr-FR') + ' FCFA / achat';
+  }
+
+  function setQuickPrice(amount) {
+    const input = document.getElementById('input-price');
+    if (input) {
+      input.value = amount;
+      calculateRevenue(amount);
+    }
+  }
+
+  function selectModel(model) {
+    const gratuitCard = document.getElementById('card-model-gratuit');
+    const monetiseCard = document.getElementById('card-model-monetise');
+    const presentielCard = document.getElementById('card-model-presentiel');
+    const calc = document.getElementById('monetization-calculator');
+
+    [gratuitCard, monetiseCard, presentielCard].forEach(card => {
+      if (card) {
+        card.className = 'p-3.5 rounded-xl bg-surface-container-low cursor-pointer transition-all flex items-start gap-3';
+        const dot = card.querySelector('.radio-dot');
+        if (dot) dot.className = 'w-4 h-4 rounded-full bg-surface-variant flex items-center justify-center radio-dot';
+      }
+    });
+
+    if (model === 'gratuit') {
+      gratuitCard.className = 'p-3.5 rounded-xl bg-primary-fixed text-on-primary-fixed cursor-pointer transition-all flex items-start gap-3 shadow-sm';
+      const dot = gratuitCard.querySelector('.radio-dot');
+      if (dot) dot.className = 'w-4 h-4 rounded-full bg-primary flex items-center justify-center radio-dot';
+      if (calc) calc.style.display = 'none';
+    } else if (model === 'monetise') {
+      monetiseCard.className = 'p-3.5 rounded-xl bg-primary-fixed text-on-primary-fixed cursor-pointer transition-all flex items-start gap-3 shadow-sm';
+      const dot = monetiseCard.querySelector('.radio-dot');
+      if (dot) dot.className = 'w-4 h-4 rounded-full bg-primary flex items-center justify-center radio-dot';
+      if (calc) calc.style.display = 'flex';
+    } else if (model === 'presentiel') {
+      presentielCard.className = 'p-3.5 rounded-xl bg-secondary-fixed text-on-secondary-fixed-variant cursor-pointer transition-all flex items-start gap-3 shadow-sm';
+      const dot = presentielCard.querySelector('.radio-dot');
+      if (dot) dot.className = 'w-4 h-4 rounded-full bg-secondary flex items-center justify-center radio-dot';
+      if (calc) calc.style.display = 'none';
+    }
+  }
+
+  function toggleAudioRecord() {
+    isRecording = !isRecording;
+    const mic = document.getElementById('mic-indicator');
+    const status = document.getElementById('mic-status-label');
+    if (isRecording) {
+      if (mic) mic.className = 'w-9 h-9 rounded-full bg-error text-on-error flex items-center justify-center animate-pulse';
+      if (status) {
+        status.textContent = 'Enregistrement 00:04';
+        status.className = 'font-body-sm text-[10px] text-error font-bold';
+      }
+    } else {
+      if (mic) mic.className = 'w-9 h-9 rounded-full bg-surface-container-highest text-secondary flex items-center justify-center';
+      if (status) {
+        status.textContent = 'Audio ajouté !';
+        status.className = 'font-body-sm text-[10px] text-primary font-bold';
+      }
+    }
+  }
+
+  function simulateUpload() {
+    const feedback = document.createElement('div');
+    feedback.className = 'fixed top-20 left-1/2 -translate-x-1/2 bg-primary-container text-on-primary px-4 py-2 rounded-full font-label-md text-label-md shadow-lg z-50 flex items-center gap-2';
+    feedback.innerHTML = '<span class="material-symbols-outlined text-[18px]">upload_file</span> Document numérisé avec succès';
+    document.body.appendChild(feedback);
+    setTimeout(() => {
+      feedback.remove();
+    }, 2400);
+  }
+
+  function toggleCtaState() {
+    const check = document.getElementById('legal-agreement');
+    const btn = document.getElementById('btn-submit-publish');
+    if (!check || !btn) return;
+
+    if (check.checked) {
+      btn.className = 'w-full h-14 rounded-xl bg-primary-container text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-md active:scale-98 transition-all cursor-pointer';
+    } else {
+      btn.className = 'w-full h-14 rounded-xl bg-primary-container text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-md active:scale-98 transition-all opacity-60 pointer-events-none';
+    }
+  }
+
+  function triggerPublishWorkflow() {
+    const modal = document.getElementById('success-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+    }
+  }
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-4px_16px_rgba(0,0,0,0.05)]" data-active-classes="text-primary font-bold"><div class="h-16 px-2 flex items-center justify-around relative"><a class="flex flex-col items-center justify-center w-14 h-14 text-on-surface-variant transition-transform duration-200 active:scale-90" data-path="accueil" href="#"><span class="material-symbols-outlined text-[22px]">school</span><span class="font-label-sm text-[10px] mt-0.5">Accueil</span></a><a class="flex flex-col items-center justify-center w-14 h-14 text-on-surface-variant transition-transform duration-200 active:scale-90" data-path="explorer" href="#"><span class="material-symbols-outlined text-[22px]">menu_book</span><span class="font-label-sm text-[10px] mt-0.5">Explorer</span></a><div class="relative -top-3.5 flex flex-col items-center justify-center"><a aria-current="page" class="w-13 h-13 w-[52px] h-[52px] rounded-full bg-primary-container flex items-center justify-center shadow-[0_4px_14px_rgba(13,92,58,0.35)] transition-transform duration-200 active:scale-95 ring-4 ring-surface text-primary font-bold" data-path="publier" href="#"><span class="material-symbols-outlined text-[26px]">add</span></a><span class="font-label-sm text-[10px] font-bold text-primary-container mt-1">Publier</span></div><a class="flex flex-col items-center justify-center w-14 h-14 text-on-surface-variant transition-transform duration-200 active:scale-90" data-path="portefeuille" href="#"><span class="material-symbols-outlined text-[22px]">account_balance_wallet</span><span class="font-label-sm text-[10px] mt-0.5">Revenus</span></a><a class="flex flex-col items-center justify-center w-14 h-14 text-on-surface-variant transition-transform duration-200 active:scale-90" data-path="profil" href="#"><span class="material-symbols-outlined text-[22px]">person</span><span class="font-label-sm text-[10px] mt-0.5">Profil</span></a></div></nav></body></html>

@@ -1,6 +1,7 @@
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {
@@ -41,7 +42,7 @@ model User {
   notifyOnWithdrawal  Boolean @default(true)
 
   profile             Profile?
-  isSuperAdmin     Boolean   @default(false)
+  isSuperAdmin        Boolean   @default(false)
   roles               UserRole[]
   resources           AcademicResource[]
   orders              Order[]
@@ -52,6 +53,9 @@ model User {
   contributorRevenues RevenueDistribution[]
   notifications       EmailNotification[]
   activities          ActivityLog[]
+
+  @@index([status])
+  @@index([createdAt])
 }
 
 model Profile {
@@ -80,6 +84,11 @@ model Profile {
   isDelegate      Boolean  @default(false)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+
+  @@index([filiereId])
+  @@index([institutionId])
+  @@index([facultyId])
+  @@index([academicLevelId])
 }
 
 model Role {
@@ -99,6 +108,8 @@ model UserRole {
   role       Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
 
   @@unique([userId, roleId])
+  @@index([userId])
+  @@index([roleId])
 }
 
 // ----------------------------------------------------
@@ -132,6 +143,10 @@ model Institution {
   faculties           Faculty[]
   resources           AcademicResource[]
   profiles            Profile[]
+
+  @@index([countryId])
+  @@index([region])
+  @@index([isLive, isArchived])
 }
 
 model Faculty {
@@ -148,6 +163,8 @@ model Faculty {
   filieres        Filiere[]
   resources       AcademicResource[]
   profiles        Profile[]
+
+  @@index([institutionId])
 }
 
 model Filiere {
@@ -163,6 +180,8 @@ model Filiere {
   profiles      Profile[]
   createdAt     DateTime           @default(now())
   updatedAt     DateTime           @updatedAt
+
+  @@index([facultyId])
 }
 
 model AcademicLevel {
@@ -233,6 +252,16 @@ model AcademicResource {
   orders          Order[]
   entitlements    Entitlement[]
   reviews         Review[]
+
+  @@index([authorId])
+  @@index([institutionId])
+  @@index([facultyId])
+  @@index([filiereId])
+  @@index([academicLevelId])
+  @@index([validationStatus])
+  @@index([visibility, isArchived])
+  @@index([resourceType])
+  @@index([createdAt])
 }
 
 model Media {
@@ -251,6 +280,8 @@ model Media {
   labelBadge       String?          // e.g. "100% lisible", "Aperçu 30s", "Ultra HD"
   description      String?
   createdAt        DateTime         @default(now())
+
+  @@index([resourceId])
 }
 
 // ----------------------------------------------------
@@ -269,6 +300,8 @@ model AccessPolicy {
   allowOffline    Boolean          @default(true)
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
+
+  @@index([mode])
 }
 
 model ContactChannel {
@@ -298,6 +331,10 @@ model Entitlement {
   user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   resource       AcademicResource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
   order          Order?           @relation(fields: [orderId], references: [id])
+
+  @@index([userId])
+  @@index([resourceId])
+  @@index([orderId])
 }
 
 // ----------------------------------------------------
@@ -320,6 +357,11 @@ model Order {
   payments     Payment[]
   distribution RevenueDistribution?
   entitlements Entitlement[]
+
+  @@index([buyerId])
+  @@index([resourceId])
+  @@index([status])
+  @@index([createdAt])
 }
 
 model Payment {
@@ -333,6 +375,9 @@ model Payment {
   createdAt             DateTime @default(now())
 
   order                 Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([status])
 }
 
 model RevenueDistribution {
@@ -347,6 +392,8 @@ model RevenueDistribution {
 
   order             Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   contributor       User     @relation(fields: [contributorId], references: [id])
+
+  @@index([contributorId])
 }
 
 model Wallet {
@@ -375,6 +422,9 @@ model LedgerEntry {
   createdAt    DateTime @default(now())
 
   wallet       Wallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
+  @@index([walletId])
+  @@index([createdAt])
 }
 
 model Withdrawal {
@@ -388,6 +438,10 @@ model Withdrawal {
   createdAt              DateTime  @default(now())
 
   wallet                 Wallet    @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
+  @@index([walletId])
+  @@index([status])
+  @@index([createdAt])
 }
 
 // ----------------------------------------------------
@@ -411,6 +465,8 @@ model AgreementVersion {
   effectiveAt     DateTime              @default(now())
   agreement       Agreement             @relation(fields: [agreementId], references: [id], onDelete: Cascade)
   acceptances     AgreementAcceptance[]
+
+  @@index([agreementId])
 }
 
 model AgreementAcceptance {
@@ -424,6 +480,9 @@ model AgreementAcceptance {
 
   user               User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   version            AgreementVersion @relation(fields: [agreementVersionId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([agreementVersionId])
 }
 
 // ----------------------------------------------------
@@ -441,6 +500,9 @@ model Review {
 
   resource   AcademicResource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
   user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([resourceId])
+  @@index([userId])
 }
 
 // ----------------------------------------------------
@@ -461,6 +523,10 @@ model EmailNotification {
   error       String?
   isRead      Boolean  @default(false)
   createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
 }
 
 // ----------------------------------------------------
@@ -485,6 +551,10 @@ model PricingCeilingRule {
   notes           String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+
+  @@index([institutionId])
+  @@index([facultyId])
+  @@index([filiereId])
 }
 
 // ----------------------------------------------------
@@ -501,5 +571,7 @@ model ActivityLog {
   metadata    String?  // JSON or details
   ipAddress   String?
   createdAt   DateTime @default(now())
-}
 
+  @@index([userId])
+  @@index([createdAt])
+}

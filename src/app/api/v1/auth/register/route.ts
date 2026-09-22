@@ -7,6 +7,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const {
+      accountType = 'STUDENT', // 'STUDENT' | 'GENERAL'
       ine,
       firstName,
       lastName,
@@ -20,31 +21,44 @@ export async function POST(req: NextRequest) {
       region,
       address,
       avatarUrl,
+      profession,
       countryCode = 'BF',
     } = body;
 
-    // 1. Mandatory Fields Validation
-    if (!ine || !firstName || !lastName || !email || !phoneNumber || !password) {
+    // 1. Mandatory Fields Validation for all accounts
+    if (!firstName || !lastName || !email || !phoneNumber || !password) {
       return NextResponse.json(
-        { error: 'Tous les champs obligatoires (INE, Nom, Prénom, Email, Téléphone, Mot de passe) doivent être renseignés.' },
+        { error: 'Tous les champs obligatoires (Nom, Prénom, Email, Téléphone, Mot de passe) doivent être renseignés.' },
         { status: 400 }
       );
     }
 
-    // 2. Validate INE
-    const ineValidation = validateIne(ine);
-    if (!ineValidation.isValid) {
-      return NextResponse.json({ error: ineValidation.message }, { status: 400 });
-    }
+    // 2. Validate INE strictly if STUDENT account
+    let cleanedIne: string | undefined = undefined;
+    if (accountType === 'STUDENT') {
+      if (!ine || !ine.trim()) {
+        return NextResponse.json(
+          { error: "L'Identifiant National de l'Étudiant (INE) est obligatoire pour les étudiants burkinabés." },
+          { status: 400 }
+        );
+      }
 
-    const existingIne = await prisma.user.findUnique({
-      where: { ine: ine.trim().toUpperCase() },
-    });
-    if (existingIne) {
-      return NextResponse.json(
-        { error: 'Cet Identifiant National Étudiant (INE) est déjà associé à un compte.' },
-        { status: 409 }
-      );
+      const ineValidation = validateIne(ine);
+      if (!ineValidation.isValid) {
+        return NextResponse.json({ error: ineValidation.message }, { status: 400 });
+      }
+
+      cleanedIne = ine.trim().toUpperCase();
+
+      const existingIne = await prisma.user.findUnique({
+        where: { ine: cleanedIne },
+      });
+      if (existingIne) {
+        return NextResponse.json(
+          { error: 'Cet Identifiant National Étudiant (INE) est déjà associé à un compte.' },
+          { status: 409 }
+        );
+      }
     }
 
     // 3. Validate Email
@@ -58,7 +72,7 @@ export async function POST(req: NextRequest) {
     });
     if (existingEmail) {
       return NextResponse.json(
-        { error: 'Cette adresse email est déjà utilisée.' },
+        { error: 'Cette adresse email est déjà associée à un compte existant.' },
         { status: 409 }
       );
     }
@@ -69,12 +83,12 @@ export async function POST(req: NextRequest) {
     });
     if (existingPhone) {
       return NextResponse.json(
-        { error: 'Ce numéro de téléphone est déjà enregistré.' },
+        { error: 'Ce numéro de téléphone est déjà enregistré sur la plateforme.' },
         { status: 409 }
       );
     }
 
-    // 5. Strict Password Validation (8+ chars, no repetition, maj, min, num, special, 0 space)
+    // 5. Strict Password Validation
     const passwordValidation = validatePassword(password);
     if (!passwordValidation.isValid) {
       return NextResponse.json(
@@ -94,7 +108,7 @@ export async function POST(req: NextRequest) {
     // 7. Atomic User & Profile & Wallet creation
     const user = await prisma.user.create({
       data: {
-        ine: ine.trim().toUpperCase(),
+        ine: cleanedIne,
         email: email.toLowerCase().trim(),
         phoneNumber: phoneNumber.trim(),
         passwordHash,
@@ -102,7 +116,7 @@ export async function POST(req: NextRequest) {
         emailVerified: false,
         verificationOtp: otp,
         verificationOtpExpiresAt: otpExpiresAt,
-        points: 0, // Règle stricte Campus Folder : Tout nouveau sur la plateforme a 0 pts
+        points: 0,
         profile: {
           create: {
             firstName: firstName.trim(),
@@ -112,11 +126,12 @@ export async function POST(req: NextRequest) {
             countryCode,
             region: region || 'Centre',
             city: region === 'Hauts-Bassins' ? 'Bobo-Dioulasso' : 'Ouagadougou',
-            address: address || 'Campus principal',
-            filiere: filiere || 'Linguistique Générale',
-            institutionId: institutionId || undefined,
-            facultyId: facultyId || undefined,
-            academicLevelId: academicLevelId || undefined,
+            address: address || (accountType === 'STUDENT' ? 'Campus Universitaire' : 'Ouagadougou'),
+            filiere: filiere || (accountType === 'STUDENT' ? 'Études Supérieures' : undefined),
+            bio: profession ? `Activité : ${profession}` : (accountType === 'STUDENT' ? 'Étudiant Burkinabé' : 'Membre de la communauté'),
+            institutionId: accountType === 'STUDENT' ? (institutionId || undefined) : undefined,
+            facultyId: accountType === 'STUDENT' ? (facultyId || undefined) : undefined,
+            academicLevelId: accountType === 'STUDENT' ? (academicLevelId || undefined) : undefined,
           },
         },
         wallet: {
@@ -124,7 +139,7 @@ export async function POST(req: NextRequest) {
             availableBalance: 0,
             pendingBalance: 0,
             currency: 'XOF',
-            cfPayId: `CF-PAY-${ine.trim().toUpperCase().substring(0, 8)}`,
+            cfPayId: `CF-PAY-${Date.now().toString().slice(-6)}-${Math.floor(100 + Math.random() * 900)}`,
           },
         },
       },
@@ -140,24 +155,39 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    console.log(`[CAMPUS_FOLDER_AUTH] Code OTP de vérification généré pour ${email}: ${otp}`);
+    // 8. Assign role (STUDENT or CONTRIBUTOR/GENERAL)
+    const roleCode = accountType === 'STUDENT' ? 'STUDENT' : 'CONTRIBUTOR';
+    const role = await prisma.role.findUnique({ where: { code: roleCode } });
+    if (role) {
+      await prisma.userRole.create({
+        data: {
+          userId: user.id,
+          roleId: role.id,
+        },
+      }).catch(() => {});
+    }
 
-    // Dispatch real/audited academic email notification
+    // 9. Dispatch real email notification with OTP
     await sendOtpEmail(user.email || email, `${firstName} ${lastName}`, otp, user.id).catch((err) => {
       console.error('[EMAIL NOTIFICATION DISPATCH ERROR]', err);
     });
 
     return NextResponse.json({
       success: true,
-      message: `Code de vérification envoyé à ${email}.`,
-      userId: user.id,
-      email: user.email,
-      otpPreview: otp, // For local test and demonstration
+      message: `Compte créé avec succès. Un code de vérification à 6 chiffres a été envoyé à votre adresse ${email}.`,
+      user: {
+        id: user.id,
+        ine: user.ine,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+        accountType,
+        profile: user.profile,
+      },
     });
   } catch (error: any) {
     console.error('API Error /auth/register:', error);
     return NextResponse.json(
-      { error: "Erreur lors de l'enregistrement du compte étudiant." },
+      { error: error.message || "Une erreur inattendue est survenue lors de l'inscription." },
       { status: 500 }
     );
   }

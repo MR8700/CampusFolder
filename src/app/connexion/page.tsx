@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Logo from '@/components/Logo';
@@ -13,27 +13,9 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
 
-  const [demoAccounts, setDemoAccounts] = useState<any[]>([]);
-  const [loadingDemos, setLoadingDemos] = useState(false);
-  const [loggingInDemoId, setLoggingInDemoId] = useState<string | null>(null);
-
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
-
-  // Load demo accounts for fast access
-  useEffect(() => {
-    setLoadingDemos(true);
-    fetch('/api/v1/auth/demo-accounts')
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.success && data.accounts) {
-          setDemoAccounts(data.accounts);
-        }
-      })
-      .catch(() => {})
-      .finally(() => setLoadingDemos(false));
-  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,7 +23,7 @@ export default function LoginPage() {
     setSuccessMsg(null);
 
     if (!identifier.trim() || !password) {
-      setErrorMsg('Veuillez renseigner votre Email ou N° INE ainsi que votre mot de passe.');
+      setErrorMsg('Veuillez renseigner votre Email, N° INE ou Téléphone ainsi que votre mot de passe.');
       return;
     }
 
@@ -63,41 +45,14 @@ export default function LoginPage() {
         throw new Error(data.error || 'Identifiant ou mot de passe incorrect.');
       }
 
-      setSuccessMsg(`Connexion réussie ! Bienvenue ${data.user?.profile?.firstName || ''}.`);
+      setSuccessMsg(`Connexion réussie ! Bienvenue ${data.user?.profile?.firstName || data.user?.profile?.displayName || ''}.`);
       setTimeout(() => {
         router.push('/');
-      }, 800);
+      }, 700);
     } catch (err: any) {
       setErrorMsg(err.message || 'Une erreur est survenue lors de la connexion.');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleQuickLogin = async (user: any) => {
-    setLoggingInDemoId(user.id);
-    setErrorMsg(null);
-
-    try {
-      const res = await fetch('/api/v1/auth/quick-login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id }),
-      });
-      const data = await res.json();
-
-      if (data.success) {
-        setSuccessMsg(`Connecté en tant que ${user.name} (${user.institutionShort})`);
-        setTimeout(() => {
-          router.push('/');
-        }, 600);
-      } else {
-        setErrorMsg(data.error || 'Erreur lors de la connexion rapide.');
-      }
-    } catch {
-      setErrorMsg('Erreur de connexion.');
-    } finally {
-      setLoggingInDemoId(null);
     }
   };
 
@@ -150,10 +105,10 @@ export default function LoginPage() {
               <span className="material-symbols-outlined text-[28px]">account_balance</span>
             </div>
             <h1 className="font-black text-2xl sm:text-3xl text-on-surface tracking-tight">
-              Espace Authentifié Étudiant
+              Espace Connexion
             </h1>
             <p className="text-on-surface-variant text-xs sm:text-sm mt-1.5 max-w-xs">
-              Accédez à vos cours, corrigés d'examen et portefeuille amphi du Burkina Faso.
+              Accédez à vos cours, corrigés d'examen, publications et portefeuille amphi du Burkina Faso.
             </p>
 
             {/* Switcher Tab */}
@@ -197,9 +152,9 @@ export default function LoginPage() {
                 {/* Identifier Input */}
                 <div>
                   <label className="block text-xs font-bold text-on-surface-variant mb-1.5 flex items-center justify-between">
-                    <span>Email ou N° INE Étudiant *</span>
+                    <span>Email, N° INE ou Téléphone *</span>
                     <span className="text-[10px] font-mono font-bold text-primary bg-primary-fixed/30 px-2 py-0.5 rounded">
-                      BF INE
+                      BF / INT
                     </span>
                   </label>
                   <div className="flex items-center bg-surface-container-low rounded-xl px-3.5 py-2.5 border border-outline-variant/30 focus-within:border-primary focus-within:bg-surface-container-lowest transition-all">
@@ -207,7 +162,7 @@ export default function LoginPage() {
                     <input
                       type="text"
                       required
-                      placeholder="Ex: aminata@campusfolder.bf ou N0123456789"
+                      placeholder="Ex: aminata@campusfolder.bf, N0145892301 ou +22676458812"
                       value={identifier}
                       onChange={(e) => setIdentifier(e.target.value)}
                       className="w-full bg-transparent text-xs sm:text-sm font-semibold outline-none placeholder:text-outline"
@@ -219,12 +174,9 @@ export default function LoginPage() {
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
                     <label className="text-xs font-bold text-on-surface-variant">Mot de passe *</label>
-                    <Link
-                      href="#"
-                      className="text-[11px] font-bold text-primary hover:underline"
-                    >
+                    <span className="text-[11px] font-bold text-primary hover:underline cursor-pointer">
                       Oublié ?
-                    </Link>
+                    </span>
                   </div>
                   <div className="flex items-center bg-surface-container-low rounded-xl px-3.5 py-2.5 border border-outline-variant/30 focus-within:border-primary focus-within:bg-surface-container-lowest transition-all">
                     <span className="material-symbols-outlined text-outline text-[18px] mr-2">key</span>
@@ -284,54 +236,11 @@ export default function LoginPage() {
                 </button>
               </form>
 
-              {/* Fast Demo Accounts Selector */}
-              {demoAccounts.length > 0 && (
-                <div className="pt-4 border-t border-outline-variant/20 flex flex-col gap-2.5">
-                  <span className="text-[11px] font-black uppercase tracking-wider text-outline text-center">
-                    Ou Connexion Rapide Étudiant (Comptes Enregistrés)
-                  </span>
-
-                  <div className="flex flex-col gap-1.5 max-h-40 overflow-y-auto pr-1">
-                    {demoAccounts.map((acc) => (
-                      <button
-                        key={acc.id}
-                        type="button"
-                        onClick={() => handleQuickLogin(acc)}
-                        disabled={loggingInDemoId === acc.id}
-                        className="p-2 rounded-xl bg-surface-container-low hover:bg-surface-container transition-all flex items-center justify-between text-left text-xs active:scale-98 border border-outline-variant/20"
-                      >
-                        <div className="flex items-center gap-2 min-w-0">
-                          <div className="w-7 h-7 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-black text-[11px] shrink-0">
-                            {acc.name[0]}
-                          </div>
-                          <div className="flex flex-col min-w-0">
-                            <span className="font-bold text-on-surface truncate">{acc.name}</span>
-                            <span className="text-[10px] text-on-surface-variant truncate">
-                              {acc.institutionShort} • {acc.role === 'ADMIN' ? 'Direction Admin' : acc.ine}
-                            </span>
-                          </div>
-                        </div>
-
-                        {loggingInDemoId === acc.id ? (
-                          <span className="material-symbols-outlined text-[16px] text-primary animate-spin">
-                            progress_activity
-                          </span>
-                        ) : (
-                          <span className="material-symbols-outlined text-[16px] text-outline">
-                            login
-                          </span>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
               {/* Inscription prompt */}
-              <div className="pt-2 text-center text-xs text-on-surface-variant">
-                <span>Pas encore inscrit sur Campus Folder ? </span>
+              <div className="pt-2 text-center text-xs text-on-surface-variant border-t border-outline-variant/20">
+                <span>Pas encore de compte ? </span>
                 <Link href="/inscription" className="text-primary font-black underline hover:text-primary-container">
-                  Créer un compte
+                  Créer un compte (Étudiant ou Public)
                 </Link>
               </div>
             </div>

@@ -14,8 +14,7 @@ export function hashPassword(password: string): string {
  */
 export function verifyPassword(password: string, storedHash: string): boolean {
   if (!storedHash || !storedHash.includes(':')) {
-    // Fallback for mock/legacy passwords in seed
-    return password === 'secret123' || password === storedHash;
+    return false;
   }
   const [salt, originalHash] = storedHash.split(':');
   const checkHash = crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex');

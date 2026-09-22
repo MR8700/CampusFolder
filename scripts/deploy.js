@@ -43,8 +43,19 @@ if (migrationUrl) {
       },
     });
     console.log('✅ Database schema and indexes synchronized successfully!');
+
+    // Seed/Update production referentials, real Super Admin and Burkina resources
+    console.log('🌱 Synchronizing real production actors, universities and publications...');
+    execSync('node prisma/seed.js', {
+      stdio: 'inherit',
+      env: {
+        ...process.env,
+        DATABASE_URL: migrationUrl,
+      },
+    });
+    console.log('✅ Production database fully seeded with real data!');
   } catch (error) {
-    console.warn('⚠️ Warning during db push (continuing build):', error.message);
+    console.warn('⚠️ Warning during db push/seed (continuing build):', error.message);
   }
 } else {
   console.warn('⚠️ Warning: No database connection found in environment variables.');

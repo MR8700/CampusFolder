@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { cookies } from 'next/headers';
 
 export async function GET(req: NextRequest) {
   try {
@@ -13,10 +14,32 @@ export async function GET(req: NextRequest) {
     const accessMode = searchParams.get('accessMode');
     const sort = searchParams.get('sort') || 'recent'; // recent, rated, exam, free
 
+    // Check student session for visibility filtering
+    let isBurkinaStudent = false;
+    const cookieStore = await cookies();
+    const sessionUserId = cookieStore.get('campus_user_id')?.value;
+
+    if (sessionUserId) {
+      const user = await prisma.user.findUnique({
+        where: { id: sessionUserId },
+        include: { roles: { include: { role: true } } },
+      });
+      if (user) {
+        const hasStudentRole = user.roles.some(
+          (r) => r.role.code === 'STUDENT' || r.role.code === 'DELEGATE' || r.role.code === 'ADMIN'
+        );
+        isBurkinaStudent = Boolean(user.ine || user.isSuperAdmin || hasStudentRole);
+      }
+    }
+
+    const allowedVisibilities = isBurkinaStudent
+      ? ['PUBLIC', 'BURKINA_STUDENTS_ONLY']
+      : ['PUBLIC'];
+
     const andConditions: any[] = [
       { validationStatus: 'APPROVED' },
       { isArchived: false },
-      { visibility: 'PUBLIC' },
+      { visibility: { in: allowedVisibilities } },
     ];
 
     if (q.trim()) {

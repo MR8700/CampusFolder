@@ -10,22 +10,37 @@ export async function GET(req: NextRequest) {
     const filter = searchParams.get('filter') || 'all'; // all, corrige, cours, exam, video, presentiel
     let requestedInstitutionId = searchParams.get('institutionId');
 
-    // If no institutionId passed in query, attempt to read from logged-in student's profile
-    if (!requestedInstitutionId) {
-      const cookieStore = await cookies();
-      const sessionUserId = cookieStore.get('campus_user_id')?.value;
-      if (sessionUserId) {
-        const user = await prisma.user.findUnique({
-          where: { id: sessionUserId },
-          include: { profile: true },
-        });
-        if (user?.profile?.institutionId) {
+    // 1. Identify requesting user and verify if student with INE
+    let isBurkinaStudent = false;
+    const cookieStore = await cookies();
+    const sessionUserId = cookieStore.get('campus_user_id')?.value;
+
+    if (sessionUserId) {
+      const user = await prisma.user.findUnique({
+        where: { id: sessionUserId },
+        include: {
+          profile: true,
+          roles: { include: { role: true } },
+        },
+      });
+
+      if (user) {
+        if (!requestedInstitutionId && user.profile?.institutionId) {
           requestedInstitutionId = user.profile.institutionId;
         }
+        const hasStudentRole = user.roles.some(
+          (r) => r.role.code === 'STUDENT' || r.role.code === 'DELEGATE' || r.role.code === 'ADMIN'
+        );
+        isBurkinaStudent = Boolean(user.ine || user.isSuperAdmin || hasStudentRole);
       }
     }
 
-    // 1. Get Active Campus
+    // 2. Determine allowed content visibilities
+    const allowedVisibilities = isBurkinaStudent
+      ? ['PUBLIC', 'BURKINA_STUDENTS_ONLY']
+      : ['PUBLIC'];
+
+    // 3. Get Active Campus
     let activeCampus = null;
     if (requestedInstitutionId && requestedInstitutionId !== 'all') {
       activeCampus = await prisma.institution.findUnique({
@@ -41,11 +56,11 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    // 2. Query trending resources (scoped to institution if specified)
+    // 4. Query trending resources
     let trendingWhere: Record<string, any> = {
       isTrending: true,
       isArchived: false,
-      visibility: 'PUBLIC',
+      visibility: { in: allowedVisibilities },
     };
     if (requestedInstitutionId && requestedInstitutionId !== 'all') {
       trendingWhere.institutionId = requestedInstitutionId;
@@ -84,7 +99,7 @@ export async function GET(req: NextRequest) {
         where: {
           institutionId: requestedInstitutionId,
           isArchived: false,
-          visibility: 'PUBLIC',
+          visibility: { in: allowedVisibilities },
         },
         include: {
           author: {
@@ -104,10 +119,10 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    // 3. Query faculty live feed (scoped to institution)
+    // 5. Query faculty live feed
     let feedWhere: Record<string, any> = {
       isArchived: false,
-      visibility: 'PUBLIC',
+      visibility: { in: allowedVisibilities },
     };
     if (requestedInstitutionId && requestedInstitutionId !== 'all') {
       feedWhere.institutionId = requestedInstitutionId;
@@ -146,11 +161,12 @@ export async function GET(req: NextRequest) {
       take: 12,
     });
 
-    // 4. Aggregated stats
+    // 6. Aggregated stats
     const totalDocs = await prisma.academicResource.count({
-      where: requestedInstitutionId && requestedInstitutionId !== 'all'
-        ? { institutionId: requestedInstitutionId }
-        : {},
+      where: {
+        visibility: { in: allowedVisibilities },
+        ...(requestedInstitutionId && requestedInstitutionId !== 'all' ? { institutionId: requestedInstitutionId } : {}),
+      },
     });
 
     const stats = {
@@ -163,6 +179,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       success: true,
       activeCampus,
+      isBurkinaStudent,
       isScopedToUserInstitution: Boolean(requestedInstitutionId && requestedInstitutionId !== 'all'),
       scopedInstitutionId: requestedInstitutionId || activeCampus?.id,
       trendingResources,

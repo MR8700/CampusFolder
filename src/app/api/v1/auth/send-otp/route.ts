@@ -43,7 +43,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       success: true,
       message: 'Un nouveau code de vérification vous a été envoyé.',
-      otpPreview: otp,
     });
   } catch (error) {
     console.error('API Error /auth/send-otp:', error);

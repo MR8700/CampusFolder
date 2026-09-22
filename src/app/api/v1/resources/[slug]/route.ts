@@ -67,7 +67,35 @@ export async function GET(
       return NextResponse.json({ error: 'Ressource introuvable' }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true, resource });
+    // Check student status for student-restricted content
+    let isBurkinaStudent = false;
+    const cookieStore = await cookies();
+    const sessionUserId = cookieStore.get('campus_user_id')?.value;
+
+    if (sessionUserId) {
+      const user = await prisma.user.findUnique({
+        where: { id: sessionUserId },
+        include: { roles: { include: { role: true } } },
+      });
+      if (user) {
+        const hasStudentRole = user.roles.some(
+          (r) => r.role.code === 'STUDENT' || r.role.code === 'DELEGATE' || r.role.code === 'ADMIN'
+        );
+        isBurkinaStudent = Boolean(user.ine || user.isSuperAdmin || hasStudentRole);
+      }
+    }
+
+    const isRestrictedForUser = resource.visibility === 'BURKINA_STUDENTS_ONLY' && !isBurkinaStudent;
+
+    return NextResponse.json({
+      success: true,
+      resource,
+      isBurkinaStudent,
+      isRestrictedForUser,
+      restrictionReason: isRestrictedForUser
+        ? 'Ce document académique est réservé aux étudiants burkinabés inscrits avec leur numéro INE.'
+        : null,
+    });
   } catch (error) {
     console.error('API Error /resources/[slug]:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

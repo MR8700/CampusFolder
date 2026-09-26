@@ -1,5 +1,5 @@
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -52,6 +52,22 @@ model User {
   contributorRevenues RevenueDistribution[]
   notifications       EmailNotification[]
   activities          ActivityLog[]
+
+  // Realtime Communication & Calling Relations
+  conversationsCreated Conversation[]        @relation("ConversationCreator")
+  conversationMemberships ConversationParticipant[]
+  sentMessages        Message[]              @relation("MessageSender")
+  messageReactions    MessageReaction[]
+  readReceipts        MessageReadReceipt[]
+  voiceNotes          VoiceMessage[]
+  callsInitiated      Call[]                 @relation("CallInitiator")
+  callParticipations  CallParticipant[]
+  screenShares        ScreenShareSession[]
+  callPurchases       CallPurchase[]
+  blockedUsers        UserBlock[]            @relation("BlockingUser")
+  blockedByUsers      UserBlock[]            @relation("BlockedUser")
+  reportsFiled        MessageReport[]        @relation("ReportingUser")
+  presence            UserPresence?
 
   @@index([status])
   @@index([createdAt])
@@ -251,6 +267,8 @@ model AcademicResource {
   orders          Order[]
   entitlements    Entitlement[]
   reviews         Review[]
+  sharedInMessages MessageAttachment[]
+  conversationContexts ConversationContext[]
 
   @@index([authorId])
   @@index([institutionId])
@@ -573,4 +591,340 @@ model ActivityLog {
 
   @@index([userId])
   @@index([createdAt])
+}
+
+// ----------------------------------------------------
+// 11. REALTIME MESSAGING & CONVERSATIONS DOMAIN
+// ----------------------------------------------------
+
+model Conversation {
+  id           String             @id @default(uuid())
+  type         String             @default("DIRECT") // DIRECT, GROUP, ACADEMIC_GROUP, RESOURCE_CONTEXT, COURSE_CLASS, PROMOTION, STUDY_GROUP, SUPPORT, SYSTEM
+  title        String?
+  description  String?
+  avatarUrl    String?
+  createdById  String?
+  createdBy    User?              @relation("ConversationCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  visibility   String             @default("PRIVATE") // PRIVATE, PUBLIC_CAMPUS, PROMO_ONLY
+  status       String             @default("ACTIVE") // ACTIVE, ARCHIVED, MUTED
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  participants ConversationParticipant[]
+  messages     Message[]
+  context      ConversationContext?
+  calls        Call[]
+
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model ConversationParticipant {
+  id                    String          @id @default(uuid())
+  conversationId        String
+  conversation          Conversation    @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  userId                String
+  user                  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role                  String          @default("MEMBER") // OWNER, ADMIN, MODERATOR, MEMBER, READ_ONLY
+  joinedAt              DateTime        @default(now())
+  leftAt                DateTime?
+  mutedUntil            DateTime?
+  canSendMessages       Boolean         @default(true)
+  canSendMedia          Boolean         @default(true)
+  canStartCalls         Boolean         @default(true)
+  canInviteParticipants Boolean         @default(false)
+  canModerate           Boolean         @default(false)
+  lastReadMessageId     String?
+  lastReadAt            DateTime?
+
+  @@unique([conversationId, userId])
+  @@index([conversationId])
+  @@index([userId])
+}
+
+model ConversationContext {
+  id             String            @id @default(uuid())
+  conversationId String            @unique
+  conversation   Conversation      @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  contextType    String            // RESOURCE, COURSE, MODULE, FILIERE, INSTITUTION, CALL
+  resourceId     String?
+  resource       AcademicResource? @relation(fields: [resourceId], references: [id], onDelete: SetNull)
+  metadata       String?           // JSON metadata for extra context info
+  createdAt      DateTime          @default(now())
+
+  @@index([contextType])
+  @@index([resourceId])
+}
+
+model Message {
+  id                     String               @id @default(uuid())
+  conversationId         String
+  conversation           Conversation         @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId               String
+  sender                 User                 @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  type                   String               @default("TEXT") // TEXT, IMAGE, VIDEO, AUDIO, DOCUMENT, RESOURCE, VOICE_NOTE, LOCATION, CONTACT, CALL_EVENT, SYSTEM, REACTION, POLL
+  text                   String?
+  replyToMessageId       String?
+  replyToMessage         Message?             @relation("MessageReplies", fields: [replyToMessageId], references: [id], onDelete: SetNull)
+  replies                Message[]            @relation("MessageReplies")
+  forwardedFromMessageId String?
+  metadata               String?              // JSON snapshot (e.g. resource price, call duration, dimensions)
+  sentAt                 DateTime             @default(now())
+  editedAt               DateTime?
+  deletedAt              DateTime?
+  status                 String               @default("SENT") // SENDING, SENT, DELIVERED, READ, FAILED
+
+  attachments            MessageAttachment[]
+  reactions              MessageReaction[]
+  readReceipts           MessageReadReceipt[]
+  voiceMessage           VoiceMessage?
+  reports                MessageReport[]
+
+  @@index([conversationId, sentAt])
+  @@index([senderId])
+  @@index([type])
+  @@index([status])
+}
+
+model MessageAttachment {
+  id             String            @id @default(uuid())
+  messageId      String
+  message        Message           @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  attachmentType String            // FILE, IMAGE, VIDEO, AUDIO, RESOURCE, PDF
+  url            String
+  fileName       String
+  fileSize       Int               @default(0)
+  mimeType       String            @default("application/octet-stream")
+  thumbnailUrl   String?
+  resourceId     String?
+  resource       AcademicResource? @relation(fields: [resourceId], references: [id], onDelete: SetNull)
+  accessSnapshot String?           // JSON: price, mode, certified, authorName at time of sharing
+  createdAt      DateTime          @default(now())
+
+  @@index([messageId])
+  @@index([resourceId])
+}
+
+model MessageReaction {
+  id        String   @id @default(uuid())
+  messageId String
+  message   Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  emoji     String   // e.g. "👍", "❤️", "🎓", "💡", "🔥"
+  createdAt DateTime @default(now())
+
+  @@unique([messageId, userId, emoji])
+  @@index([messageId])
+  @@index([userId])
+}
+
+model MessageReadReceipt {
+  id        String   @id @default(uuid())
+  messageId String
+  message   Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  readAt    DateTime @default(now())
+
+  @@unique([messageId, userId])
+  @@index([messageId])
+  @@index([userId])
+}
+
+model VoiceMessage {
+  id              String   @id @default(uuid())
+  messageId       String   @unique
+  message         Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  audioUrl        String
+  durationSeconds Int      @default(0)
+  durationMs      Int      @default(0)
+  codec           String   @default("audio/webm;codecs=opus")
+  sampleRate      Int      @default(48000)
+  waveformJson    String?  // JSON array of float/int bars for visual waveform: [12, 45, 80, 23, ...]
+  transcription   String?
+  createdAt       DateTime @default(now())
+
+  @@index([userId])
+}
+
+// ----------------------------------------------------
+// 12. REALTIME CALLING & CONFERENCES DOMAIN
+// ----------------------------------------------------
+
+model Call {
+  id              String               @id @default(uuid())
+  conversationId  String?
+  conversation    Conversation?        @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+  initiatorId     String
+  initiator       User                 @relation("CallInitiator", fields: [initiatorId], references: [id], onDelete: Cascade)
+  type            String               @default("VOICE") // VOICE, VIDEO
+  title           String?
+  status          String               @default("CREATED") // CREATED, RINGING, ACTIVE, ENDING, ENDED, FAILED, CANCELLED
+  channelName     String               @unique // Unique room ID for signaling/SFU
+  isGroup         Boolean              @default(false)
+  isScreenShared  Boolean              @default(false)
+  isRecording     Boolean              @default(false)
+  maxParticipants Int                  @default(50)
+  startedAt       DateTime?
+  endedAt         DateTime?
+  durationSeconds Int                  @default(0)
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+
+  participants    CallParticipant[]
+  sessions        CallSession[]
+  events          CallEvent[]
+  screenShares    ScreenShareSession[]
+  offer           CallOffer?
+
+  @@index([initiatorId])
+  @@index([conversationId])
+  @@index([status])
+  @@index([channelName])
+}
+
+model CallParticipant {
+  id              String    @id @default(uuid())
+  callId          String
+  call            Call      @relation(fields: [callId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role            String    @default("PARTICIPANT") // HOST, CO_HOST, MODERATOR, SPEAKER, PARTICIPANT, OBSERVER
+  status          String    @default("INVITED") // INVITED, RINGING, CONNECTED, DECLINED, MISSED, LEFT
+  isMuted         Boolean   @default(false)
+  isVideoOn       Boolean   @default(true)
+  isScreenSharing Boolean   @default(false)
+  joinedAt        DateTime?
+  leftAt          DateTime?
+
+  @@unique([callId, userId])
+  @@index([callId])
+  @@index([userId])
+}
+
+model CallSession {
+  id               String    @id @default(uuid())
+  callId           String
+  call             Call      @relation(fields: [callId], references: [id], onDelete: Cascade)
+  sessionId        String    @unique
+  sfuNodeId        String?
+  serverRegion     String    @default("west-africa-ci")
+  startedAt        DateTime  @default(now())
+  endedAt          DateTime?
+  peakParticipants Int       @default(0)
+  qualityRating    Float?
+
+  @@index([callId])
+}
+
+model CallEvent {
+  id        String   @id @default(uuid())
+  callId    String
+  call      Call     @relation(fields: [callId], references: [id], onDelete: Cascade)
+  eventType String   // USER_JOINED, USER_LEFT, MUTE_TOGGLED, SCREEN_SHARE_START, QUALITY_DROPPED
+  payload   String?  // JSON
+  createdAt DateTime @default(now())
+
+  @@index([callId])
+}
+
+model ScreenShareSession {
+  id        String   @id @default(uuid())
+  callId    String
+  call      Call     @relation(fields: [callId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  shareType String   @default("FULL_SCREEN") // FULL_SCREEN, WINDOW, BROWSER_TAB
+  startedAt DateTime @default(now())
+  endedAt   DateTime?
+
+  @@index([callId])
+  @@index([userId])
+}
+
+// ----------------------------------------------------
+// 13. MONETIZED CALLS & MASTERCLASSES
+// ----------------------------------------------------
+
+model CallOffer {
+  id           String        @id @default(uuid())
+  callId       String        @unique
+  call         Call          @relation(fields: [callId], references: [id], onDelete: Cascade)
+  pricingModel String        @default("FREE") // FREE, ONE_TIME, PER_SESSION, PER_MINUTE, EVENT_TICKET
+  ticketPrice  Int           @default(0) // FCFA
+  currency     String        @default("XOF")
+  description  String?
+  maxTickets   Int?
+  soldTickets  Int           @default(0)
+  createdAt    DateTime      @default(now())
+
+  purchases    CallPurchase[]
+}
+
+model CallPurchase {
+  id          String    @id @default(uuid())
+  callOfferId String
+  callOffer   CallOffer @relation(fields: [callOfferId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amountPaid  Int
+  currency    String    @default("XOF")
+  accessCode  String    @unique
+  isAdmitted  Boolean   @default(true)
+  purchasedAt DateTime  @default(now())
+
+  @@index([callOfferId])
+  @@index([userId])
+}
+
+// ----------------------------------------------------
+// 14. REALTIME PRESENCE & MODERATION
+// ----------------------------------------------------
+
+model UserPresence {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status        String   @default("OFFLINE") // ONLINE, OFFLINE, AWAY, BUSY, IN_CALL, DO_NOT_DISTURB
+  customStatus  String?
+  lastSeenAt    DateTime @default(now())
+  currentCallId String?
+  updatedAt     DateTime @updatedAt
+
+  @@index([status])
+  @@index([lastSeenAt])
+}
+
+model UserBlock {
+  id        String   @id @default(uuid())
+  blockerId String
+  blocker   User     @relation("BlockingUser", fields: [blockerId], references: [id], onDelete: Cascade)
+  blockedId String
+  blocked   User     @relation("BlockedUser", fields: [blockedId], references: [id], onDelete: Cascade)
+  reason    String?
+  createdAt DateTime @default(now())
+
+  @@unique([blockerId, blockedId])
+  @@index([blockerId])
+  @@index([blockedId])
+}
+
+model MessageReport {
+  id          String   @id @default(uuid())
+  messageId   String
+  message     Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  reporterId  String
+  reporter    User     @relation("ReportingUser", fields: [reporterId], references: [id], onDelete: Cascade)
+  reason      String   // SPAM, INAPPROPRIATE, HARASSMENT, FRAUD, ACADEMIC_INTEGRITY
+  description String?
+  status      String   @default("PENDING") // PENDING, REVIEWED, DISMISSED, ACTION_TAKEN
+  createdAt   DateTime @default(now())
+
+  @@index([messageId])
+  @@index([reporterId])
+  @@index([status])
 }

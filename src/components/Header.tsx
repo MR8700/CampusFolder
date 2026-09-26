@@ -243,6 +243,21 @@ export default function Header({
             </Link>
 
             <Link
+              href="/messages"
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs lg:text-sm font-bold transition-all relative ${
+                isNavActive('/messages')
+                  ? 'bg-primary text-on-primary shadow-sm ring-2 ring-primary/20'
+                  : 'text-on-surface hover:text-primary hover:bg-surface-container'
+              }`}
+            >
+              <div className="relative flex items-center">
+                <span className="material-symbols-outlined text-[18px]">chat</span>
+                <span className="absolute -top-1 -right-1 w-2 h-2 bg-secondary rounded-full" />
+              </div>
+              <span>Messages</span>
+            </Link>
+
+            <Link
               href="/portefeuille"
               className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs lg:text-sm font-bold transition-all ${
                 isNavActive('/portefeuille')

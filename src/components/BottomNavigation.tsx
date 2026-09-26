@@ -29,7 +29,7 @@ export default function BottomNavigation() {
           <span className="font-label-sm text-[10px] mt-0.5 font-bold">Accueil</span>
         </Link>
 
-        {/* Tab 2: Explorer */}
+        {/* Tab 2: Ressources / Explorer */}
         <Link
           href="/explorer"
           className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all duration-200 active:scale-90 ${
@@ -39,10 +39,10 @@ export default function BottomNavigation() {
           }`}
         >
           <span className="material-symbols-outlined text-[22px]">menu_book</span>
-          <span className="font-label-sm text-[10px] mt-0.5 font-bold">Explorer</span>
+          <span className="font-label-sm text-[10px] mt-0.5 font-bold">Ressources</span>
         </Link>
 
-        {/* Tab 3: Publier (Central Elevated Action Button) */}
+        {/* Tab 3: ＋ Publier (Central Elevated Action Button) */}
         <div className="relative -top-3.5 flex flex-col items-center justify-center">
           <Link
             href="/publier"
@@ -61,17 +61,20 @@ export default function BottomNavigation() {
           </span>
         </div>
 
-        {/* Tab 4: Revenus (Portefeuille) */}
+        {/* Tab 4: Messages (Realtime Academic Messaging & Collaboration) */}
         <Link
-          href="/portefeuille"
-          className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all duration-200 active:scale-90 ${
-            isTab('/portefeuille')
+          href="/messages"
+          className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all duration-200 active:scale-90 relative ${
+            isTab('/messages')
               ? 'bg-primary-fixed/50 text-primary font-black shadow-xs'
               : 'text-on-surface-variant hover:text-on-surface'
           }`}
         >
-          <span className="material-symbols-outlined text-[22px]">account_balance_wallet</span>
-          <span className="font-label-sm text-[10px] mt-0.5 font-bold">Portefeuille</span>
+          <div className="relative">
+            <span className="material-symbols-outlined text-[22px]">chat</span>
+            <span className="absolute -top-1 -right-1.5 w-2.5 h-2.5 bg-secondary rounded-full ring-2 ring-surface" />
+          </div>
+          <span className="font-label-sm text-[10px] mt-0.5 font-bold">Messages</span>
         </Link>
 
         {/* Tab 5: Mon Profil */}
@@ -84,7 +87,7 @@ export default function BottomNavigation() {
           }`}
         >
           <span className="material-symbols-outlined text-[22px]">person</span>
-          <span className="font-label-sm text-[10px] mt-0.5 font-bold">Mon Profil</span>
+          <span className="font-label-sm text-[10px] mt-0.5 font-bold">Profil</span>
         </Link>
       </div>
     </nav>

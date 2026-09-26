@@ -87,6 +87,29 @@ export default function ResourceDetailsPage() {
     }, 500);
   };
 
+  const handleContactAuthorInApp = async () => {
+    if (!resource) return;
+    try {
+      const res = await fetch('/api/v1/conversations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'DIRECT',
+          targetUserId: resource.authorId,
+          resourceId: resource.id,
+        }),
+      });
+      const data = await res.json();
+      if (data.success && data.conversation) {
+        router.push(`/messages/${data.conversation.id}`);
+      } else {
+        router.push('/messages');
+      }
+    } catch {
+      router.push('/messages');
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-surface">
       <Header showBack title="Détails Document" />
@@ -617,18 +640,15 @@ export default function ResourceDetailsPage() {
                   </span>
                 </button>
 
-                {/* Secondary WhatsApp Direct Share/Chat */}
-                <a
-                  aria-label="Échanger avec l’auteur sur WhatsApp"
-                  href={`https://wa.me/${resource.contactChannel?.phoneNumber?.replace(/[^0-9]/g, '') || '22670112233'}?text=${encodeURIComponent(
-                    'Bonjour, je souhaite échanger sur le document : ' + resource.title
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-xl bg-[#DCFCE7] border border-[#15803D]/30 text-[#15803D] flex items-center justify-center shrink-0 shadow-sm active:scale-95 transition-transform"
+                {/* Native Campus Folder Direct Chat with Author */}
+                <button
+                  type="button"
+                  onClick={handleContactAuthorInApp}
+                  aria-label="Échanger directement avec l’auteur sur Campus Folder"
+                  className="w-12 h-12 rounded-xl bg-primary-fixed border border-primary/30 text-primary flex items-center justify-center shrink-0 shadow-sm active:scale-95 transition-transform"
                 >
                   <span className="material-symbols-outlined text-[24px]">chat</span>
-                </a>
+                </button>
               </div>
 
               <p className="text-center font-body-sm text-body-sm text-on-surface-variant flex items-center justify-center gap-1 text-[11px]">
@@ -717,16 +737,24 @@ export default function ResourceDetailsPage() {
             <p className="text-xs text-on-surface-variant">
               Vous pouvez également rencontrer {resource.author?.profile?.displayName || 'l’auteur'} directement devant l&apos;Amphi A pour récupérer les notes imprimées.
             </p>
+            <button
+              type="button"
+              onClick={handleContactAuthorInApp}
+              className="w-full py-2.5 rounded-xl bg-primary text-on-primary font-bold text-xs flex items-center justify-center gap-2 active:scale-98 transition-all shadow-xs"
+            >
+              <span className="material-symbols-outlined text-[18px]">forum</span>
+              <span>Discuter avec l'auteur sur Campus Folder</span>
+            </button>
             <a
               href={`https://wa.me/${resource.contactChannel?.phoneNumber?.replace(/[^0-9]/g, '') || '22670112233'}?text=${encodeURIComponent(
                 'Bonjour, je souhaite échanger sur le document : ' + resource.title
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-2.5 rounded-xl bg-[#DCFCE7] hover:bg-[#bbf7d0] text-[#15803D] border border-[#15803D]/30 font-bold text-xs flex items-center justify-center gap-2 active:scale-98 transition-all"
+              className="w-full py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface border border-outline-variant/30 font-bold text-xs flex items-center justify-center gap-2 active:scale-98 transition-all"
             >
               <span className="material-symbols-outlined text-[18px]">chat</span>
-              <span>Écrire sur WhatsApp (+226)</span>
+              <span>Échanger par WhatsApp (+226)</span>
             </a>
           </div>
 

@@ -282,7 +282,7 @@ export default function ResourceDetailsPage() {
                     Présentation Pédagogique & Objectifs d'Amphi
                   </h3>
                 </div>
-                <p className="font-body-md text-sm text-on-surface leading-loose text-justify text-justified-academic">
+                <p className="font-body-md text-xs sm:text-sm text-on-surface leading-relaxed text-left">
                   {resource.description}
                 </p>
               </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Icon from '@/components/ui/Icon';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import BottomNavigation from '@/components/BottomNavigation';
@@ -103,7 +104,7 @@ export default function WalletPage() {
           <section aria-labelledby="auth-required-heading" className="max-w-2xl mx-auto my-8 w-full">
             <div className="bg-surface-container-lowest rounded-3xl p-6 sm:p-8 shadow-xl border border-outline-variant/40 flex flex-col items-center text-center gap-5">
               <div className="w-16 h-16 rounded-2xl bg-primary-container text-on-primary flex items-center justify-center shadow-md">
-                <span className="material-symbols-outlined text-[34px]">lock</span>
+                <Icon name="lock" className="text-[34px]" />
               </div>
 
               <div className="space-y-2">
@@ -125,7 +126,7 @@ export default function WalletPage() {
                   onClick={() => setShowAuthModal(true)}
                   className="py-3 px-4 rounded-xl bg-primary text-on-primary font-bold text-xs sm:text-sm shadow-md hover:bg-primary/90 active:scale-95 transition-all flex items-center justify-center gap-2"
                 >
-                  <span className="material-symbols-outlined text-[18px]">badge</span>
+                  <Icon name="badge" className="text-[18px]" />
                   <span>Comptes Étudiants (DB)</span>
                 </button>
 
@@ -133,7 +134,7 @@ export default function WalletPage() {
                   href="/connexion"
                   className="py-3 px-4 rounded-xl bg-surface-container text-on-surface font-bold text-xs sm:text-sm border border-outline-variant/40 hover:bg-surface-container-high active:scale-95 transition-all flex items-center justify-center gap-2"
                 >
-                  <span className="material-symbols-outlined text-[18px]">login</span>
+                  <Icon name="login" className="text-[18px]" />
                   <span>Connexion Manuelle</span>
                 </Link>
               </div>
@@ -160,9 +161,7 @@ export default function WalletPage() {
                   </span>
                 </div>
                 <div className="flex items-center gap-1 text-on-surface-variant text-[11px] font-semibold">
-                  <span className="material-symbols-outlined text-[15px] text-primary">
-                    verified_user
-                  </span>
+                  <Icon name="verified_user" className="text-[15px] text-primary" />
                   <span>Compensé & Garanti</span>
                 </div>
               </div>
@@ -181,9 +180,7 @@ export default function WalletPage() {
 
                 <div className="flex items-center justify-between relative z-10">
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[20px] text-secondary-fixed">
-                      account_balance_wallet
-                    </span>
+                    <Icon name="account_balance_wallet" className="text-[20px] text-secondary-fixed" />
                     <h2 id="wallet-card-heading" className="text-xs text-primary-fixed uppercase tracking-wider font-bold">
                       Solde Disponible Amphi
                     </h2>
@@ -194,9 +191,7 @@ export default function WalletPage() {
                     onClick={() => setIsBalanceHidden(!isBalanceHidden)}
                     type="button"
                   >
-                    <span className="material-symbols-outlined text-[18px]">
-                      {isBalanceHidden ? 'visibility' : 'visibility_off'}
-                    </span>
+                    <Icon name={isBalanceHidden ? 'visibility' : 'visibility_off'} className="text-[18px]" />
                   </button>
                 </div>
 
@@ -241,14 +236,14 @@ export default function WalletPage() {
                   onClick={() => setIsWithdrawOpen(true)}
                   className="py-3 px-4 rounded-xl bg-primary text-on-primary font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md hover:bg-primary/90 active:scale-98 transition-all"
                 >
-                  <span className="material-symbols-outlined text-[18px]">payments</span>
+                  <Icon name="payments" className="text-[18px]" />
                   <span>Retirer des gains</span>
                 </button>
                 <Link
                   href="/publier"
                   className="py-3 px-4 rounded-xl bg-surface-container text-on-surface font-bold text-xs sm:text-sm border-2 border-outline-variant/40 flex items-center justify-center gap-2 hover:bg-surface-container-high active:scale-98 transition-all"
                 >
-                  <span className="material-symbols-outlined text-[18px]">add_circle</span>
+                  <Icon name="add_circle" className="text-[18px]" />
                   <span>Publier un cours</span>
                 </Link>
               </div>
@@ -283,7 +278,7 @@ export default function WalletPage() {
               <section aria-labelledby="analytics-heading" className="bg-surface-container-lowest p-5 rounded-2xl border-2 border-outline-variant/40 shadow-xs flex flex-col gap-4">
                 <div className="flex items-center justify-between pb-2 border-b border-outline-variant/30">
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-primary text-[20px]">trending_up</span>
+                    <Icon name="trending_up" className="text-primary text-[20px]" />
                     <h2 id="analytics-heading" className="text-sm font-bold text-on-surface">
                       Ventes Hebdomadaires & Royalties
                     </h2>
@@ -321,7 +316,7 @@ export default function WalletPage() {
               <section aria-labelledby="ledger-heading" className="bg-surface-container-lowest p-5 rounded-2xl border-2 border-outline-variant/40 shadow-xs flex flex-col gap-3">
                 <div className="flex items-center justify-between pb-2 border-b border-surface-container-high">
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-primary text-[20px]">receipt_long</span>
+                    <Icon name="receipt_long" className="text-primary text-[20px]" />
                     <h2 id="ledger-heading" className="text-sm font-bold text-on-surface">
                       Grand Livre des Transactions ({walletData.ledgerEntries?.length || 0})
                     </h2>
@@ -347,9 +342,7 @@ export default function WalletPage() {
                                 : 'bg-error-container/20 text-error'
                             }`}
                           >
-                            <span className="material-symbols-outlined text-[18px]">
-                              {entry.type === 'CREDIT' ? 'download_done' : 'outbox'}
-                            </span>
+                            <Icon name={entry.type === 'CREDIT' ? 'download_done' : 'outbox'} className="text-[18px]" />
                           </div>
                           <div className="min-w-0">
                             <h3 className="text-xs font-bold text-on-surface truncate">
@@ -389,7 +382,7 @@ export default function WalletPage() {
           <div className="bg-surface-container-lowest w-full max-w-md rounded-3xl shadow-2xl border-2 border-primary/30 ring-1 ring-primary/15 p-6 flex flex-col gap-4">
             <div className="flex items-center justify-between pb-2 border-b border-surface-container-high">
               <h2 className="text-base font-bold text-on-surface flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-[20px]">payments</span>
+                <Icon name="payments" className="text-primary text-[20px]" />
                 <span>Retrait Mobile Money Instantané</span>
               </h2>
               <button
@@ -397,7 +390,7 @@ export default function WalletPage() {
                 onClick={() => setIsWithdrawOpen(false)}
                 className="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant"
               >
-                <span className="material-symbols-outlined text-[18px]">close</span>
+                <Icon name="close" className="text-[18px]" />
               </button>
             </div>
 
@@ -475,7 +468,7 @@ export default function WalletPage() {
                 </>
               ) : (
                 <>
-                  <span className="material-symbols-outlined text-[18px]">send</span>
+                  <Icon name="send" className="text-[18px]" />
                   <span>Confirmer le Retrait Instantané</span>
                 </>
               )}

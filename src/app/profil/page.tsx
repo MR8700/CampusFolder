@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Icon from '@/components/ui/Icon';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import BottomNavigation from '@/components/BottomNavigation';
@@ -480,9 +481,7 @@ export default function ProfilePage() {
       <div className="min-h-screen bg-surface flex flex-col">
         <Header />
         <main className="flex-1 flex flex-col items-center justify-center pt-24 pb-20">
-          <span className="material-symbols-outlined text-4xl text-primary animate-spin">
-            progress_activity
-          </span>
+          <Icon name="progress_activity" className="text-4xl text-primary animate-spin" />
           <span className="text-xs font-bold text-on-surface-variant mt-2">
             Chargement de votre identité académique...
           </span>
@@ -498,7 +497,7 @@ export default function ProfilePage() {
         <Header />
         <main className="flex-1 flex flex-col items-center justify-center p-6 text-center pt-24 pb-20 max-w-md mx-auto">
           <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-4">
-            <span className="material-symbols-outlined text-3xl">account_circle</span>
+            <Icon name="account_circle" className="text-3xl" />
           </div>
           <h2 className="text-xl font-black text-on-surface">Espace Profil Non Connecté</h2>
           <p className="text-xs text-on-surface-variant mt-2 mb-6 leading-relaxed">
@@ -509,7 +508,7 @@ export default function ProfilePage() {
             onClick={() => setShowAuthGateway(true)}
             className="w-full h-12 rounded-2xl bg-primary text-on-primary font-bold text-xs flex items-center justify-center gap-2 shadow-md active:scale-98 transition-all"
           >
-            <span className="material-symbols-outlined text-[18px]">lock_open</span>
+            <Icon name="lock_open" className="text-[18px]" />
             <span>Connexion / Inscription Immédiate</span>
           </button>
         </main>
@@ -554,7 +553,7 @@ export default function ProfilePage() {
       {/* Toast Notification */}
       {toastMsg && (
         <div className="fixed top-20 right-4 z-50 bg-primary text-on-primary px-4 py-2.5 rounded-2xl shadow-xl text-xs font-bold flex items-center gap-2 animate-bounce">
-          <span className="material-symbols-outlined text-[18px]">verified</span>
+          <Icon name="verified" className="text-[18px]" />
           <span>{toastMsg}</span>
         </div>
       )}
@@ -599,7 +598,7 @@ export default function ProfilePage() {
                   title="Changer de photo ou capturer par la caméra (avec redimensionnement)"
                   className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-secondary text-on-secondary flex items-center justify-center shadow-md hover:scale-110 active:scale-95 transition-transform"
                 >
-                  <span className="material-symbols-outlined text-[16px]">photo_camera</span>
+                  <Icon name="photo_camera" className="text-[16px]" />
                 </button>
               </div>
 
@@ -610,7 +609,7 @@ export default function ProfilePage() {
                   </span>
                   {currentUser.isSuperAdmin && (
                     <span className="px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-400 text-black flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[12px]">stars</span>
+                      <Icon name="stars" className="text-[12px]" />
                       Super Admin
                     </span>
                   )}
@@ -639,9 +638,7 @@ export default function ProfilePage() {
             {/* Quick Metrics (Points Amphi & Solde) */}
             <div className="flex md:flex-col items-center md:items-end justify-between gap-3 pt-3 md:pt-0 border-t md:border-t-0 border-white/15">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-2xl">
-                <span className="material-symbols-outlined text-secondary-fixed text-[20px]">
-                  bolt
-                </span>
+                <Icon name="bolt" className="text-secondary-fixed text-[20px]" />
                 <div className="flex flex-col">
                   <span className="text-[9px] uppercase tracking-wider text-primary-fixed-dim font-bold">
                     Points amphi
@@ -657,9 +654,7 @@ export default function ProfilePage() {
                   href="/portefeuille"
                   className="flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-all px-3 py-1.5 rounded-2xl text-surface-container-lowest"
                 >
-                  <span className="material-symbols-outlined text-[18px] text-secondary-fixed">
-                    account_balance_wallet
-                  </span>
+                  <Icon name="account_balance_wallet" className="text-[18px] text-secondary-fixed" />
                   <div className="flex flex-col text-right">
                     <span className="text-[9px] uppercase tracking-wider text-primary-fixed-dim font-bold">
                       Solde Ledger
@@ -709,7 +704,7 @@ export default function ProfilePage() {
                   : 'bg-surface-container-low text-on-surface hover:bg-surface-container'
               }`}
             >
-              <span className="material-symbols-outlined text-[18px]">{tab.icon}</span>
+              <Icon name={tab.icon} className="text-[18px]" />
               <span>{tab.label}</span>
               {tab.badge !== undefined && (
                 <span
@@ -734,7 +729,7 @@ export default function ProfilePage() {
             <div className="bg-surface-container-lowest p-6 rounded-3xl border-2 border-outline-variant/40 shadow-xs flex flex-col gap-6">
               <div className="border-b border-outline-variant/20 pb-3">
                 <h2 id="tab-info-heading" className="text-base font-black text-on-surface flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary text-xl">contact_page</span>
+                  <Icon name="contact_page" className="text-primary text-xl" />
                   Fiche d'Identité & Coordonnées de l'Étudiant
                 </h2>
                 <p className="text-xs text-on-surface-variant mt-0.5">
@@ -801,7 +796,7 @@ export default function ProfilePage() {
                     <label className="font-bold text-on-surface-variant flex items-center justify-between">
                       <span>Identifiant National (INE)</span>
                       <span className="text-[10px] text-green-600 font-bold flex items-center gap-0.5">
-                        <span className="material-symbols-outlined text-[12px]">verified</span>
+                        <Icon name="verified" className="text-[12px]" />
                         Certifié
                       </span>
                     </label>
@@ -818,7 +813,7 @@ export default function ProfilePage() {
                       <span>Téléphone / WhatsApp (+226)</span>
                       {currentUser.phoneVerified ? (
                         <span className="text-[10px] text-green-600 font-bold flex items-center gap-0.5">
-                          <span className="material-symbols-outlined text-[12px]">verified</span>
+                          <Icon name="verified" className="text-[12px]" />
                           Certifié (+1 pt Amphi)
                         </span>
                       ) : (
@@ -828,7 +823,7 @@ export default function ProfilePage() {
                           onClick={handleCertifyWhatsApp}
                           className="text-[10px] text-primary font-extrabold flex items-center gap-0.5 hover:underline disabled:opacity-50"
                         >
-                          <span className="material-symbols-outlined text-[12px]">bolt</span>
+                          <Icon name="bolt" className="text-[12px]" />
                           <span>{certifyingWhatsApp ? 'Validation...' : 'Certifier (+1 pt)'}</span>
                         </button>
                       )}
@@ -842,9 +837,7 @@ export default function ProfilePage() {
                         className="w-full h-11 px-3.5 rounded-xl bg-surface-container-low border border-outline-variant/30 text-xs text-on-surface font-semibold focus:outline-none focus:border-primary pr-9"
                       />
                       {currentUser.phoneVerified && (
-                        <span className="material-symbols-outlined absolute right-2.5 text-green-600 text-[18px]">
-                          check_circle
-                        </span>
+                        <Icon name="check_circle" className="absolute right-2.5 text-green-600 text-[18px]" />
                       )}
                     </div>
                   </div>
@@ -854,7 +847,7 @@ export default function ProfilePage() {
                       <span>Email / Gmail BF</span>
                       {currentUser.emailVerified ? (
                         <span className="text-[10px] text-green-600 font-bold flex items-center gap-0.5">
-                          <span className="material-symbols-outlined text-[12px]">verified</span>
+                          <Icon name="verified" className="text-[12px]" />
                           Certifié (+1 pt Amphi)
                         </span>
                       ) : (
@@ -864,7 +857,7 @@ export default function ProfilePage() {
                           onClick={handleStartCertifyEmail}
                           className="text-[10px] text-primary font-extrabold flex items-center gap-0.5 hover:underline disabled:opacity-50"
                         >
-                          <span className="material-symbols-outlined text-[12px]">bolt</span>
+                          <Icon name="bolt" className="text-[12px]" />
                           <span>{certifyingEmail ? 'Envoi...' : 'Certifier (+1 pt)'}</span>
                         </button>
                       )}
@@ -877,9 +870,7 @@ export default function ProfilePage() {
                         className="w-full h-11 px-3.5 rounded-xl bg-surface-container-high/60 border border-outline-variant/30 text-xs text-on-surface-variant font-mono cursor-not-allowed pr-9"
                       />
                       {currentUser.emailVerified && (
-                        <span className="material-symbols-outlined absolute right-2.5 text-green-600 text-[18px]">
-                          check_circle
-                        </span>
+                        <Icon name="check_circle" className="absolute right-2.5 text-green-600 text-[18px]" />
                       )}
                     </div>
                   </div>
@@ -888,7 +879,7 @@ export default function ProfilePage() {
                 {/* Academic Context (Burkina Faso) */}
                 <div className="border-t border-outline-variant/20 pt-4 flex flex-col gap-3">
                   <h3 className="font-black text-on-surface text-sm flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-primary text-base">school</span>
+                    <Icon name="school" className="text-primary text-base" />
                     Affiliation & Cursus Universitaire
                   </h3>
 
@@ -898,7 +889,7 @@ export default function ProfilePage() {
                         <label className="font-bold text-on-surface-variant">Université / Établissement</label>
                         {!isAdmin && (
                           <span className="text-[10px] text-primary font-bold flex items-center gap-0.5">
-                            <span className="material-symbols-outlined text-[12px]">lock</span>
+                            <Icon name="lock" className="text-[12px]" />
                             Scellée à l'inscription
                           </span>
                         )}
@@ -932,7 +923,7 @@ export default function ProfilePage() {
                         <label className="font-bold text-on-surface-variant">UFR / Faculté de Rattachement</label>
                         {!isAdmin && (
                           <span className="text-[10px] text-primary font-bold flex items-center gap-0.5">
-                            <span className="material-symbols-outlined text-[12px]">lock</span>
+                            <Icon name="lock" className="text-[12px]" />
                             Fixée à l'inscription
                           </span>
                         )}
@@ -1015,9 +1006,7 @@ export default function ProfilePage() {
                     className="px-6 py-2.5 rounded-2xl bg-primary text-on-primary font-bold text-xs shadow-md hover:bg-primary/90 transition-all flex items-center gap-1.5 disabled:opacity-50"
                   >
                     {savingProfile && (
-                      <span className="material-symbols-outlined text-[16px] animate-spin">
-                        progress_activity
-                      </span>
+                      <Icon name="progress_activity" className="text-[16px] animate-spin" />
                     )}
                     <span>Enregistrer les Modifications</span>
                   </button>
@@ -1050,7 +1039,7 @@ export default function ProfilePage() {
                         : 'bg-surface-container-low text-on-surface hover:bg-surface-container'
                     }`}
                   >
-                    <span className="material-symbols-outlined text-[16px]">{st.icon}</span>
+                    <Icon name={st.icon} className="text-[16px]" />
                     <span>{st.label}</span>
                     <span
                       className={`px-1.5 py-0.2 rounded-full text-[10px] font-black ${
@@ -1069,16 +1058,14 @@ export default function ProfilePage() {
                 href="/publier"
                 className="px-3.5 py-1.5 rounded-xl bg-secondary text-on-secondary text-xs font-bold flex items-center gap-1 shadow-xs hover:bg-secondary/90 transition-all"
               >
-                <span className="material-symbols-outlined text-[16px]">add</span>
+                <Icon name="add" className="text-[16px]" />
                 <span>Nouvelle Publication</span>
               </Link>
             </div>
 
             {loadingMediatheque ? (
               <div className="flex flex-col items-center justify-center p-12 bg-surface-container-lowest rounded-3xl border border-outline-variant/30">
-                <span className="material-symbols-outlined text-4xl text-primary animate-spin">
-                  progress_activity
-                </span>
+                <Icon name="progress_activity" className="text-4xl text-primary animate-spin" />
                 <span className="text-xs font-bold text-on-surface-variant mt-2">
                   Chargement de votre médiathèque en direct de la base de données...
                 </span>
@@ -1090,9 +1077,7 @@ export default function ProfilePage() {
                   <div className="flex flex-col gap-3">
                     {purchasedDocs.length === 0 ? (
                       <div className="flex flex-col items-center justify-center p-12 bg-surface-container-lowest rounded-3xl border border-outline-variant/30 text-center gap-2">
-                        <span className="material-symbols-outlined text-4xl text-primary/30">
-                          menu_book
-                        </span>
+                        <Icon name="menu_book" className="text-4xl text-primary/30" />
                         <h3 className="text-sm font-black text-on-surface">
                           Aucun document débloqué pour le moment
                         </h3>
@@ -1119,7 +1104,7 @@ export default function ProfilePage() {
                                   {item.resource.mediaFormat || 'PDF'}
                                 </span>
                                 <span className="text-[10px] text-green-600 font-bold flex items-center gap-1">
-                                  <span className="material-symbols-outlined text-[13px]">offline_pin</span>
+                                  <Icon name="offline_pin" className="text-[13px]" />
                                   Accès permanent
                                 </span>
                               </div>
@@ -1149,7 +1134,7 @@ export default function ProfilePage() {
                                   href={`/lecteur/${item.downloadToken}`}
                                   className="px-3 py-1.5 rounded-xl bg-primary text-on-primary text-xs font-bold flex items-center gap-1 shadow-xs hover:bg-primary/90 transition-all"
                                 >
-                                  <span className="material-symbols-outlined text-[15px]">auto_stories</span>
+                                  <Icon name="auto_stories" className="text-[15px]" />
                                   <span>Lire</span>
                                 </Link>
                                 {item.resource.media?.[0]?.url && (
@@ -1159,7 +1144,7 @@ export default function ProfilePage() {
                                     className="p-1.5 rounded-xl bg-surface-container-high text-on-surface hover:bg-surface-container transition-all"
                                     title="Télécharger"
                                   >
-                                    <span className="material-symbols-outlined text-[18px]">download</span>
+                                    <Icon name="download" className="text-[18px]" />
                                   </a>
                                 )}
                               </div>
@@ -1176,14 +1161,12 @@ export default function ProfilePage() {
                   <div className="flex flex-col gap-3">
                     {publishedDocs.length === 0 ? (
                       <div className="flex flex-col items-center justify-center p-12 bg-surface-container-lowest rounded-3xl border-2 border-outline-variant/40 text-center gap-2">
-                        <span className="material-symbols-outlined text-4xl text-primary/30">
-                          upload_file
-                        </span>
+                        <Icon name="upload_file" className="text-4xl text-primary/30" />
                         <h3 className="text-sm font-black text-on-surface">
                           Vous n'avez pas encore publié de documents
                         </h3>
                         <p className="text-xs text-on-surface-variant max-w-sm">
-                          Partagez vos polycopiés, fiches TD et corrigés d'examens avec vos pairs burkinabè et percevez 85% de royalties chaque vendredi sur Orange Money ou Moov Money.
+                          Partagez vos polycopiés, fiches TD et corrigés d'examens avec vos pairs burkinabè et percevez 60% de royalties chaque vendredi sur Orange Money ou Moov Money.
                         </p>
                         <Link
                           href="/publier"
@@ -1227,15 +1210,13 @@ export default function ProfilePage() {
                                         : 'bg-error/10 text-error'
                                     }`}
                                   >
-                                    <span className="material-symbols-outlined text-[12px]">
-                                      {res.visibility === 'PUBLIC' ? 'public' : res.visibility === 'UNLISTED' ? 'link' : 'lock'}
-                                    </span>
+                                    <Icon name={res.visibility === 'PUBLIC' ? 'public' : res.visibility === 'UNLISTED' ? 'link' : 'lock'} className="text-[12px]" />
                                     {res.visibility === 'PUBLIC' ? 'Public' : res.visibility === 'UNLISTED' ? 'Non répertorié' : 'Privé'}
                                   </span>
 
                                   {res.isArchived && (
                                     <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-800 border border-amber-500/30 flex items-center gap-1">
-                                      <span className="material-symbols-outlined text-[12px]">archive</span>
+                                      <Icon name="archive" className="text-[12px]" />
                                       Archivé
                                     </span>
                                   )}
@@ -1275,7 +1256,7 @@ export default function ProfilePage() {
                                   className="text-primary font-bold hover:underline flex items-center gap-0.5"
                                 >
                                   <span>Fiche publique</span>
-                                  <span className="material-symbols-outlined text-[13px]">arrow_forward</span>
+                                  <Icon name="arrow_forward" className="text-[13px]" />
                                 </Link>
                               </div>
 
@@ -1288,7 +1269,7 @@ export default function ProfilePage() {
                                     className="px-2.5 py-1 rounded-xl bg-surface-container-high hover:bg-surface-container text-on-surface font-bold text-[11px] flex items-center gap-1 transition-all"
                                     title="Modifier le document"
                                   >
-                                    <span className="material-symbols-outlined text-[14px] text-primary">edit</span>
+                                    <Icon name="edit" className="text-[14px] text-primary" />
                                     <span>Éditer</span>
                                   </button>
 
@@ -1302,9 +1283,7 @@ export default function ProfilePage() {
                                     }`}
                                     title={res.isArchived ? "Rendre à nouveau public/actif" : "Masquer du catalogue public"}
                                   >
-                                    <span className="material-symbols-outlined text-[14px]">
-                                      {res.isArchived ? 'unarchive' : 'archive'}
-                                    </span>
+                                    <Icon name={res.isArchived ? 'unarchive' : 'archive'} className="text-[14px]" />
                                     <span>{res.isArchived ? 'Désarchiver' : 'Archiver'}</span>
                                   </button>
                                 </div>
@@ -1317,9 +1296,9 @@ export default function ProfilePage() {
                                   title="Supprimer la publication"
                                 >
                                   {deletingResourceId === res.id ? (
-                                    <span className="material-symbols-outlined text-[14px] animate-spin">progress_activity</span>
+                                    <Icon name="progress_activity" className="text-[14px] animate-spin" />
                                   ) : (
-                                    <span className="material-symbols-outlined text-[14px]">delete</span>
+                                    <Icon name="delete" className="text-[14px]" />
                                   )}
                                   <span>Supprimer</span>
                                 </button>
@@ -1336,7 +1315,7 @@ export default function ProfilePage() {
                 {mediathequeSubTab === 'activity' && (
                   <div className="bg-surface-container-lowest p-5 rounded-3xl border border-outline-variant/30 shadow-xs flex flex-col gap-4">
                     <h3 className="font-black text-on-surface text-sm flex items-center gap-1.5 border-b border-outline-variant/20 pb-3">
-                      <span className="material-symbols-outlined text-primary text-base">timeline</span>
+                      <Icon name="timeline" className="text-primary text-base" />
                       Journal des Actions & Événements Académiques
                     </h3>
 
@@ -1367,15 +1346,13 @@ export default function ProfilePage() {
                                     : 'bg-surface-container-high text-on-surface'
                                 }`}
                               >
-                                <span className="material-symbols-outlined text-[16px]">
-                                  {isSecurity
+                                <Icon name={isSecurity
                                     ? 'security'
                                     : isCommerce
                                     ? 'payments'
                                     : isAcademic
                                     ? 'school'
-                                    : 'info'}
-                                </span>
+                                    : 'info'} className="text-[16px]" />
                               </div>
 
                               <div className="flex-1 min-w-0">
@@ -1413,7 +1390,7 @@ export default function ProfilePage() {
             <div className="bg-surface-container-lowest p-6 rounded-3xl border-2 border-outline-variant/40 shadow-xs flex flex-col gap-5">
               <div className="border-b border-outline-variant/20 pb-3">
                 <h2 id="tab-params-heading" className="text-base font-black text-on-surface flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary text-xl">lock_reset</span>
+                  <Icon name="lock_reset" className="text-primary text-xl" />
                   Sécurité du Compte & Mot de Passe
                 </h2>
                 <p className="text-xs text-on-surface-variant mt-0.5">
@@ -1423,7 +1400,7 @@ export default function ProfilePage() {
 
               {passwordError && (
                 <div className="p-3 rounded-xl bg-error/10 text-error text-xs font-semibold flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[18px]">error</span>
+                  <Icon name="error" className="text-[18px]" />
                   <span>{passwordError}</span>
                 </div>
               )}
@@ -1474,9 +1451,7 @@ export default function ProfilePage() {
                     className="px-5 py-2.5 rounded-2xl bg-primary text-on-primary font-bold text-xs shadow-md hover:bg-primary/90 transition-all flex items-center gap-1.5 disabled:opacity-50"
                   >
                     {savingPassword && (
-                      <span className="material-symbols-outlined text-[16px] animate-spin">
-                        progress_activity
-                      </span>
+                      <Icon name="progress_activity" className="text-[16px] animate-spin" />
                     )}
                     <span>Modifier mon mot de passe</span>
                   </button>
@@ -1488,7 +1463,7 @@ export default function ProfilePage() {
             <div className="bg-surface-container-lowest p-6 rounded-3xl border-2 border-outline-variant/40 shadow-xs flex flex-col gap-5">
               <div className="border-b border-outline-variant/20 pb-3">
                 <h3 className="text-base font-black text-on-surface flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary text-xl">notifications_active</span>
+                  <Icon name="notifications_active" className="text-primary text-xl" />
                   Alertes & Préférences de Notifications
                 </h3>
                 <p className="text-xs text-on-surface-variant mt-0.5">
@@ -1518,7 +1493,7 @@ export default function ProfilePage() {
                   },
                   {
                     id: 'notifyOnSale',
-                    title: 'Ventes de mes documents & Royalties (85%)',
+                    title: 'Ventes de mes documents & Royalties (60%)',
                     desc: 'Être prévenu à chaque fois qu\'un étudiant acquiert l\'un de vos polycopiés ou corrigés.',
                     checked: notifications.notifyOnSale,
                   },
@@ -1562,9 +1537,7 @@ export default function ProfilePage() {
                     className="px-5 py-2.5 rounded-2xl bg-primary text-on-primary font-bold text-xs shadow-md hover:bg-primary/90 transition-all flex items-center gap-1.5 disabled:opacity-50"
                   >
                     {savingSettings && (
-                      <span className="material-symbols-outlined text-[16px] animate-spin">
-                        progress_activity
-                      </span>
+                      <Icon name="progress_activity" className="text-[16px] animate-spin" />
                     )}
                     <span>Enregistrer les Préférences</span>
                   </button>
@@ -1587,7 +1560,7 @@ export default function ProfilePage() {
                     href="/admin"
                     className="px-4 py-2 rounded-xl bg-amber-500/15 text-amber-800 dark:text-amber-200 border border-amber-500/30 text-xs font-bold flex items-center gap-1"
                   >
-                    <span className="material-symbols-outlined text-[16px]">admin_panel_settings</span>
+                    <Icon name="admin_panel_settings" className="text-[16px]" />
                     <span>Console Admin</span>
                   </Link>
                 )}
@@ -1599,7 +1572,7 @@ export default function ProfilePage() {
                   }}
                   className="px-4 py-2 rounded-xl bg-error/10 text-error hover:bg-error/20 text-xs font-bold transition-all flex items-center gap-1"
                 >
-                  <span className="material-symbols-outlined text-[16px]">logout</span>
+                  <Icon name="logout" className="text-[16px]" />
                   <span>Déconnexion</span>
                 </button>
               </div>
@@ -1625,7 +1598,7 @@ export default function ProfilePage() {
             <div className="bg-surface p-6 rounded-3xl max-w-sm w-full border border-primary/20 shadow-2xl flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary text-[22px]">mark_email_read</span>
+                  <Icon name="mark_email_read" className="text-primary text-[22px]" />
                   <h3 className="font-extrabold text-sm text-on-surface">Certification Gmail / Email</h3>
                 </div>
                 <button
@@ -1633,7 +1606,7 @@ export default function ProfilePage() {
                   onClick={() => setShowEmailOtpModal(false)}
                   className="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-outline"
                 >
-                  <span className="material-symbols-outlined text-[16px]">close</span>
+                  <Icon name="close" className="text-[16px]" />
                 </button>
               </div>
 
@@ -1676,7 +1649,7 @@ export default function ProfilePage() {
             <div className="w-full max-w-lg bg-surface-container-lowest rounded-3xl p-6 border border-outline-variant/30 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between pb-2 border-b border-outline-variant/20">
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary text-xl">edit_note</span>
+                  <Icon name="edit_note" className="text-primary text-xl" />
                   <h3 className="text-base font-black text-on-surface">
                     Gérer & Modifier la Publication
                   </h3>
@@ -1686,14 +1659,14 @@ export default function ProfilePage() {
                   onClick={() => setEditingResource(null)}
                   className="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface"
                 >
-                  <span className="material-symbols-outlined text-[20px]">close</span>
+                  <Icon name="close" className="text-[20px]" />
                 </button>
               </div>
 
               {/* Notice revalidation if resource is currently APPROVED */}
               {editingResource.validationStatus === 'APPROVED' && (
                 <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-2.5 text-xs text-amber-900">
-                  <span className="material-symbols-outlined text-amber-600 text-lg shrink-0 mt-0.5">warning</span>
+                  <Icon name="warning" className="text-amber-600 text-lg shrink-0 mt-0.5" />
                   <div>
                     <strong className="block font-bold">Resoumission pour Validation Requise</strong>
                     <span>
@@ -1807,7 +1780,7 @@ export default function ProfilePage() {
                     className="px-4 py-2 rounded-xl bg-primary text-on-primary font-bold shadow-md hover:bg-primary/90 flex items-center gap-1.5 disabled:opacity-50"
                   >
                     {savingResourceEdit && (
-                      <span className="material-symbols-outlined text-[16px] animate-spin">progress_activity</span>
+                      <Icon name="progress_activity" className="text-[16px] animate-spin" />
                     )}
                     <span>Enregistrer les modifications</span>
                   </button>

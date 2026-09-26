@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { Readable } from 'stream';
 
 const MIME_TYPES: Record<string, string> = {
   '.jpg': 'image/jpeg',
@@ -10,7 +11,14 @@ const MIME_TYPES: Record<string, string> = {
   '.svg': 'image/svg+xml',
   '.gif': 'image/gif',
   '.pdf': 'application/pdf',
+  '.mp4': 'video/mp4',
+  '.webm': 'video/webm',
+  '.ogg': 'video/ogg',
+  '.ogv': 'video/ogg',
   '.mp3': 'audio/mpeg',
+  '.wav': 'audio/wav',
+  '.m4a': 'audio/mp4',
+  '.aac': 'audio/aac',
 };
 
 export async function GET(
@@ -42,14 +50,52 @@ export async function GET(
 
     const ext = path.extname(filePath).toLowerCase();
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+    const fileSize = stats.size;
+    const range = req.headers.get('range');
 
+    // Partial Content Streaming (HTTP 206) for smooth seeking and memory-efficient media playback
+    if (range && (contentType.startsWith('video/') || contentType.startsWith('audio/'))) {
+      const parts = range.replace(/bytes=/, '').split('-');
+      const start = parseInt(parts[0], 10);
+      const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+
+      if (start >= fileSize || end >= fileSize) {
+        return new NextResponse(null, {
+          status: 416,
+          headers: { 'Content-Range': `bytes */${fileSize}` },
+        });
+      }
+
+      const chunksize = end - start + 1;
+      const fileStream = fs.createReadStream(filePath, { start, end });
+      const stream = new ReadableStream({
+        start(controller) {
+          fileStream.on('data', (chunk) => controller.enqueue(chunk));
+          fileStream.on('end', () => controller.close());
+          fileStream.on('error', (err) => controller.error(err));
+        },
+      });
+
+      return new NextResponse(stream as any, {
+        status: 206,
+        headers: {
+          'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+          'Accept-Ranges': 'bytes',
+          'Content-Length': chunksize.toString(),
+          'Content-Type': contentType,
+        },
+      });
+    }
+
+    // Full file serving
     const fileBuffer = fs.readFileSync(filePath);
 
     return new NextResponse(fileBuffer, {
       status: 200,
       headers: {
         'Content-Type': contentType,
-        'Content-Length': stats.size.toString(),
+        'Content-Length': fileSize.toString(),
+        'Accept-Ranges': 'bytes',
         'Cache-Control': 'public, max-age=31536000, immutable',
       },
     });

@@ -105,33 +105,27 @@ export default function Header({
                 <div className="flex items-center gap-space-xs">
                   {currentUser ? (
                     <button
-                      className="inline-flex items-center gap-1.5 bg-primary-fixed/30 hover:bg-primary-fixed/50 px-3 py-1 rounded-full text-left truncate min-w-0 max-w-[210px] active:scale-95 transition-all border border-primary/20"
+                      className="inline-flex items-center gap-1.5 bg-primary-fixed/30 hover:bg-primary-fixed/50 px-2.5 sm:px-3 py-1 rounded-full text-left truncate min-w-0 max-w-[130px] sm:max-w-[210px] active:scale-95 transition-all border border-primary/20"
                       type="button"
                       onClick={() => setShowCampusDropdown(!showCampusDropdown)}
                     >
-                      <span className="material-symbols-outlined text-[15px] text-primary shrink-0">
-                        account_balance
-                      </span>
+                      <Icon name="account_balance" size={15} className="text-primary shrink-0" />
                       <span className="font-label-sm text-[11px] leading-tight font-extrabold text-on-surface truncate">
                         {userInstitutionName}
                       </span>
-                      <span className="material-symbols-outlined text-[13px] text-primary shrink-0">
-                        expand_more
-                      </span>
+                      <Icon name="expand_more" size={13} className="text-primary shrink-0" />
                     </button>
                   ) : (
                     <button
-                      className="inline-flex items-center gap-1 bg-surface-container-high hover:bg-surface-container px-2.5 py-1 rounded-full text-left truncate min-w-0 max-w-[190px] active:scale-95 transition-all"
+                      className="inline-flex items-center gap-1 bg-surface-container-high hover:bg-surface-container px-2.5 py-1 rounded-full text-left truncate min-w-0 max-w-[125px] sm:max-w-[190px] active:scale-95 transition-all"
                       type="button"
                       onClick={() => setShowAuthGateway(true)}
                     >
-                      <span className="material-symbols-outlined text-[14px] text-secondary">
-                        public
-                      </span>
+                      <Icon name="public" size={14} className="text-secondary shrink-0" />
                       <span className="font-label-sm text-[11px] leading-tight font-bold text-on-surface truncate">
                         Burkina Faso (Tous)
                       </span>
-                      <span className="text-[9px] bg-secondary text-on-secondary px-1 rounded font-bold ml-0.5">
+                      <span className="text-[9px] bg-secondary text-on-secondary px-1 rounded font-bold ml-0.5 shrink-0">
                         INVITÉ
                       </span>
                     </button>
@@ -176,10 +170,10 @@ export default function Header({
                         className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold bg-primary text-on-primary hover:bg-primary/90 transition-all flex items-center justify-between"
                       >
                         <span className="flex items-center gap-2">
-                          <span className="material-symbols-outlined text-[16px]">account_circle</span>
+                          <Icon name="account_circle" size={16} />
                           <span>Mon Profil & Cursus Certifié</span>
                         </span>
-                        <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+                        <Icon name="chevron_right" size={14} />
                       </button>
 
                       <button
@@ -191,12 +185,10 @@ export default function Header({
                         className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors flex items-center justify-between"
                       >
                         <span className="flex items-center gap-2">
-                          <span className="material-symbols-outlined text-[16px] text-secondary">
-                            filter_alt
-                          </span>
+                          <Icon name="filter_alt" size={16} className="text-secondary" />
                           <span>Filtrer d'autres universités</span>
                         </span>
-                        <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+                        <Icon name="chevron_right" size={14} />
                       </button>
                     </div>
                   </div>
@@ -365,16 +357,12 @@ export default function Header({
                           {userInstitutionName}
                         </p>
                       </div>
-                      <span className="material-symbols-outlined text-[16px] text-outline shrink-0">
-                        chevron_right
-                      </span>
+                      <Icon name="chevron_right" size={16} className="text-outline shrink-0" />
                     </Link>
 
                     <div className="flex items-center justify-between text-xs text-on-surface-variant px-1 bg-surface-container py-1.5 rounded-lg">
                       <span className="flex items-center gap-1 font-medium">
-                        <span className="material-symbols-outlined text-[15px] text-secondary">
-                          bolt
-                        </span>
+                        <Icon name="bolt" size={15} className="text-secondary" />
                         Points amphi
                       </span>
                       <span className="font-extrabold text-primary">{currentUser.points || 0} pts</span>
@@ -386,9 +374,7 @@ export default function Header({
                         onClick={() => setShowUserMenu(false)}
                         className="flex items-center gap-2 px-2.5 py-2 rounded-xl text-xs font-bold text-primary bg-primary/10 hover:bg-primary/20 transition-colors"
                       >
-                        <span className="material-symbols-outlined text-[18px]">
-                          manage_accounts
-                        </span>
+                        <Icon name="manage_accounts" size={18} />
                         <span>Gérer Mon Profil & Médiathèque</span>
                       </Link>
 
@@ -400,9 +386,7 @@ export default function Header({
                         }}
                         className="flex items-center gap-2 px-2.5 py-2 rounded-xl text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors text-left"
                       >
-                        <span className="material-symbols-outlined text-[16px] text-primary">
-                          school
-                        </span>
+                        <Icon name="school" size={16} className="text-primary" />
                         <span>Modifier mon université</span>
                       </button>
 
@@ -411,9 +395,7 @@ export default function Header({
                         onClick={() => setShowUserMenu(false)}
                         className="flex items-center gap-2 px-2.5 py-2 rounded-xl text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors"
                       >
-                        <span className="material-symbols-outlined text-[16px] text-primary">
-                          account_balance_wallet
-                        </span>
+                        <Icon name="account_balance_wallet" size={16} className="text-primary" />
                         <span>Mon Portefeuille</span>
                       </Link>
 
@@ -423,9 +405,7 @@ export default function Header({
                           onClick={() => setShowUserMenu(false)}
                           className="flex items-center gap-2 px-2.5 py-2 rounded-xl text-xs font-bold text-error bg-error/10 hover:bg-error/20 transition-colors"
                         >
-                          <span className="material-symbols-outlined text-[16px]">
-                            admin_panel_settings
-                          </span>
+                          <Icon name="admin_panel_settings" size={16} />
                           <span>Console Centrale Admin</span>
                         </Link>
                       )}
@@ -438,9 +418,7 @@ export default function Header({
                         }}
                         className="flex items-center gap-2 px-2.5 py-2 rounded-xl text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors text-left"
                       >
-                        <span className="material-symbols-outlined text-[16px] text-secondary">
-                          switch_account
-                        </span>
+                        <Icon name="switch_account" size={16} className="text-secondary" />
                         <span>Changer de compte étudiant</span>
                       </button>
 
@@ -453,7 +431,7 @@ export default function Header({
                         }}
                         className="flex items-center gap-2 px-2.5 py-2 rounded-xl text-xs font-bold text-error hover:bg-error/10 transition-colors text-left"
                       >
-                        <span className="material-symbols-outlined text-[16px]">logout</span>
+                        <Icon name="logout" size={16} />
                         <span>Se déconnecter</span>
                       </button>
                     </div>
@@ -471,7 +449,7 @@ export default function Header({
                       : 'bg-primary text-on-primary hover:bg-primary/90'
                   }`}
                 >
-                  <span className="material-symbols-outlined text-[16px]">login</span>
+                  <Icon name="login" size={16} />
                   <span>Connexion</span>
                 </button>
                 <Link

@@ -144,9 +144,7 @@ export default function HomeFeedPage() {
               <div className="relative p-space-md flex items-center justify-between gap-space-sm z-10">
                 <div className="flex items-center gap-space-sm min-w-0">
                   <div className="w-11 h-11 rounded-xl bg-surface-container-lowest/20 backdrop-blur-md flex items-center justify-center shrink-0">
-                    <span className="material-symbols-outlined text-[24px] text-primary-fixed">
-                      school
-                    </span>
+                    <Icon name="school" size={24} className="text-primary-fixed" />
                   </div>
                   <div className="flex flex-col min-w-0">
                     <div className="flex items-center gap-1.5">
@@ -178,7 +176,7 @@ export default function HomeFeedPage() {
                       type="button"
                       onClick={() => setShowUniManager(true)}
                     >
-                      <span className="material-symbols-outlined text-[16px]">manage_accounts</span>
+                      <Icon name="manage_accounts" size={16} />
                       <span className="hidden sm:inline">Mon Profil</span>
                     </button>
                   ) : (
@@ -189,7 +187,7 @@ export default function HomeFeedPage() {
                       type="button"
                       onClick={() => setShowAuthGateway(true)}
                     >
-                      <span className="material-symbols-outlined text-[16px]">login</span>
+                      <Icon name="login" size={16} />
                       <span>Se connecter</span>
                     </button>
                   )}
@@ -201,9 +199,7 @@ export default function HomeFeedPage() {
                     type="button"
                     onClick={() => router.push('/explorer')}
                   >
-                    <span className="material-symbols-outlined text-[18px] text-on-primary">
-                      filter_alt
-                    </span>
+                    <Icon name="filter_alt" size={18} className="text-on-primary" />
                   </button>
                 </div>
               </div>
@@ -282,9 +278,7 @@ export default function HomeFeedPage() {
           <section className="mt-space-md flex flex-col gap-space-sm">
             <div className="px-margin flex items-center justify-between">
               <div className="flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-[20px] text-secondary">
-                  local_fire_department
-                </span>
+                <Icon name="local_fire_department" size={20} className="text-secondary" />
                 <h2 className="font-headline-md text-[18px] text-on-surface font-bold tracking-tight">
                   Top Ressources Tendance
                 </h2>
@@ -294,7 +288,7 @@ export default function HomeFeedPage() {
                 className="font-label-sm text-label-sm text-primary flex items-center font-bold"
               >
                 Voir tout
-                <span className="material-symbols-outlined text-[16px]">chevron_right</span>
+                <Icon name="chevron_right" size={16} />
               </Link>
             </div>
 
@@ -319,23 +313,19 @@ export default function HomeFeedPage() {
                         <div className="flex items-center gap-1 flex-wrap">
                           {res.media?.some((m: any) => m.mediaType === 'PDF') && (
                             <span className="bg-error-container text-on-error-container font-label-sm text-[10px] px-2 py-0.5 rounded uppercase font-bold flex items-center gap-0.5">
-                              <span className="material-symbols-outlined text-[12px]">
-                                picture_as_pdf
-                              </span>{' '}
+                              <Icon name="picture_as_pdf" size={12} />
                               PDF
                             </span>
                           )}
                           {res.media?.some((m: any) => m.mediaType === 'AUDIO') && (
                             <span className="bg-surface-container-high text-on-surface font-label-sm text-[10px] px-2 py-0.5 rounded uppercase font-bold flex items-center gap-0.5">
-                              <span className="material-symbols-outlined text-[12px] text-secondary">
-                                mic
-                              </span>{' '}
+                              <Icon name="mic" size={12} className="text-secondary" />
                               Audio
                             </span>
                           )}
                           {isInPerson && (
                             <span className="bg-surface-container-highest text-primary font-label-sm text-[10px] px-2 py-0.5 rounded uppercase font-bold flex items-center gap-0.5">
-                              <span className="material-symbols-outlined text-[12px]">handshake</span>{' '}
+                              <Icon name="handshake" size={12} />
                               Présentiel
                             </span>
                           )}
@@ -353,9 +343,7 @@ export default function HomeFeedPage() {
                             isBookmarked ? 'text-primary' : 'text-on-surface-variant hover:text-secondary'
                           }`}
                         >
-                          <span className="material-symbols-outlined text-[18px]">
-                            {isBookmarked ? 'bookmark_added' : 'bookmark'}
-                          </span>
+                          <Icon name="bookmark" size={18} />
                         </button>
                       </div>
 
@@ -384,9 +372,7 @@ export default function HomeFeedPage() {
                             {res.author?.profile?.displayName || 'Étudiant UJKZ'}
                           </span>
                           <div className="flex items-center gap-1 text-[11px] text-on-surface-variant">
-                            <span className="material-symbols-outlined text-[13px] text-secondary">
-                              star
-                            </span>
+                            <Icon name="star" size={13} className="text-secondary" />
                             <span className="font-bold text-on-surface">
                               {res.ratingAverage?.toFixed(1) || '4.9'}
                             </span>
@@ -426,9 +412,7 @@ export default function HomeFeedPage() {
                             : 'bg-primary-container text-on-primary'
                         }`}
                       >
-                        <span className="material-symbols-outlined text-[16px]">
-                          {isPaid ? 'lock_open' : isInPerson ? 'chat' : 'download'}
-                        </span>
+                        <Icon name={isPaid ? 'lock_open' : isInPerson ? 'chat' : 'download'} size={16} />
                         <span>
                           {isPaid ? 'Débloquer' : isInPerson ? 'WhatsApp' : '1-Clic'}
                         </span>
@@ -476,9 +460,7 @@ export default function HomeFeedPage() {
           <section className="mt-space-sm px-margin flex flex-col gap-space-sm pb-space-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-[20px] text-primary">
-                  dynamic_feed
-                </span>
+                <Icon name="menu_book" size={20} className="text-primary" />
                 <h2 className="font-headline-md text-[18px] text-on-surface font-bold tracking-tight">
                   Flux en direct des facultés
                 </h2>
@@ -510,9 +492,7 @@ export default function HomeFeedPage() {
                         />
                         {hasVideo && (
                           <div className="absolute inset-0 bg-inverse-surface/30 flex items-center justify-center">
-                            <span className="material-symbols-outlined text-[24px] text-on-primary">
-                              play_circle
-                            </span>
+                            <Icon name="play_arrow" size={24} className="text-on-primary" />
                           </div>
                         )}
                         <span className="absolute bottom-1 right-1 bg-surface-tint/90 text-on-primary text-[9px] font-bold px-1 rounded">
@@ -526,9 +506,7 @@ export default function HomeFeedPage() {
                             {item.faculty?.name || 'Faculté'}
                           </span>
                           <span className="inline-flex items-center gap-0.5 bg-primary-fixed text-on-primary-fixed font-label-sm text-[9px] px-1.5 py-0.5 rounded font-bold shrink-0">
-                            <span className="material-symbols-outlined text-[11px] text-primary">
-                              verified
-                            </span>{' '}
+                            <Icon name="verified" size={11} className="text-primary" />
                             {item.badgeQuality || 'Vérifié Commu'}
                           </span>
                         </div>
@@ -569,9 +547,7 @@ export default function HomeFeedPage() {
                           </span>
                         </div>
                         <div className="flex items-center gap-1 text-on-surface-variant text-[11px]">
-                          <span className="material-symbols-outlined text-[13px] text-primary">
-                            {hasVideo ? 'play_arrow' : 'sim_card_download'}
-                          </span>
+                          <Icon name={hasVideo ? 'play_arrow' : 'download'} size={13} className="text-primary" />
                           <span className="font-semibold text-on-surface">
                             {item.downloadsCount || item.viewsCount || 430}
                           </span>
@@ -586,7 +562,7 @@ export default function HomeFeedPage() {
                           }}
                           className="h-8 px-2.5 rounded-lg bg-surface-container-high text-on-surface font-label-sm text-[11px] flex items-center gap-1 active:scale-95 transition-transform"
                         >
-                          <span className="material-symbols-outlined text-[15px]">visibility</span>
+                          <Icon name="visibility" size={15} />
                           <span>Aperçu</span>
                         </button>
                         <button
@@ -598,9 +574,7 @@ export default function HomeFeedPage() {
                           }}
                           className="h-8 px-3 rounded-lg bg-primary-container text-on-primary font-label-sm text-[11px] flex items-center gap-1 shadow-sm active:scale-95 transition-transform font-bold"
                         >
-                          <span className="material-symbols-outlined text-[15px]">
-                            {isPaid ? 'shopping_cart_checkout' : 'play_circle'}
-                          </span>
+                          <Icon name={isPaid ? 'shopping_bag' : 'play_arrow'} size={15} />
                           <span>{isPaid ? 'Acheter' : 'Consulter'}</span>
                         </button>
                       </div>
@@ -616,16 +590,14 @@ export default function HomeFeedPage() {
             <div className="p-space-md rounded-xl bg-gradient-to-r from-primary to-primary-container text-on-primary shadow-sm flex items-center justify-between">
               <div className="flex items-center gap-space-sm min-w-0">
                 <div className="w-10 h-10 rounded-full bg-primary-fixed/20 flex items-center justify-center shrink-0">
-                  <span className="material-symbols-outlined text-[22px] text-primary-fixed">
-                    monetization_on
-                  </span>
+                  <Icon name="monetization_on" size={22} className="text-primary-fixed" />
                 </div>
                 <div className="flex flex-col min-w-0">
                   <span className="font-label-md text-label-md font-bold truncate">
                     Tu as un corrigé de devoir ?
                   </span>
                   <span className="font-body-sm text-[11px] text-primary-fixed-dim">
-                    Publie-le et gagne 85% par téléchargement
+                    Publie-le et gagne 60% par téléchargement
                   </span>
                 </div>
               </div>
@@ -660,7 +632,7 @@ export default function HomeFeedPage() {
                       onClick={() => router.push('/portefeuille')}
                       className="py-2 px-3 bg-primary text-on-primary rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm hover:bg-primary-container transition-all"
                     >
-                      <span className="material-symbols-outlined text-[16px]">account_balance_wallet</span>
+                      <Icon name="account_balance_wallet" size={16} />
                       <span>Portefeuille</span>
                     </button>
                     <button
@@ -668,7 +640,7 @@ export default function HomeFeedPage() {
                       onClick={() => router.push('/portefeuille')}
                       className="py-2 px-3 bg-surface-container-high text-on-surface rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-surface-container transition-all"
                     >
-                      <span className="material-symbols-outlined text-[16px] text-secondary">payments</span>
+                      <Icon name="payments" size={16} className="text-secondary" />
                       <span>Retirer gains</span>
                     </button>
                   </div>
@@ -687,7 +659,7 @@ export default function HomeFeedPage() {
                       onClick={() => setShowAuthGateway(true)}
                       className="w-full py-2.5 px-3 bg-primary text-on-primary rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm hover:bg-primary-container active:scale-95 transition-all"
                     >
-                      <span className="material-symbols-outlined text-[16px]">login</span>
+                      <Icon name="login" size={16} />
                       <span>Se connecter</span>
                     </button>
                   </div>
@@ -699,7 +671,7 @@ export default function HomeFeedPage() {
             <div className="bg-surface-container-lowest p-5 rounded-2xl border border-primary/20 hover:border-primary/40 shadow-sm flex flex-col gap-3 transition-all">
               <div className="flex items-center justify-between pb-2 border-b border-surface-container-high">
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary text-[20px]">hub</span>
+                  <Icon name="hub" size={20} className="text-primary" />
                   <h3 className="text-sm font-bold text-on-surface">Réseau Universitaire BF</h3>
                 </div>
                 <span className="flex items-center gap-1 text-[10px] text-secondary font-bold">
@@ -710,9 +682,7 @@ export default function HomeFeedPage() {
 
               {/* Search Bar for Universities in Network */}
               <div className="relative">
-                <span className="material-symbols-outlined absolute left-2.5 top-2 text-outline text-[16px]">
-                  search
-                </span>
+                <Icon name="search" size={16} className="absolute left-2.5 top-2 text-outline" />
                 <input
                   type="text"
                   value={sidebarUnivSearchQuery}
@@ -726,7 +696,7 @@ export default function HomeFeedPage() {
                     onClick={() => setSidebarUnivSearchQuery('')}
                     className="absolute right-2 top-2 text-outline hover:text-on-surface"
                   >
-                    <span className="material-symbols-outlined text-[14px]">close</span>
+                    <Icon name="close" size={14} />
                   </button>
                 )}
               </div>
@@ -773,11 +743,11 @@ export default function HomeFeedPage() {
             <div className="bg-gradient-to-br from-[#0D5C3A] to-[#00422B] text-white p-5 rounded-2xl shadow-md flex flex-col gap-3 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-28 h-28 bg-white/5 rounded-full blur-2xl pointer-events-none" />
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-[24px] text-[#10B981]">local_fire_department</span>
+                <Icon name="local_fire_department" size={24} className="text-[#10B981]" />
                 <h4 className="font-bold text-sm">Monétisez vos corrigés de devoirs</h4>
               </div>
               <p className="text-xs text-white/80 leading-relaxed">
-                Rejoignez les 57 délégués et majors qui partagent leurs synthèses. Vous touchez <strong>85% en FCFA</strong> par téléchargement via Orange Money ou Moov Flooz.
+                Rejoignez les 57 délégués et majors qui partagent leurs synthèses. Vous touchez <strong>60% en FCFA</strong> par téléchargement via Orange Money ou Moov Flooz.
               </p>
               <button
                 type="button"

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { sendPurchaseConfirmationEmail, sendSaleNotificationEmail } from '@/lib/email';
+import { getCommissionSettings, calculateRevenueSplit } from '@/lib/config/commission';
 
 export async function POST(req: NextRequest) {
   try {
@@ -76,9 +77,9 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      // 3. Calculate 85% / 15% split
-      const platformShare = Math.round(price * 0.15);
-      const authorShare = price - platformShare;
+      // 3. Calculate centralized platform & author revenue split (Default 40% platform / 60% author)
+      const { platformCommissionPercent } = await getCommissionSettings();
+      const { platformShare, authorShare } = calculateRevenueSplit(price, platformCommissionPercent);
 
       // 4. Record Revenue Distribution
       await tx.revenueDistribution.create({

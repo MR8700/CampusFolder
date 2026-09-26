@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Icon from '@/components/ui/Icon';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
@@ -163,7 +164,7 @@ export default function ExplorerPage() {
             <div className="bg-surface-container-lowest p-4 sm:p-5 rounded-2xl border border-primary/20 hover:border-primary/40 shadow-xs flex flex-col gap-3 transition-all">
               <div className="flex items-center justify-between">
                 <h2 className="text-xs font-bold uppercase tracking-wider text-outline flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[16px] text-primary">public</span>
+                  <Icon name="public" className="text-[16px] text-primary" />
                   <span>Régions du Burkina Faso</span>
                 </h2>
                 {selectedRegion !== 'all' && (
@@ -179,9 +180,7 @@ export default function ExplorerPage() {
 
               {/* Search Bar Régions */}
               <div className="relative">
-                <span className="material-symbols-outlined absolute left-2.5 top-2 text-outline text-[16px]">
-                  search
-                </span>
+                <Icon name="search" className="absolute left-2.5 top-2 text-outline text-[16px]" />
                 <input
                   type="text"
                   value={filterRegionSearch}
@@ -195,7 +194,7 @@ export default function ExplorerPage() {
                     onClick={() => setFilterRegionSearch('')}
                     className="absolute right-2 top-2 text-outline hover:text-on-surface"
                   >
-                    <span className="material-symbols-outlined text-[14px]">close</span>
+                    <Icon name="close" className="text-[14px]" />
                   </button>
                 )}
               </div>
@@ -227,7 +226,7 @@ export default function ExplorerPage() {
                   >
                     <span>{reg}</span>
                     {selectedRegion === reg && (
-                      <span className="material-symbols-outlined text-[14px]">check</span>
+                      <Icon name="check" className="text-[14px]" />
                     )}
                   </button>
                 ))}
@@ -238,9 +237,7 @@ export default function ExplorerPage() {
             <div className="bg-surface-container-lowest p-4 sm:p-5 rounded-2xl border border-primary/20 hover:border-primary/40 shadow-xs flex flex-col gap-3 transition-all">
               <div className="flex items-center justify-between">
                 <h2 className="text-xs font-bold uppercase tracking-wider text-outline flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[16px] text-primary">
-                    account_balance
-                  </span>
+                  <Icon name="account_balance" className="text-[16px] text-primary" />
                   <span>Filtre Universités</span>
                 </h2>
                 {selectedUniv && (
@@ -291,9 +288,7 @@ export default function ExplorerPage() {
 
               {/* Search Bar Universités */}
               <div className="relative">
-                <span className="material-symbols-outlined absolute left-2.5 top-2 text-outline text-[16px]">
-                  search
-                </span>
+                <Icon name="search" className="absolute left-2.5 top-2 text-outline text-[16px]" />
                 <input
                   type="text"
                   value={filterUnivSearch}
@@ -307,7 +302,7 @@ export default function ExplorerPage() {
                     onClick={() => setFilterUnivSearch('')}
                     className="absolute right-2 top-2 text-outline hover:text-on-surface"
                   >
-                    <span className="material-symbols-outlined text-[14px]">close</span>
+                    <Icon name="close" className="text-[14px]" />
                   </button>
                 )}
               </div>
@@ -361,7 +356,7 @@ export default function ExplorerPage() {
             <div className="bg-surface-container-lowest p-4 sm:p-5 rounded-2xl border border-primary/20 hover:border-primary/40 shadow-xs flex flex-col gap-3 transition-all">
               <div className="flex items-center justify-between">
                 <h2 className="text-xs font-bold uppercase tracking-wider text-outline flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[16px] text-primary">school</span>
+                  <Icon name="school" className="text-[16px] text-primary" />
                   <span>Facultés / UFR</span>
                 </h2>
                 {selectedFaculty !== 'all' && (
@@ -377,9 +372,7 @@ export default function ExplorerPage() {
 
               {/* Search Bar Facultés */}
               <div className="relative">
-                <span className="material-symbols-outlined absolute left-2.5 top-2 text-outline text-[16px]">
-                  search
-                </span>
+                <Icon name="search" className="absolute left-2.5 top-2 text-outline text-[16px]" />
                 <input
                   type="text"
                   value={filterFacSearch}
@@ -393,7 +386,7 @@ export default function ExplorerPage() {
                     onClick={() => setFilterFacSearch('')}
                     className="absolute right-2 top-2 text-outline hover:text-on-surface"
                   >
-                    <span className="material-symbols-outlined text-[14px]">close</span>
+                    <Icon name="close" className="text-[14px]" />
                   </button>
                 )}
               </div>
@@ -440,9 +433,7 @@ export default function ExplorerPage() {
             <div className="bg-surface-container-lowest p-4 sm:p-5 rounded-2xl border border-primary/20 hover:border-primary/40 shadow-xs flex flex-col gap-3 transition-all">
               <div className="flex items-center justify-between">
                 <h2 className="text-xs font-bold uppercase tracking-wider text-outline flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[16px] text-primary">
-                    history_edu
-                  </span>
+                  <Icon name="history_edu" className="text-[16px] text-primary" />
                   <span>Filières Spécialisées</span>
                 </h2>
                 {selectedFiliere !== 'all' && (
@@ -458,9 +449,7 @@ export default function ExplorerPage() {
 
               {/* Search Bar Filières */}
               <div className="relative">
-                <span className="material-symbols-outlined absolute left-2.5 top-2 text-outline text-[16px]">
-                  search
-                </span>
+                <Icon name="search" className="absolute left-2.5 top-2 text-outline text-[16px]" />
                 <input
                   type="text"
                   value={filterFiliereSearch}
@@ -474,7 +463,7 @@ export default function ExplorerPage() {
                     onClick={() => setFilterFiliereSearch('')}
                     className="absolute right-2 top-2 text-outline hover:text-on-surface"
                   >
-                    <span className="material-symbols-outlined text-[14px]">close</span>
+                    <Icon name="close" className="text-[14px]" />
                   </button>
                 )}
               </div>
@@ -520,7 +509,7 @@ export default function ExplorerPage() {
             {/* 5. Tri */}
             <div className="bg-surface-container-lowest p-4 sm:p-5 rounded-2xl border border-primary/20 hover:border-primary/40 shadow-xs flex flex-col gap-3 transition-all">
               <h2 className="text-xs font-bold uppercase tracking-wider text-outline flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-[16px] text-primary">sort</span>
+                <Icon name="sort" className="text-[16px] text-primary" />
                 <span>Trier par</span>
               </h2>
               <div className="flex flex-col gap-1.5 text-xs">
@@ -569,7 +558,7 @@ export default function ExplorerPage() {
               </h2>
               <div className="flex items-center gap-space-xs bg-surface-container-lowest rounded-2xl p-2 shadow-xs border border-primary/25 hover:border-primary/50 transition-all">
                 <div className="w-10 h-10 flex items-center justify-center text-primary shrink-0">
-                  <span className="material-symbols-outlined text-[24px]">search</span>
+                  <Icon name="search" className="text-[24px]" />
                 </div>
                 <input
                   className="w-full bg-transparent font-body-md text-on-surface placeholder:text-outline focus:outline-none min-w-0 text-xs sm:text-sm"
@@ -588,7 +577,7 @@ export default function ExplorerPage() {
                       : 'bg-surface-container-low text-primary hover:bg-surface-container'
                   }`}
                 >
-                  <span className="material-symbols-outlined text-[18px]">mic</span>
+                  <Icon name="mic" className="text-[18px]" />
                 </button>
                 <button
                   aria-label="Filtres avancés"
@@ -596,7 +585,7 @@ export default function ExplorerPage() {
                   onClick={() => setShowMobileFilters(true)}
                   className="w-9 h-9 flex items-center justify-center rounded-xl bg-primary text-on-primary active:scale-90 transition-transform shrink-0 shadow-xs relative"
                 >
-                  <span className="material-symbols-outlined text-[18px]">tune</span>
+                  <Icon name="tune" className="text-[18px]" />
                   {(selectedRegion !== 'all' || selectedUniv !== null || selectedFaculty !== 'all' || selectedFiliere !== 'all') && (
                     <span className="absolute -top-1 -right-1 w-3 h-3 bg-secondary rounded-full ring-2 ring-surface"></span>
                   )}
@@ -614,7 +603,7 @@ export default function ExplorerPage() {
                       : 'bg-surface-container-lowest text-on-surface border-primary/20 hover:border-primary/40'
                   }`}
                 >
-                  <span className="material-symbols-outlined text-[14px]">school</span>
+                  <Icon name="school" className="text-[14px]" />
                   <span>Toutes Universités</span>
                 </button>
 
@@ -664,9 +653,7 @@ export default function ExplorerPage() {
                       <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-1.5 ${
                         isSelected ? 'bg-white/20 text-on-primary' : 'bg-primary/10 text-primary'
                       }`}>
-                        <span className="material-symbols-outlined text-[22px]">
-                          {fac.iconName || 'school'}
-                        </span>
+                        <Icon name={fac.iconName || 'school'} className="text-[22px]" />
                       </div>
                       <span className="font-label-md text-xs font-bold leading-tight truncate w-full">
                         {fac.code.toUpperCase()}
@@ -711,11 +698,10 @@ export default function ExplorerPage() {
                         : 'bg-surface-container-lowest text-on-surface border-primary/20 hover:border-primary/40'
                     }`}
                   >
-                    <span
-                      className={`material-symbols-outlined text-[16px] ${sortItem.iconColor}`}
-                    >
-                      {sortItem.icon}
-                    </span>
+                    <Icon
+                      name={sortItem.icon}
+                      className={`text-[16px] ${sortItem.iconColor}`}
+                    />
                     <span>{sortItem.label}</span>
                   </button>
                 ))}
@@ -726,14 +712,14 @@ export default function ExplorerPage() {
             {(selectedRegion !== 'all' || selectedUniv !== null || selectedFaculty !== 'all' || selectedFiliere !== 'all' || searchQuery.trim() !== '') && (
               <div className="mt-4 p-3 rounded-2xl bg-surface-container-lowest border border-primary/20 flex items-center gap-2 flex-wrap text-xs">
                 <span className="font-bold text-outline text-[11px] uppercase tracking-wider mr-1 flex items-center gap-1">
-                  <span className="material-symbols-outlined text-[15px] text-primary">filter_alt</span>
+                  <Icon name="filter_alt" className="text-[15px] text-primary" />
                   <span>Filtres actifs:</span>
                 </span>
                 {selectedRegion !== 'all' && (
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/10 text-primary font-bold border border-primary/20">
                     <span>Région: {selectedRegion}</span>
                     <button type="button" onClick={() => handleSelectRegion('all')} className="hover:opacity-75">
-                      <span className="material-symbols-outlined text-[14px]">close</span>
+                      <Icon name="close" className="text-[14px]" />
                     </button>
                   </span>
                 )}
@@ -741,7 +727,7 @@ export default function ExplorerPage() {
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/10 text-primary font-bold border border-primary/20">
                     <span>Univ: {institutions.find((i) => i.id === selectedUniv)?.shortName || 'Univ'}</span>
                     <button type="button" onClick={() => handleSelectUniv(null)} className="hover:opacity-75">
-                      <span className="material-symbols-outlined text-[14px]">close</span>
+                      <Icon name="close" className="text-[14px]" />
                     </button>
                   </span>
                 )}
@@ -749,7 +735,7 @@ export default function ExplorerPage() {
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/10 text-primary font-bold border border-primary/20">
                     <span>UFR: {selectedFaculty.toUpperCase()}</span>
                     <button type="button" onClick={() => setSelectedFaculty('all')} className="hover:opacity-75">
-                      <span className="material-symbols-outlined text-[14px]">close</span>
+                      <Icon name="close" className="text-[14px]" />
                     </button>
                   </span>
                 )}
@@ -757,7 +743,7 @@ export default function ExplorerPage() {
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/10 text-primary font-bold border border-primary/20">
                     <span>Filière: {filieres.find((f) => f.id === selectedFiliere)?.code || 'Filière'}</span>
                     <button type="button" onClick={() => setSelectedFiliere('all')} className="hover:opacity-75">
-                      <span className="material-symbols-outlined text-[14px]">close</span>
+                      <Icon name="close" className="text-[14px]" />
                     </button>
                   </span>
                 )}
@@ -765,7 +751,7 @@ export default function ExplorerPage() {
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/10 text-primary font-bold border border-primary/20">
                     <span>Mot-clé: "{searchQuery.trim()}"</span>
                     <button type="button" onClick={() => setSearchQuery('')} className="hover:opacity-75">
-                      <span className="material-symbols-outlined text-[14px]">close</span>
+                      <Icon name="close" className="text-[14px]" />
                     </button>
                   </span>
                 )}
@@ -788,9 +774,7 @@ export default function ExplorerPage() {
                 <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0D5C3A] via-[#094229] to-[#042818] text-on-primary p-4 sm:p-5 shadow-md border border-primary/30 ring-1 ring-primary/20">
                   <div className="flex items-center justify-between relative z-10 mb-2">
                     <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-white/20 font-label-sm text-[10px] tracking-wide uppercase backdrop-blur-md font-bold">
-                      <span className="material-symbols-outlined text-[12px] text-secondary-fixed">
-                        verified
-                      </span>
+                      <Icon name="verified" className="text-[12px] text-secondary-fixed" />
                       Fiche Certifiée Major UJKZ
                     </span>
                     <span className="font-label-sm text-xs bg-secondary-container text-on-secondary px-2.5 py-0.5 rounded-full font-bold">
@@ -829,9 +813,7 @@ export default function ExplorerPage() {
                   </div>
                   <div className="mt-space-md pt-space-xs flex items-center justify-between relative z-10 gap-2 flex-wrap">
                     <div className="flex items-center gap-1.5 text-surface-container-high font-label-sm text-xs">
-                      <span className="material-symbols-outlined text-[16px] text-tertiary-fixed">
-                        file_download_done
-                      </span>
+                      <Icon name="file_download_done" className="text-[16px] text-tertiary-fixed" />
                       <span>Hors-ligne disponible</span>
                     </div>
                     <button
@@ -839,7 +821,7 @@ export default function ExplorerPage() {
                       onClick={() => router.push(`/ressources/${spotlightResource.slug}`)}
                       className="px-3.5 py-1.5 rounded-xl bg-surface-container-lowest text-primary font-label-md text-xs font-bold shadow-sm active:scale-95 transition-transform inline-flex items-center gap-1"
                     >
-                      <span className="material-symbols-outlined text-[16px]">visibility</span>
+                      <Icon name="visibility" className="text-[16px]" />
                       <span>Aperçu rapide</span>
                     </button>
                   </div>
@@ -851,9 +833,7 @@ export default function ExplorerPage() {
             <section aria-labelledby="stream-heading" className="mt-space-lg flex flex-col gap-space-md w-full min-w-0 max-w-full">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-primary text-[20px]">
-                    menu_book
-                  </span>
+                  <Icon name="menu_book" className="text-primary text-[20px]" />
                   <h2 id="stream-heading" className="font-headline-md text-headline-md text-on-surface font-bold">
                     Documents Recommandés ({searchResults.length})
                   </h2>
@@ -886,7 +866,7 @@ export default function ExplorerPage() {
               {!loading && searchResults.length === 0 && (
                 <div className="flex flex-col items-center justify-center p-8 sm:p-12 bg-surface-container-lowest rounded-3xl border border-dashed border-primary/30 text-center my-4">
                   <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-3">
-                    <span className="material-symbols-outlined text-3xl">content_paste_search</span>
+                    <Icon name="content_paste_search" className="text-3xl" />
                   </div>
                   <h3 className="font-extrabold text-base text-on-surface">
                     Aucun document ne correspond à vos filtres
@@ -899,7 +879,7 @@ export default function ExplorerPage() {
                     onClick={resetAllFilters}
                     className="mt-5 px-5 py-2.5 rounded-2xl bg-primary text-on-primary text-xs font-bold shadow-md hover:bg-primary/90 active:scale-95 transition-all flex items-center gap-2"
                   >
-                    <span className="material-symbols-outlined text-[18px]">restart_alt</span>
+                    <Icon name="restart_alt" className="text-[18px]" />
                     <span>Réinitialiser tous les filtres</span>
                   </button>
                 </div>
@@ -952,16 +932,12 @@ export default function ExplorerPage() {
 
                             <div className="flex items-center gap-2 mt-auto pt-2 text-outline font-label-sm text-[11px] flex-wrap">
                               <span className="flex items-center gap-0.5">
-                                <span className="material-symbols-outlined text-[13px] text-secondary">
-                                  star
-                                </span>
+                                <Icon name="star" className="text-[13px] text-secondary" />
                                 {item.ratingAverage || 5.0}
                               </span>
                               <span>•</span>
                               <span className="flex items-center gap-0.5">
-                                <span className="material-symbols-outlined text-[13px]">
-                                  download
-                                </span>
+                                <Icon name="download" className="text-[13px]" />
                                 {item.downloadsCount || 0}
                               </span>
                               {item.institution && (
@@ -992,7 +968,7 @@ export default function ExplorerPage() {
             {/* Drawer Header */}
             <div className="p-4 border-b border-outline-variant/30 flex items-center justify-between bg-surface-container-lowest">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-[22px]">tune</span>
+                <Icon name="tune" className="text-primary text-[22px]" />
                 <h3 className="font-extrabold text-sm text-on-surface">Filtres Académiques BF</h3>
               </div>
               <button
@@ -1000,7 +976,7 @@ export default function ExplorerPage() {
                 onClick={() => setShowMobileFilters(false)}
                 className="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-outline hover:text-on-surface"
               >
-                <span className="material-symbols-outlined text-[18px]">close</span>
+                <Icon name="close" className="text-[18px]" />
               </button>
             </div>
 
@@ -1010,7 +986,7 @@ export default function ExplorerPage() {
               <div className="bg-surface-container-lowest p-3.5 rounded-2xl border border-primary/20 flex flex-col gap-2.5">
                 <div className="flex items-center justify-between font-bold text-on-surface">
                   <span className="flex items-center gap-1 text-primary">
-                    <span className="material-symbols-outlined text-[16px]">public</span>
+                    <Icon name="public" className="text-[16px]" />
                     Régions du Burkina Faso
                   </span>
                   {selectedRegion !== 'all' && (
@@ -1057,7 +1033,7 @@ export default function ExplorerPage() {
                     >
                       <span>{reg}</span>
                       {selectedRegion === reg && (
-                        <span className="material-symbols-outlined text-[14px]">check</span>
+                        <Icon name="check" className="text-[14px]" />
                       )}
                     </button>
                   ))}
@@ -1068,7 +1044,7 @@ export default function ExplorerPage() {
               <div className="bg-surface-container-lowest p-3.5 rounded-2xl border border-primary/20 flex flex-col gap-2.5">
                 <div className="flex items-center justify-between font-bold text-on-surface">
                   <span className="flex items-center gap-1 text-primary">
-                    <span className="material-symbols-outlined text-[16px]">account_balance</span>
+                    <Icon name="account_balance" className="text-[16px]" />
                     Universités & Établissements
                   </span>
                   {selectedUniv && (
@@ -1119,7 +1095,7 @@ export default function ExplorerPage() {
                       >
                         <span className="truncate">{inst.shortName || inst.name}</span>
                         {selectedUniv === inst.id && (
-                          <span className="material-symbols-outlined text-[14px]">check</span>
+                          <Icon name="check" className="text-[14px]" />
                         )}
                       </button>
                     ))}
@@ -1130,7 +1106,7 @@ export default function ExplorerPage() {
               <div className="bg-surface-container-lowest p-3.5 rounded-2xl border border-primary/20 flex flex-col gap-2.5">
                 <div className="flex items-center justify-between font-bold text-on-surface">
                   <span className="flex items-center gap-1 text-primary">
-                    <span className="material-symbols-outlined text-[16px]">school</span>
+                    <Icon name="school" className="text-[16px]" />
                     UFR & Facultés
                   </span>
                   {selectedFaculty !== 'all' && (
@@ -1190,7 +1166,7 @@ export default function ExplorerPage() {
               <div className="bg-surface-container-lowest p-3.5 rounded-2xl border border-primary/20 flex flex-col gap-2.5">
                 <div className="flex items-center justify-between font-bold text-on-surface">
                   <span className="flex items-center gap-1 text-primary">
-                    <span className="material-symbols-outlined text-[16px]">history_edu</span>
+                    <Icon name="history_edu" className="text-[16px]" />
                     Filières
                   </span>
                   {selectedFiliere !== 'all' && (

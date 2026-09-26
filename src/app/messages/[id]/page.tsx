@@ -364,9 +364,7 @@ export default function ConversationDetailPage() {
       <main className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-3 max-w-3xl mx-auto w-full">
         {loading ? (
           <div className="flex-1 flex flex-col items-center justify-center gap-2 text-on-surface-variant">
-            <span className="material-symbols-outlined animate-spin text-[32px] text-primary">
-              sync
-            </span>
+            <Icon name="sync" className="animate-spin text-[32px] text-primary" />
             <span className="text-xs">Chargement de la discussion...</span>
           </div>
         ) : messages.length > 0 ? (
@@ -433,7 +431,7 @@ export default function ConversationDetailPage() {
                         />
                         <div className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/10 transition-colors">
                           <div className="w-12 h-12 rounded-full bg-red-600/90 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                            <span className="material-symbols-outlined text-[28px] fill-current">play_arrow</span>
+                            <Icon name="play_arrow" className="text-[28px] fill-current" />
                           </div>
                         </div>
                         <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/70 backdrop-blur-xs text-[10px] font-bold text-white flex items-center gap-1">
@@ -619,9 +617,7 @@ export default function ConversationDetailPage() {
           })
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center text-center p-6 text-on-surface-variant">
-            <span className="material-symbols-outlined text-[48px] text-primary mb-2">
-              forum
-            </span>
+            <Icon name="forum" className="text-[48px] text-primary mb-2" />
             <h4 className="font-bold text-sm text-on-surface">Début de l'échange</h4>
             <p className="text-xs max-w-xs mt-1">
               Envoyez un message, posez une question ou partagez un document de cours avec {interlocutorName}.

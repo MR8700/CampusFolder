@@ -1,4 +1,5 @@
 import React from 'react';
+import Icon from '@/components/ui/Icon';
 
 export type BadgeVariant =
   | 'primary'
@@ -44,9 +45,7 @@ export default function Badge({
       {...rest}
     >
       {icon && (
-        <span className="material-symbols-outlined text-[13px] leading-none shrink-0">
-          {icon}
-        </span>
+        <Icon name={icon} className="text-[13px] leading-none shrink-0" />
       )}
       <span>{children}</span>
     </span>

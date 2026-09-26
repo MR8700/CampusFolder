@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Icon from '@/components/ui/Icon';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
@@ -134,9 +135,7 @@ export default function MessagesInboxPage() {
         {activeCall && (
           <div className="mt-3 p-4 rounded-2xl bg-secondary-container text-on-secondary shadow-lg flex items-center justify-between gap-3 animate-bounce">
             <div className="flex items-center gap-3">
-              <span className="material-symbols-outlined text-[28px] animate-pulse">
-                {activeCall.type === 'VIDEO' ? 'videocam' : 'ring_volume'}
-              </span>
+              <Icon name={activeCall.type === 'VIDEO' ? 'videocam' : 'ring_volume'} className="text-[28px] animate-pulse" />
               <div>
                 <h4 className="font-bold text-sm">Appel entrant : {activeCall.title}</h4>
                 <p className="text-xs opacity-90">Un camarade vous invite à rejoindre</p>
@@ -160,7 +159,7 @@ export default function MessagesInboxPage() {
         {/* Top Search & Action Bar */}
         <div className="pt-4 flex items-center gap-2">
           <div className="flex-1 flex items-center gap-2 bg-surface-container-low px-3.5 py-2.5 rounded-2xl border border-outline-variant/30 shadow-xs">
-            <span className="material-symbols-outlined text-outline text-[20px]">search</span>
+            <Icon name="search" className="text-outline text-[20px]" />
             <input
               type="text"
               placeholder="Rechercher une discussion, un camarade, un TD..."
@@ -176,7 +175,7 @@ export default function MessagesInboxPage() {
             aria-label="Nouvelle conversation"
             className="h-11 w-11 rounded-2xl bg-primary text-on-primary flex items-center justify-center shadow-sm active:scale-95 transition-all shrink-0 hover:bg-primary-container"
           >
-            <span className="material-symbols-outlined text-[22px]">edit_square</span>
+            <Icon name="edit_square" className="text-[22px]" />
           </button>
         </div>
 
@@ -207,9 +206,7 @@ export default function MessagesInboxPage() {
         <div className="flex flex-col gap-2 pt-3">
           {loading ? (
             <div className="py-20 flex flex-col items-center justify-center gap-2 text-on-surface-variant">
-              <span className="material-symbols-outlined animate-spin text-[32px] text-primary">
-                sync
-              </span>
+              <Icon name="sync" className="animate-spin text-[32px] text-primary" />
               <span className="text-xs font-medium">Chargement des échanges...</span>
             </div>
           ) : filteredConversations.length > 0 ? (
@@ -265,7 +262,7 @@ export default function MessagesInboxPage() {
                       {/* Resource Context Tag if bound */}
                       {conv.context?.resource && (
                         <div className="flex items-center gap-1 text-[11px] text-primary font-bold truncate mt-0.5">
-                          <span className="material-symbols-outlined text-[14px]">menu_book</span>
+                          <Icon name="menu_book" className="text-[14px]" />
                           <span className="truncate">{conv.context.resource.title}</span>
                         </div>
                       )}
@@ -273,10 +270,10 @@ export default function MessagesInboxPage() {
                       {/* Last Message Snippet */}
                       <p className="font-body-sm text-xs text-on-surface-variant truncate mt-0.5 flex items-center gap-1">
                         {conv.lastMessage?.isVoiceNote && (
-                          <span className="material-symbols-outlined text-[14px] text-primary">mic</span>
+                          <Icon name="mic" className="text-[14px] text-primary" />
                         )}
                         {conv.lastMessage?.hasAttachment && (
-                          <span className="material-symbols-outlined text-[14px] text-secondary">attachment</span>
+                          <Icon name="attachment" className="text-[14px] text-secondary" />
                         )}
                         <span>
                           {conv.lastMessage?.text ||
@@ -308,7 +305,7 @@ export default function MessagesInboxPage() {
                         className="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary-fixed/40 transition-colors"
                         aria-label="Appeler"
                       >
-                        <span className="material-symbols-outlined text-[18px]">call</span>
+                        <Icon name="call" className="text-[18px]" />
                       </button>
                       <button
                         type="button"
@@ -316,7 +313,7 @@ export default function MessagesInboxPage() {
                         className="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary-fixed/40 transition-colors"
                         aria-label="Appel vidéo"
                       >
-                        <span className="material-symbols-outlined text-[18px]">videocam</span>
+                        <Icon name="videocam" className="text-[18px]" />
                       </button>
                     </div>
                   </div>
@@ -325,9 +322,7 @@ export default function MessagesInboxPage() {
             })
           ) : (
             <div className="py-20 flex flex-col items-center justify-center text-center p-6 bg-surface-container-low rounded-3xl border border-outline-variant/30 mt-4">
-              <span className="material-symbols-outlined text-[48px] text-primary mb-2">
-                chat_bubble_outline
-              </span>
+              <Icon name="chat_bubble_outline" className="text-[48px] text-primary mb-2" />
               <h3 className="font-headline-md text-base font-bold text-on-surface">
                 Aucune discussion active
               </h3>
@@ -359,7 +354,7 @@ export default function MessagesInboxPage() {
                 onClick={() => setShowNewChatModal(false)}
                 className="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high"
               >
-                <span className="material-symbols-outlined text-[20px]">close</span>
+                <Icon name="close" className="text-[20px]" />
               </button>
             </div>
 
@@ -387,9 +382,7 @@ export default function MessagesInboxPage() {
                     </h5>
                     <p className="text-[11px] text-on-surface-variant truncate">{u.role}</p>
                   </div>
-                  <span className="material-symbols-outlined text-primary text-[20px]">
-                    arrow_forward
-                  </span>
+                  <Icon name="arrow_forward" className="text-primary text-[20px]" />
                 </div>
               ))}
             </div>

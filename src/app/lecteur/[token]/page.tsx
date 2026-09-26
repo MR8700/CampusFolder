@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Icon from '@/components/ui/Icon';
 import { useRouter, useParams } from 'next/navigation';
 import Header from '@/components/Header';
 
@@ -24,7 +25,7 @@ function VoiceNoteCard({
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuCc3PVTyqZN1TppLsIyBpo2-6zoBYobbZF-u5hk8WlAqQVvtoGXYP16d1cAn-NNKUQegs04Pj8QwyO0BRzxue8JE2PACYiH_Ok8qjz5wyrGAL_AzPSUJHJyTx0EF074aMOdhMplv_WhsuktOSokZfbbP0ll-DQyxZxH-c_tJ3tV77qJXV4-BwPNI2bFg2w6_zXZNrncb0b2pAfvvRLck3zVLMf3dSQ0ecpAfm5A2_A5yhPYVgEM9e9o5w"
             />
             <div className="absolute bottom-0 right-0 w-4 h-4 bg-primary rounded-full flex items-center justify-center text-white text-[9px]">
-              <span className="material-symbols-outlined text-[11px]">mic</span>
+              <Icon name="mic" className="text-[11px]" />
             </div>
           </div>
           <div className="min-w-0">
@@ -32,9 +33,7 @@ function VoiceNoteCard({
               <p className="font-label-md text-label-md text-on-surface font-bold truncate">
                 {doc.voiceNote?.title || 'Note Vocale du Major'}
               </p>
-              <span className="material-symbols-outlined text-primary text-[15px]">
-                verified
-              </span>
+              <Icon name="verified" className="text-primary text-[15px]" />
             </div>
             <p className="font-body-sm text-xs text-on-surface-variant truncate">
               {doc.voiceNote?.description || 'Explication dérivation & méthode'}
@@ -61,9 +60,7 @@ function VoiceNoteCard({
           }}
           className="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-sm shrink-0 active:scale-95 transition-transform cursor-pointer"
         >
-          <span className="material-symbols-outlined text-[22px]">
-            {isPlayingAudio ? 'pause' : 'play_arrow'}
-          </span>
+          <Icon name={isPlayingAudio ? 'pause' : 'play_arrow'} className="text-[22px]" />
         </button>
 
         <div
@@ -94,7 +91,7 @@ function OfflineCacheCard() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="w-7 h-7 rounded-full bg-primary-fixed flex items-center justify-center text-primary">
-            <span className="material-symbols-outlined text-[17px]">offline_pin</span>
+            <Icon name="offline_pin" className="text-[17px]" />
           </span>
           <span className="font-label-md text-sm text-on-surface font-bold">
             Téléchargé & Prêt Hors-Ligne
@@ -122,7 +119,7 @@ function WhatsAppGroupCard() {
     <div className="p-4 bg-surface-container-lowest rounded-2xl shadow-xs flex items-center justify-between gap-3 border border-surface-container-high">
       <div className="flex items-center gap-3 min-w-0">
         <div className="w-10 h-10 rounded-xl bg-[#25D366]/15 flex items-center justify-center text-[#128C7E] shrink-0">
-          <span className="material-symbols-outlined text-[24px]">forum</span>
+          <Icon name="forum" className="text-[24px]" />
         </div>
         <div className="min-w-0">
           <h4 className="font-label-lg text-sm text-on-surface font-bold truncate">
@@ -140,7 +137,7 @@ function WhatsAppGroupCard() {
         className="px-3 py-1.5 rounded-lg bg-[#25D366] text-white font-label-sm text-xs font-bold flex items-center gap-1 shadow-sm shrink-0 active:scale-95 transition-transform"
       >
         <span>Rejoindre</span>
-        <span className="material-symbols-outlined text-[14px]">north_east</span>
+        <Icon name="north_east" className="text-[14px]" />
       </a>
     </div>
   );
@@ -211,9 +208,7 @@ export default function DocumentReaderPage() {
         <Header showBack title="Initialisation..." />
         <div className="flex-1 flex items-center justify-center pt-16">
           <div className="flex flex-col items-center gap-2">
-            <span className="material-symbols-outlined animate-spin text-primary text-[32px]">
-              sync
-            </span>
+            <Icon name="sync" className="animate-spin text-primary text-[32px]" />
             <span className="text-body-sm text-on-surface-variant font-medium">
               Génération du filigrane sécurisé SSL...
             </span>
@@ -266,7 +261,7 @@ export default function DocumentReaderPage() {
                       : 'bg-surface-container-highest text-on-surface'
                   }`}
                 >
-                  <span className="material-symbols-outlined text-[14px]">contrast</span>
+                  <Icon name="contrast" className="text-[14px]" />
                   <span>Amphi HQ</span>
                 </button>
                 <button
@@ -274,7 +269,7 @@ export default function DocumentReaderPage() {
                   onClick={() => showToast('Mode Plein Écran')}
                   className="w-7 h-7 flex items-center justify-center rounded-full bg-surface-container-highest text-on-surface hover:bg-surface-container-high transition-colors"
                 >
-                  <span className="material-symbols-outlined text-[16px]">fullscreen</span>
+                  <Icon name="fullscreen" className="text-[16px]" />
                 </button>
               </div>
             </div>
@@ -320,7 +315,7 @@ export default function DocumentReaderPage() {
                       }}
                       className="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors"
                     >
-                      <span className="material-symbols-outlined text-[20px]">chevron_left</span>
+                      <Icon name="chevron_left" className="text-[20px]" />
                     </button>
                     <span className="font-label-md text-label-md text-on-surface tabular-nums font-semibold px-1">
                       Page <strong>{currentPage}</strong> sur {doc.totalPages || 14}
@@ -335,7 +330,7 @@ export default function DocumentReaderPage() {
                       }}
                       className="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors"
                     >
-                      <span className="material-symbols-outlined text-[20px]">chevron_right</span>
+                      <Icon name="chevron_right" className="text-[20px]" />
                     </button>
                   </div>
 
@@ -345,11 +340,11 @@ export default function DocumentReaderPage() {
                       onClick={handleZoom}
                       className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface-container-lowest text-on-surface font-label-sm text-label-sm font-bold shadow-xs border border-surface-container-high"
                     >
-                      <span className="material-symbols-outlined text-[16px]">zoom_in</span>
+                      <Icon name="zoom_in" className="text-[16px]" />
                       <span>{zoomLevel}%</span>
                     </button>
                     <div className="flex items-center gap-1 text-primary">
-                      <span className="material-symbols-outlined text-[16px]">verified_user</span>
+                      <Icon name="verified_user" className="text-[16px]" />
                       <span className="font-label-sm text-label-sm uppercase font-bold hidden sm:inline">Signé</span>
                     </div>
                   </div>
@@ -408,20 +403,18 @@ export default function DocumentReaderPage() {
                     </div>
                     {/* Professor Note */}
                     <div className="mt-1 p-2.5 bg-secondary-fixed/40 rounded-lg flex items-start gap-space-xs text-secondary">
-                      <span className="material-symbols-outlined text-[18px] shrink-0 mt-0.5">
-                        edit_note
-                      </span>
-                      <p className="font-body-sm text-body-sm text-on-secondary-fixed-variant italic text-justify leading-loose">
+                      <Icon name="edit_note" className="text-[18px] shrink-0 mt-0.5" />
+                      <p className="font-body-sm text-xs sm:text-sm text-on-secondary-fixed-variant italic text-left leading-relaxed">
                         <strong>Remarque du Délégué :</strong> {doc.professorNote}
                       </p>
                     </div>
 
-                    {/* Academic Synthesis Text Excerpt (Interligne 2 & Texte Justifié) */}
+                    {/* Academic Synthesis Text Excerpt */}
                     <div className="mt-2 p-3 bg-surface-container-lowest rounded-xl border border-outline-variant/30">
                       <span className="text-[10px] font-bold text-primary uppercase tracking-wider block mb-1">
                         Démonstration & Synthèse Académique d'Amphi
                       </span>
-                      <p className="text-on-surface text-xs leading-loose text-justify text-justified-academic">
+                      <p className="text-on-surface text-xs leading-relaxed text-left">
                         Dans le cadre de l'évaluation semestrielle, l'analyse comparative des structures syntaxiques exige de distinguer rigoureusement les constituants immédiats des syntagmes nominaux et verbaux. Chaque proposition subordonnée relative doit être décomposée conformément aux règles génératives énoncées au cours magistral, avec justification formelle à chaque étape.
                       </p>
                     </div>
@@ -430,7 +423,7 @@ export default function DocumentReaderPage() {
                   {/* Document Page Footer */}
                   <div className="flex items-center justify-between pt-3 relative z-10 border-t border-outline-variant/30">
                     <div className="flex items-center gap-1.5">
-                      <span className="material-symbols-outlined text-primary text-[15px]">lock</span>
+                      <Icon name="lock" className="text-primary text-[15px]" />
                       <span className="text-[11px] text-on-surface-variant uppercase tracking-wider font-semibold font-mono">
                         SHA-256 : {doc.shaFingerprint?.substring(0, 16)}...
                       </span>
@@ -455,7 +448,7 @@ export default function DocumentReaderPage() {
                   onClick={() => showToast('Téléchargement du PDF filigrané crypté lancé')}
                   className="flex-1 h-12 rounded-xl bg-primary text-on-primary font-label-lg text-label-lg font-bold flex items-center justify-center gap-space-xs shadow-md active:scale-[0.98] transition-transform cursor-pointer"
                 >
-                  <span className="material-symbols-outlined text-[20px]">download_done</span>
+                  <Icon name="download_done" className="text-[20px]" />
                   <span>Exporter PDF Filigrané Sécurisé</span>
                 </button>
                 <button
@@ -463,7 +456,7 @@ export default function DocumentReaderPage() {
                   onClick={() => showToast('Lien de partage crypté généré pour votre binôme')}
                   className="flex-1 h-12 rounded-xl bg-surface-container-highest text-on-surface font-label-lg text-label-lg font-semibold flex items-center justify-center gap-space-xs hover:bg-surface-container-high transition-colors active:scale-[0.98] cursor-pointer"
                 >
-                  <span className="material-symbols-outlined text-[20px]">group_add</span>
+                  <Icon name="group_add" className="text-[20px]" />
                   <span>Transférer à un binôme certifié</span>
                 </button>
               </div>
@@ -488,9 +481,7 @@ export default function DocumentReaderPage() {
           {/* Toast feedback */}
           {toastMessage && (
             <div className="fixed bottom-6 left-1/2 -translate-x-1/2 px-4 py-2.5 rounded-full bg-inverse-surface text-inverse-on-surface shadow-xl flex items-center gap-2 transition-all duration-300 z-50 animate-bounce">
-              <span className="material-symbols-outlined text-[18px] text-tertiary-fixed">
-                check_circle
-              </span>
+              <Icon name="check_circle" className="text-[18px] text-tertiary-fixed" />
               <span className="font-label-sm text-label-sm">{toastMessage}</span>
             </div>
           )}

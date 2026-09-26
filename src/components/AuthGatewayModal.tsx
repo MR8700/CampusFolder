@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Logo from '@/components/Logo';
+import Icon from '@/components/ui/Icon';
 
 interface AuthGatewayModalProps {
   isOpen: boolean;
@@ -86,7 +87,7 @@ export default function AuthGatewayModal({
               title="Fermer"
               type="button"
             >
-              <span className="material-symbols-outlined text-[20px]">close</span>
+              <Icon name="close" size={20} />
             </button>
           </div>
         </div>
@@ -95,7 +96,7 @@ export default function AuthGatewayModal({
         <div className="p-6 flex flex-col gap-4">
           {errorMsg && (
             <div className="p-3 rounded-xl bg-error/10 border border-error/20 text-error text-xs font-semibold flex items-center gap-2">
-              <span className="material-symbols-outlined text-[18px]">error</span>
+              <Icon name="error" size={18} />
               <span>{errorMsg}</span>
             </div>
           )}
@@ -106,7 +107,7 @@ export default function AuthGatewayModal({
                 Email, N° INE ou Téléphone *
               </label>
               <div className="flex items-center bg-surface-container-low rounded-xl px-3.5 py-2.5 border border-outline-variant/30 focus-within:border-primary focus-within:bg-surface-container-lowest transition-all">
-                <span className="material-symbols-outlined text-outline text-[18px] mr-2">badge</span>
+                <Icon name="badge" size={18} className="text-outline mr-2" />
                 <input
                   type="text"
                   required
@@ -123,7 +124,7 @@ export default function AuthGatewayModal({
                 Mot de passe *
               </label>
               <div className="flex items-center bg-surface-container-low rounded-xl px-3.5 py-2.5 border border-outline-variant/30 focus-within:border-primary focus-within:bg-surface-container-lowest transition-all">
-                <span className="material-symbols-outlined text-outline text-[18px] mr-2">key</span>
+                <Icon name="key" size={18} className="text-outline mr-2" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   required
@@ -137,9 +138,7 @@ export default function AuthGatewayModal({
                   onClick={() => setShowPassword(!showPassword)}
                   className="text-on-surface-variant hover:text-on-surface p-1"
                 >
-                  <span className="material-symbols-outlined text-[18px]">
-                    {showPassword ? 'visibility_off' : 'visibility'}
-                  </span>
+                  <Icon name={showPassword ? 'visibility' : 'visibility'} size={18} />
                 </button>
               </div>
             </div>
@@ -151,12 +150,12 @@ export default function AuthGatewayModal({
             >
               {formSubmitting ? (
                 <>
-                  <span className="material-symbols-outlined text-[18px] animate-spin">autorenew</span>
+                  <Icon name="autorenew" size={18} className="animate-spin" />
                   <span>Connexion en cours...</span>
                 </>
               ) : (
                 <>
-                  <span className="material-symbols-outlined text-[18px]">lock_open</span>
+                  <Icon name="lock_open" size={18} />
                   <span>Se Connecter</span>
                 </>
               )}

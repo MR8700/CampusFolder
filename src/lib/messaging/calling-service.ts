@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { CallInitiateDto } from './types';
 import { realTimeBus } from './event-bus';
 import { PresenceService } from './presence-service';
+import { getCommissionSettings, calculateRevenueSplit } from '@/lib/config/commission';
 
 export class CallingService {
   /**
@@ -316,9 +317,9 @@ export class CallingService {
         },
       });
 
-      // 2. Credit host wallet (85% creator, 15% platform)
-      const platformFee = Math.round(price * 0.15);
-      const hostRevenue = price - platformFee;
+      // 2. Credit host wallet using centralized commission rates (Default 40% platform, 60% creator)
+      const { platformCommissionPercent } = await getCommissionSettings();
+      const { authorShare: hostRevenue, authorRoyaltyPercent } = calculateRevenueSplit(price, platformCommissionPercent);
 
       const hostWallet = offer.call.initiator.wallet;
       if (hostWallet) {
@@ -337,7 +338,7 @@ export class CallingService {
             amount: hostRevenue,
             balanceAfter: hostWallet.availableBalance + hostRevenue,
             referenceId: offer.callId,
-            description: `Rémunération Masterclass [85%] : ${offer.call.title || 'Session'}`,
+            description: `Rémunération Masterclass [${authorRoyaltyPercent}%] : ${offer.call.title || 'Session'}`,
           },
         });
       }

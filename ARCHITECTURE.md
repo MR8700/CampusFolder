@@ -18,7 +18,7 @@ Identity / Auth        Resource Core           Messaging & Calls
      │                       │                 Ressource Contextuelle
   Portefeuille        Commerce & Ledger               │
   Revenus & Soldes    Orange Money / Moov             ▼
-                      Commission 15% / 85%       Calling Engine
+                      Commission 40% / 60%       Calling Engine
                                                       │
                                              ┌────────┼────────┐
                                              ▼        ▼        ▼
@@ -43,7 +43,7 @@ Le projet conserve l'architecture Next.js 15 (App Router, React 19) et Prisma OR
 * `User` : Réutilisation stricte de l'entité utilisateur existante (INE, profils, rôles, wallet).
 * `AcademicResource` : Les documents partagés dans le chat font référence aux ressources validées du référentiel sans duplication.
 * `Entitlement` & `AccessPolicy` : Aucune fuite de document payant. Le chat ne contourne jamais la politique de monétisation.
-* `Wallet` & `LedgerEntry` : Rémunération automatique des auteurs lors d'achats de ressources ou de tickets de conférences (85% auteur / 15% plateforme).
+* `Wallet` & `LedgerEntry` : Rémunération automatique des auteurs lors d'achats de ressources ou de tickets de conférences (60% auteur / 40% plateforme, paramétrable centralement par les administrateurs).
 
 ---
 

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Logo from '@/components/Logo';
+import Icon from '@/components/ui/Icon';
 
 const MESSAGES = [
   'Campus Folder • Le Carrefour Académique du Faso & d’Afrique',
@@ -100,7 +101,7 @@ export default function SplashScreen({ onFinish }: { onFinish?: () => void }) {
             className="px-3 py-1.5 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-bold text-xs flex items-center gap-1 transition-all shadow-sm active:scale-95 cursor-pointer border border-white/20"
           >
             <span>Passer</span>
-            <span className="material-symbols-outlined text-[15px]">skip_next</span>
+            <Icon name="skip_next" size={15} />
           </button>
         </div>
       </div>
@@ -125,7 +126,7 @@ export default function SplashScreen({ onFinish }: { onFinish?: () => void }) {
 
           {/* Badge Indicator */}
           <div className="absolute -bottom-1 -right-1 w-9 h-9 rounded-full bg-[#EA580C] text-white flex items-center justify-center shadow-lg border-2 border-white">
-            <span className="material-symbols-outlined text-[18px]">school</span>
+            <Icon name="school" size={18} />
           </div>
         </div>
 
@@ -167,7 +168,7 @@ export default function SplashScreen({ onFinish }: { onFinish?: () => void }) {
           className="mt-1 px-5 py-2.5 rounded-full bg-white/15 hover:bg-white/25 border border-white/25 text-white font-bold text-xs sm:text-sm flex items-center gap-2 transition-all active:scale-95 shadow-md cursor-pointer"
         >
           <span>Passer l'introduction</span>
-          <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+          <Icon name="arrow_forward" size={18} />
         </button>
       </div>
     </div>

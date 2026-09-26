@@ -315,8 +315,8 @@ model AccessPolicy {
   mode            String           // FREE, PAID, IN_PERSON
   priceAmount     Int              @default(0) // in FCFA, e.g. 500
   currency        String           @default("XOF")
-  platformFeeRate Float            @default(0.15) // 15%
-  contributorRate Float            @default(0.85) // 85%
+  platformFeeRate Float            @default(0.40) // 40%
+  contributorRate Float            @default(0.60) // 60%
   allowOffline    Boolean          @default(true)
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
@@ -405,8 +405,8 @@ model RevenueDistribution {
   orderId           String   @unique
   contributorId     String
   grossAmount       Int      // 500
-  platformAmount    Int      // 75 (15%)
-  contributorAmount Int      // 425 (85%)
+  platformAmount    Int      // 200 (40%)
+  contributorAmount Int      // 300 (60%)
   isSettled         Boolean  @default(true)
   settledAt         DateTime @default(now())
 
@@ -575,6 +575,18 @@ model PricingCeilingRule {
   @@index([institutionId])
   @@index([facultyId])
   @@index([filiereId])
+}
+
+model SystemSetting {
+  id          String   @id @default(uuid())
+  key         String   @unique // e.g. "PLATFORM_COMMISSION_PERCENT", "AUTHOR_ROYALTY_PERCENT"
+  value       String   // e.g. "40"
+  description String?
+  updatedBy   String?  // Admin username or ID
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+
+  @@index([key])
 }
 
 // ----------------------------------------------------

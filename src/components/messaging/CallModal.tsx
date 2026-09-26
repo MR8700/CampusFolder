@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Icon from '@/components/ui/Icon';
 
 interface CallParticipant {
   id: string;
@@ -216,7 +217,7 @@ export default function CallModal({
         {isScreenSharing ? (
           <div className="flex-1 w-full h-full rounded-3xl overflow-hidden bg-black border-2 border-primary/50 relative shadow-2xl flex flex-col items-center justify-center">
             <div className="absolute top-3 left-3 z-10 bg-primary px-3 py-1 rounded-full text-xs font-bold text-white flex items-center gap-1 shadow-md">
-              <span className="material-symbols-outlined text-[16px]">screen_share</span>
+              <Icon name="screen_share" className="text-[16px]" />
               Partage d'écran en cours
             </div>
             <video
@@ -246,7 +247,7 @@ export default function CallModal({
               </h4>
               <span className="text-xs text-white/60 mt-0.5">Déléguée Promo L3</span>
               <span className="absolute bottom-3 left-3 bg-black/60 px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1">
-                <span className="material-symbols-outlined text-emerald-400 text-[14px]">mic</span>
+                <Icon name="mic" className="text-emerald-400 text-[14px]" />
                 Connecté
               </span>
             </div>
@@ -271,9 +272,9 @@ export default function CallModal({
               )}
               <span className="absolute bottom-3 left-3 bg-black/60 px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1">
                 {isMuted ? (
-                  <span className="material-symbols-outlined text-rose-400 text-[14px]">mic_off</span>
+                  <Icon name="mic_off" className="text-rose-400 text-[14px]" />
                 ) : (
-                  <span className="material-symbols-outlined text-emerald-400 text-[14px]">mic</span>
+                  <Icon name="mic" className="text-emerald-400 text-[14px]" />
                 )}
                 Vous ({isMuted ? 'Muet' : 'Actif'})
               </span>
@@ -293,7 +294,7 @@ export default function CallModal({
                 onClick={() => setShowInCallChat(false)}
                 className="text-white/60 hover:text-white"
               >
-                <span className="material-symbols-outlined text-[18px]">close</span>
+                <Icon name="close" className="text-[18px]" />
               </button>
             </div>
 
@@ -322,7 +323,7 @@ export default function CallModal({
                 type="submit"
                 className="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center shrink-0"
               >
-                <span className="material-symbols-outlined text-[16px]">send</span>
+                <Icon name="send" className="text-[16px]" />
               </button>
             </form>
           </div>
@@ -339,9 +340,7 @@ export default function CallModal({
             isMuted ? 'bg-rose-600 text-white' : 'bg-white/15 hover:bg-white/25 text-white'
           }`}
         >
-          <span className="material-symbols-outlined text-[24px]">
-            {isMuted ? 'mic_off' : 'mic'}
-          </span>
+          <Icon name={isMuted ? 'mic_off' : 'mic'} className="text-[24px]" />
         </button>
 
         {/* 2. Video Toggle */}
@@ -352,9 +351,7 @@ export default function CallModal({
             !isVideoOn ? 'bg-rose-600 text-white' : 'bg-white/15 hover:bg-white/25 text-white'
           }`}
         >
-          <span className="material-symbols-outlined text-[24px]">
-            {!isVideoOn ? 'videocam_off' : 'videocam'}
-          </span>
+          <Icon name={!isVideoOn ? 'videocam_off' : 'videocam'} className="text-[24px]" />
         </button>
 
         {/* 3. Screen Share Toggle (Phase 8) */}
@@ -365,9 +362,7 @@ export default function CallModal({
             isScreenSharing ? 'bg-primary text-white' : 'bg-white/15 hover:bg-white/25 text-white'
           }`}
         >
-          <span className="material-symbols-outlined text-[24px]">
-            {isScreenSharing ? 'stop_screen_share' : 'screen_share'}
-          </span>
+          <Icon name={isScreenSharing ? 'stop_screen_share' : 'screen_share'} className="text-[24px]" />
         </button>
 
         {/* 4. In-Call Chat Toggle (Phase 9) */}
@@ -378,7 +373,7 @@ export default function CallModal({
             showInCallChat ? 'bg-primary text-white' : 'bg-white/15 hover:bg-white/25 text-white'
           }`}
         >
-          <span className="material-symbols-outlined text-[24px]">chat</span>
+          <Icon name="chat" className="text-[24px]" />
         </button>
 
         {/* 5. End Call Button */}
@@ -387,7 +382,7 @@ export default function CallModal({
           onClick={handleEndCall}
           className="w-14 h-12 rounded-full bg-rose-600 hover:bg-rose-700 text-white flex items-center justify-center shadow-lg active:scale-95 transition-all"
         >
-          <span className="material-symbols-outlined text-[26px]">call_end</span>
+          <Icon name="call_end" className="text-[26px]" />
         </button>
       </div>
     </div>

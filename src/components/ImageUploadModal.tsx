@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { resizeImage, uploadResizedImage, ProcessedImageResult } from '@/lib/imageProcessor';
+import Icon from '@/components/ui/Icon';
 
 interface ImageUploadModalProps {
   isOpen: boolean;
@@ -225,7 +226,7 @@ export default function ImageUploadModal({
         <div className="bg-primary px-6 py-4 text-on-primary flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-white/15 flex items-center justify-center text-on-primary">
-              <span className="material-symbols-outlined text-[22px]">photo_camera</span>
+              <Icon name="photo_camera" size={22} />
             </div>
             <div>
               <h2 className="text-base font-black leading-tight text-white">{title}</h2>
@@ -237,7 +238,7 @@ export default function ImageUploadModal({
             onClick={onClose}
             className="w-8 h-8 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-white transition-colors"
           >
-            <span className="material-symbols-outlined text-[18px]">close</span>
+            <Icon name="close" size={18} />
           </button>
         </div>
 
@@ -245,7 +246,7 @@ export default function ImageUploadModal({
         <div className="p-5 flex flex-col gap-4 overflow-y-auto">
           {errorMsg && (
             <div className="p-3 rounded-xl bg-error/10 border border-error/20 text-error text-xs font-bold flex items-center gap-2">
-              <span className="material-symbols-outlined text-[18px]">error</span>
+              <Icon name="error" size={18} />
               <span>{errorMsg}</span>
             </div>
           )}
@@ -264,7 +265,7 @@ export default function ImageUploadModal({
                       : 'text-on-surface-variant hover:text-on-surface'
                   }`}
                 >
-                  <span className="material-symbols-outlined text-[17px]">folder_open</span>
+                  <Icon name="folder_open" size={17} />
                   <span>Depuis l'appareil</span>
                 </button>
                 <button
@@ -276,7 +277,7 @@ export default function ImageUploadModal({
                       : 'text-on-surface-variant hover:text-on-surface'
                   }`}
                 >
-                  <span className="material-symbols-outlined text-[17px]">photo_camera</span>
+                  <Icon name="photo_camera" size={17} />
                   <span>Prendre Photo</span>
                 </button>
                 <button
@@ -288,7 +289,7 @@ export default function ImageUploadModal({
                       : 'text-on-surface-variant hover:text-on-surface'
                   }`}
                 >
-                  <span className="material-symbols-outlined text-[17px]">link</span>
+                  <Icon name="link" size={17} />
                   <span>Lien URL</span>
                 </button>
               </div>
@@ -308,7 +309,7 @@ export default function ImageUploadModal({
                     className="border-2 border-dashed border-outline-variant/60 hover:border-primary/60 rounded-3xl p-8 flex flex-col items-center justify-center gap-3 cursor-pointer bg-surface-container-low/50 hover:bg-surface-container-low transition-all group"
                   >
                     <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary group-hover:scale-110 transition-transform flex items-center justify-center">
-                      <span className="material-symbols-outlined text-3xl">add_photo_alternate</span>
+                      <Icon name="add_photo_alternate" size={32} />
                     </div>
                     <div className="text-center">
                       <p className="text-xs font-black text-on-surface">
@@ -344,7 +345,7 @@ export default function ImageUploadModal({
                         onClick={() => cameraInputRef.current?.click()}
                         className="px-4 py-2 rounded-xl bg-primary text-on-primary text-xs font-bold flex items-center justify-center gap-2 self-start shadow-sm"
                       >
-                        <span className="material-symbols-outlined text-[17px]">camera_alt</span>
+                        <Icon name="camera_alt" size={17} />
                         <span>Ouvrir l'appareil photo du smartphone</span>
                       </button>
                     </div>
@@ -374,7 +375,7 @@ export default function ImageUploadModal({
                           className="w-10 h-10 rounded-full bg-black/60 text-white hover:bg-black/80 flex items-center justify-center backdrop-blur-md"
                           title="Changer de caméra"
                         >
-                          <span className="material-symbols-outlined text-[20px]">flip_camera_ios</span>
+                          <Icon name="flip_camera_ios" size={20} />
                         </button>
 
                         <button
@@ -383,7 +384,7 @@ export default function ImageUploadModal({
                           className="w-14 h-14 rounded-full bg-white text-primary border-4 border-primary shadow-xl hover:scale-105 active:scale-95 transition-transform flex items-center justify-center"
                           title="Prendre la photo"
                         >
-                          <span className="material-symbols-outlined text-[28px]">camera</span>
+                          <Icon name="camera" size={28} />
                         </button>
                       </div>
                     </div>
@@ -434,9 +435,7 @@ export default function ImageUploadModal({
                       className="w-full h-full object-contain"
                     />
                   ) : (
-                    <span className="material-symbols-outlined text-3xl text-outline animate-spin">
-                      autorenew
-                    </span>
+                    <Icon name="autorenew" size={32} className="text-outline animate-spin" />
                   )}
 
                   {isProcessing && (
@@ -449,7 +448,7 @@ export default function ImageUploadModal({
                 {/* Resizing Specs & Stats */}
                 <div className="flex-1 flex flex-col gap-2 text-xs">
                   <div className="flex items-center gap-1.5 text-primary font-black">
-                    <span className="material-symbols-outlined text-[17px]">auto_fix_high</span>
+                    <Icon name="auto_fix_high" size={17} />
                     <span>Optimisation & Redimensionnement Automatique</span>
                   </div>
 
@@ -517,7 +516,7 @@ export default function ImageUploadModal({
               {/* Crop mode toggle */}
               <div className="flex items-center justify-between p-3 rounded-xl bg-surface-container-low border border-outline-variant/20 text-xs">
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[18px] text-primary">crop</span>
+                  <Icon name="crop" size={18} className="text-primary" />
                   <span className="font-bold text-on-surface">Cadrage carré parfait (1:1)</span>
                 </div>
                 <input
@@ -538,7 +537,7 @@ export default function ImageUploadModal({
                   }}
                   className="px-3.5 py-2 rounded-xl bg-surface-container text-on-surface text-xs font-bold hover:bg-surface-container-high transition-colors flex items-center gap-1"
                 >
-                  <span className="material-symbols-outlined text-[15px]">arrow_back</span>
+                  <Icon name="arrow_back" size={15} />
                   <span>Changer d'image</span>
                 </button>
 
@@ -550,14 +549,12 @@ export default function ImageUploadModal({
                 >
                   {isUploading ? (
                     <>
-                      <span className="material-symbols-outlined text-[16px] animate-spin">
-                        progress_activity
-                      </span>
+                      <Icon name="progress_activity" size={16} className="animate-spin" />
                       <span>Enregistrement en cours...</span>
                     </>
                   ) : (
                     <>
-                      <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                      <Icon name="check_circle" size={16} />
                       <span>Valider & Appliquer</span>
                     </>
                   )}

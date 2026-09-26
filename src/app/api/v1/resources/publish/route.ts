@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { sendSubmissionPendingEmail } from '@/lib/email';
+import { getCommissionSettings } from '@/lib/config/commission';
 
 export async function POST(req: NextRequest) {
   try {
@@ -126,6 +127,8 @@ export async function POST(req: NextRequest) {
     const defaultThumbnail =
       'https://lh3.googleusercontent.com/aida-public/AB6AXuCnleFEQlJt-dnss1cLqHYIsNjS6BplHmwvWLGH2nWX6e7mryDrah1CR5gtCBNyRhxI05vsY4vQG-G2ye9O9_YWFdGOaNHwKs2-aKxbWa18-wLYErNZnxpMfEKOdR4LgaLkCLThibmYxzu90mzUOVdk0G6zBIEOfciI0t27Mdr68ZMMcQXfew8xE2OvcweZuzA7M8YlbAmP8KtODtsxps_UzNnxn9gpL-1ISJksp9xwl8PP77k0tAAS8g';
 
+    const commission = await getCommissionSettings();
+
     const resource = await prisma.academicResource.create({
       data: {
         authorId: user.id,
@@ -153,8 +156,8 @@ export async function POST(req: NextRequest) {
             mode: isFree ? 'FREE' : (accessMode === 'IN_PERSON' ? 'IN_PERSON' : 'PAID'),
             priceAmount: isFree ? 0 : price,
             currency: 'XOF',
-            platformFeeRate: 0.15,
-            contributorRate: 0.85,
+            platformFeeRate: commission.platformCommissionPercent / 100,
+            contributorRate: commission.authorRoyaltyPercent / 100,
           },
         },
         contactChannel:

@@ -17,51 +17,21 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* RÈGLE TYPOGRAPHIQUE ACADÉMIQUE : 
-     1. Interligne de 2 (ou équivalent)
-     2. Texte justifié partout sur la plateforme
-     3. 8pts d'espacement entre les paragraphes
-  */
-  p, 
-  article, 
-  blockquote, 
-  .academic-text, 
-  .prose p,
-  main p,
-  section p,
-  aside p,
-  div > p,
-  .text-justify-platform {
-    text-align: justify !important;
-    text-justify: inter-word !important;
-    line-height: 2 !important; /* Interligne 2 (double interligne) */
-    margin-bottom: 8pt !important; /* 8pts entre les paragraphes */
-    hyphens: auto;
+  /* TYPOGRAPHIE NATURELLE ET LISIBLE (MOBILE-FIRST) */
+  p {
+    margin: 0;
+    line-height: 1.5;
+    text-align: left;
   }
 
-  /* Espacement précis de 8pts entre paragraphes consécutifs */
-  p + p,
-  article + article,
-  blockquote + blockquote {
-    margin-top: 8pt !important;
-  }
-
-  /* Annulation de la marge inférieure sur le dernier paragraphe d'un conteneur */
-  p:last-child {
-    margin-bottom: 0 !important;
-  }
-
-  /* Préservation du positionnement compact pour les éléments d'interface (boutons, navigation, badges) */
-  button p, 
-  nav p,
-  .badge p,
+  /* Préservation de l'alignement et de la lisibilité des boutons et composants */
+  button, 
+  nav,
+  .badge,
   .btn-text,
-  .no-justify,
   .truncate {
-    text-align: inherit !important;
-    line-height: inherit !important;
-    margin-bottom: 0 !important;
-    margin-top: 0 !important;
+    text-align: inherit;
+    line-height: inherit;
   }
 
   .pb-safe {
@@ -73,24 +43,22 @@
   }
 }
 
-/* Classes utilitaires académiques normalisées */
+/* Classes utilitaires académiques optionnelles (réservées aux documents rédigés) */
 .text-justified-academic {
-  text-align: justify !important;
-  text-justify: inter-word !important;
-  line-height: 2 !important;
-  margin-bottom: 8pt !important;
-  hyphens: auto !important;
+  text-align: left;
+  line-height: 1.6;
+}
+
+@media (min-width: 640px) {
+  .text-justified-academic {
+    text-align: justify;
+    text-justify: inter-word;
+    line-height: 1.7;
+  }
 }
 
 .interligne-2 {
-  line-height: 2 !important;
-  text-align: justify !important;
-  text-justify: inter-word !important;
-  margin-bottom: 8pt !important;
-}
-
-.paragraphe-8pt {
-  margin-bottom: 8pt !important;
+  line-height: 1.8;
 }
 
 /* Custom scrollbar hide for mobile feel */

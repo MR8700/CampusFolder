@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Icon from '@/components/ui/Icon';
 
 interface ResourcePickerModalProps {
   isOpen: boolean;
@@ -96,7 +97,7 @@ export default function ResourcePickerModal({
         {/* Header */}
         <div className="p-4 border-b border-outline-variant/30 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary text-[24px]">school</span>
+            <Icon name="school" className="text-primary text-[24px]" />
             <h3 className="font-headline-md text-base font-bold text-on-surface">
               Partager une ressource pédagogique
             </h3>
@@ -107,7 +108,7 @@ export default function ResourcePickerModal({
             aria-label="Fermer"
             className="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high"
           >
-            <span className="material-symbols-outlined text-[20px]">close</span>
+            <Icon name="close" className="text-[20px]" />
           </button>
         </div>
 
@@ -122,7 +123,7 @@ export default function ResourcePickerModal({
                 : 'border-transparent text-on-surface-variant hover:text-on-surface'
             }`}
           >
-            <span className="material-symbols-outlined text-[18px]">menu_book</span>
+            <Icon name="menu_book" className="text-[18px]" />
             <span>Documents Campus</span>
           </button>
           <button
@@ -134,7 +135,7 @@ export default function ResourcePickerModal({
                 : 'border-transparent text-on-surface-variant hover:text-on-surface'
             }`}
           >
-            <span className="material-symbols-outlined text-[18px]">play_circle</span>
+            <Icon name="play_circle" className="text-[18px]" />
             <span>Vidéos & YouTube</span>
           </button>
         </div>
@@ -145,7 +146,7 @@ export default function ResourcePickerModal({
             {/* Search Input */}
             <div className="p-3 border-b border-outline-variant/20 bg-surface-container-low">
               <div className="flex items-center gap-2 bg-surface px-3 py-2 rounded-xl border border-outline-variant/30">
-                <span className="material-symbols-outlined text-outline text-[18px]">search</span>
+                <Icon name="search" className="text-outline text-[18px]" />
                 <input
                   type="text"
                   placeholder="Rechercher un cours, TD, corrigé..."
@@ -160,9 +161,7 @@ export default function ResourcePickerModal({
             <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2">
               {loading ? (
                 <div className="py-12 flex flex-col items-center justify-center gap-2 text-on-surface-variant text-xs">
-                  <span className="material-symbols-outlined animate-spin text-[28px] text-primary">
-                    sync
-                  </span>
+                  <Icon name="sync" className="animate-spin text-[28px] text-primary" />
                   <span>Chargement des documents du campus...</span>
                 </div>
               ) : filteredResources.length > 0 ? (
@@ -207,7 +206,7 @@ export default function ResourcePickerModal({
                           {isPaid ? `${item.accessPolicy?.priceAmount} F` : 'GRATUIT'}
                         </span>
                         <span className="font-label-sm text-[10px] text-primary mt-1 flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
-                          Joindre <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                          Joindre <Icon name="arrow_forward" className="text-[14px]" />
                         </span>
                       </div>
                     </div>
@@ -228,7 +227,7 @@ export default function ResourcePickerModal({
             {/* Custom URL Input Form */}
             <form onSubmit={handleShareCustomYouTube} className="flex flex-col gap-2 p-3.5 rounded-2xl bg-surface-container-low border border-outline-variant/30">
               <span className="text-xs font-bold text-on-surface flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-red-500 text-[18px]">smart_display</span>
+                <Icon name="smart_display" className="text-red-500 text-[18px]" />
                 Partager un lien YouTube
               </span>
               <input
@@ -250,7 +249,7 @@ export default function ResourcePickerModal({
                 type="submit"
                 className="mt-1 h-9 rounded-xl bg-primary text-on-primary text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm active:scale-95 transition-all hover:bg-primary-container"
               >
-                <span className="material-symbols-outlined text-[16px]">send</span>
+                <Icon name="send" className="text-[16px]" />
                 <span>Partager cette vidéo dans la conversation</span>
               </button>
             </form>
@@ -278,7 +277,7 @@ export default function ResourcePickerModal({
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                     />
                     <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                      <span className="material-symbols-outlined text-white text-[20px]">play_circle</span>
+                      <Icon name="play_circle" className="text-white text-[20px]" />
                     </div>
                   </div>
                   <div className="min-w-0 flex-1">
@@ -289,9 +288,7 @@ export default function ResourcePickerModal({
                       {vid.title}
                     </h4>
                   </div>
-                  <span className="material-symbols-outlined text-primary text-[20px] shrink-0 group-hover:translate-x-1 transition-transform">
-                    send
-                  </span>
+                  <Icon name="send" className="text-primary text-[20px] shrink-0 group-hover:translate-x-1 transition-transform" />
                 </div>
               ))}
             </div>

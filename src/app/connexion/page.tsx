@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Icon from '@/components/ui/Icon';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Logo from '@/components/Logo';
@@ -71,7 +72,7 @@ export default function LoginPage() {
               aria-label="Retour"
               className="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface active:scale-95 transition-transform"
             >
-              <span className="material-symbols-outlined text-[24px]">arrow_back</span>
+              <Icon name="arrow_back" className="text-[24px]" />
             </button>
             <Link href="/" className="flex items-center gap-2">
               <Logo size={32} showWordmark={false} />
@@ -83,7 +84,7 @@ export default function LoginPage() {
 
           <div className="flex items-center gap-2">
             <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-fixed/30 border border-primary/20 text-primary text-[11px] font-bold">
-              <span className="material-symbols-outlined text-[14px]">lock</span>
+              <Icon name="lock" className="text-[14px]" />
               <span>Connexion SSL</span>
             </div>
             <Link
@@ -102,7 +103,7 @@ export default function LoginPage() {
           {/* Header Title & Academic Badges */}
           <div className="mb-6 sm:mb-8 text-center flex flex-col items-center">
             <div className="w-14 h-14 rounded-2xl bg-primary-fixed/50 text-primary flex items-center justify-center mx-auto mb-3 shadow-xs border border-primary/20">
-              <span className="material-symbols-outlined text-[28px]">account_balance</span>
+              <Icon name="account_balance" className="text-[28px]" />
             </div>
             <h1 className="font-black text-2xl sm:text-3xl text-on-surface tracking-tight">
               Espace Connexion
@@ -128,14 +129,14 @@ export default function LoginPage() {
           {/* Feedback alerts */}
           {errorMsg && (
             <div className="mb-5 p-4 bg-error-container text-on-error-container rounded-2xl text-xs sm:text-sm flex items-start gap-3 shadow-sm border border-error/20 animate-shake">
-              <span className="material-symbols-outlined text-[20px] text-error shrink-0">error</span>
+              <Icon name="error" className="text-[20px] text-error shrink-0" />
               <span className="flex-1 font-semibold leading-relaxed">{errorMsg}</span>
             </div>
           )}
 
           {successMsg && (
             <div className="mb-5 p-4 bg-primary-fixed/60 text-primary rounded-2xl text-xs sm:text-sm flex items-center gap-3 shadow-sm border border-primary/20">
-              <span className="material-symbols-outlined text-[20px] text-primary shrink-0">check_circle</span>
+              <Icon name="check_circle" className="text-[20px] text-primary shrink-0" />
               <span className="flex-1 font-bold">{successMsg}</span>
             </div>
           )}
@@ -158,7 +159,7 @@ export default function LoginPage() {
                     </span>
                   </label>
                   <div className="flex items-center bg-surface-container-low rounded-xl px-3.5 py-2.5 border border-outline-variant/30 focus-within:border-primary focus-within:bg-surface-container-lowest transition-all">
-                    <span className="material-symbols-outlined text-outline text-[18px] mr-2">badge</span>
+                    <Icon name="badge" className="text-outline text-[18px] mr-2" />
                     <input
                       type="text"
                       required
@@ -179,7 +180,7 @@ export default function LoginPage() {
                     </span>
                   </div>
                   <div className="flex items-center bg-surface-container-low rounded-xl px-3.5 py-2.5 border border-outline-variant/30 focus-within:border-primary focus-within:bg-surface-container-lowest transition-all">
-                    <span className="material-symbols-outlined text-outline text-[18px] mr-2">key</span>
+                    <Icon name="key" className="text-outline text-[18px] mr-2" />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       required
@@ -194,9 +195,7 @@ export default function LoginPage() {
                       aria-label="Afficher le mot de passe"
                       className="text-on-surface-variant hover:text-on-surface p-1"
                     >
-                      <span className="material-symbols-outlined text-[18px]">
-                        {showPassword ? 'visibility_off' : 'visibility'}
-                      </span>
+                      <Icon name={showPassword ? 'visibility_off' : 'visibility'} className="text-[18px]" />
                     </button>
                   </div>
                 </div>
@@ -222,14 +221,12 @@ export default function LoginPage() {
                 >
                   {loading ? (
                     <>
-                      <span className="material-symbols-outlined text-[18px] animate-spin">
-                        autorenew
-                      </span>
+                      <Icon name="autorenew" className="text-[18px] animate-spin" />
                       <span>Connexion en cours...</span>
                     </>
                   ) : (
                     <>
-                      <span className="material-symbols-outlined text-[18px]">lock_open</span>
+                      <Icon name="lock_open" className="text-[18px]" />
                       <span>Se Connecter à Mon Espace</span>
                     </>
                   )}

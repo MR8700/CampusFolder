@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, Suspense } from 'react';
+import Icon from '@/components/ui/Icon';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -98,7 +99,7 @@ function ResourceSummaryCard({ resource }: { resource: ResourceData | null }) {
               {resource?.title || 'Corrigé Examen Linguistique Générale L1'}
             </h2>
             <p className="font-body-sm text-xs text-on-surface-variant flex items-center gap-1 mt-1">
-              <span className="material-symbols-outlined text-[14px] text-primary">school</span>
+              <Icon name="school" className="text-[14px] text-primary" />
               {resource?.author?.profile?.firstName} {resource?.author?.profile?.lastName} • {resource?.institution?.shortName || 'UJKZ'}
             </p>
           </div>
@@ -108,7 +109,7 @@ function ResourceSummaryCard({ resource }: { resource: ResourceData | null }) {
       {/* Included Media Assets Bar */}
       <div className="bg-surface-container-low rounded-xl p-3 flex items-center justify-between text-xs">
         <div className="flex items-center gap-1.5 text-on-surface font-medium">
-          <span className="material-symbols-outlined text-primary text-[16px]">folder_open</span>
+          <Icon name="folder_open" className="text-primary text-[16px]" />
           <span>{resource?.media?.length || 3} médias inclus :</span>
         </div>
         <div className="flex items-center gap-1.5 flex-wrap">
@@ -118,24 +119,22 @@ function ResourceSummaryCard({ resource }: { resource: ResourceData | null }) {
                 key={m.id}
                 className="inline-flex items-center gap-1 bg-surface-container-highest px-2 py-0.5 rounded text-[10px] font-semibold text-on-surface"
               >
-                <span className="material-symbols-outlined text-[12px] text-primary">
-                  {m.mediaType === 'PDF' ? 'picture_as_pdf' : m.mediaType === 'AUDIO' ? 'mic' : 'attach_file'}
-                </span>
+                <Icon name={m.mediaType === 'PDF' ? 'picture_as_pdf' : m.mediaType === 'AUDIO' ? 'mic' : 'attach_file'} className="text-[12px] text-primary" />
                 {m.mediaType === 'PDF' ? 'PDF' : m.mediaType === 'AUDIO' ? 'Audio' : 'Barème'}
               </span>
             ))
           ) : (
             <>
               <span className="inline-flex items-center gap-1 bg-surface-container-highest px-2 py-0.5 rounded text-[10px] font-semibold text-on-surface">
-                <span className="material-symbols-outlined text-[12px] text-error">picture_as_pdf</span>
+                <Icon name="picture_as_pdf" className="text-[12px] text-error" />
                 PDF (12p)
               </span>
               <span className="inline-flex items-center gap-1 bg-surface-container-highest px-2 py-0.5 rounded text-[10px] font-semibold text-on-surface">
-                <span className="material-symbols-outlined text-[12px] text-primary">mic</span>
+                <Icon name="mic" className="text-[12px] text-primary" />
                 Audio
               </span>
               <span className="inline-flex items-center gap-1 bg-secondary-fixed text-on-secondary-fixed px-2 py-0.5 rounded text-[10px] font-bold">
-                <span className="material-symbols-outlined text-[12px]">check_circle</span>
+                <Icon name="check_circle" className="text-[12px]" />
                 Barème
               </span>
             </>
@@ -158,7 +157,7 @@ function FeeBreakdownCard({ price }: { price: number }) {
       <div className="flex items-center justify-between text-body-sm font-body-sm">
         <span className="text-on-surface-variant flex items-center gap-1">
           Frais de traitement opérateur
-          <span className="material-symbols-outlined text-[14px] text-outline">help</span>
+          <Icon name="help" className="text-[14px] text-outline" />
         </span>
         <span className="font-label-md text-label-md text-primary font-bold">0 FCFA (Offerts)</span>
       </div>
@@ -171,7 +170,7 @@ function FeeBreakdownCard({ price }: { price: number }) {
           <span className="font-headline-md text-xl text-primary font-black">
             {price.toLocaleString('fr-FR')} FCFA
           </span>
-          <span className="block font-label-sm text-[10px] text-outline">TVA incluse • 85% reversés à l'auteur</span>
+          <span className="block font-label-sm text-[10px] text-outline">TVA incluse • 60% reversés à l'auteur</span>
         </div>
       </div>
     </div>
@@ -183,7 +182,7 @@ function TrustBadgesCard() {
     <div className="grid grid-cols-2 gap-3">
       <div className="bg-surface-container-lowest rounded-xl p-3.5 flex items-center gap-2.5 border border-surface-container-high shadow-xs">
         <div className="w-8 h-8 rounded-full bg-primary-fixed/60 flex items-center justify-center text-primary shrink-0">
-          <span className="material-symbols-outlined text-[18px]">all_inclusive</span>
+          <Icon name="all_inclusive" className="text-[18px]" />
         </div>
         <div className="min-w-0">
           <p className="font-label-sm text-xs text-on-surface font-bold leading-tight">
@@ -196,7 +195,7 @@ function TrustBadgesCard() {
       </div>
       <div className="bg-surface-container-lowest rounded-xl p-3.5 flex items-center gap-2.5 border border-surface-container-high shadow-xs">
         <div className="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface shrink-0">
-          <span className="material-symbols-outlined text-[18px]">cloud_download</span>
+          <Icon name="cloud_download" className="text-[18px]" />
         </div>
         <div className="min-w-0">
           <p className="font-label-sm text-xs text-on-surface font-bold leading-tight">
@@ -386,7 +385,7 @@ function PaymentContent() {
               onClick={() => router.back()}
               className="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface active:scale-95 transition-transform shrink-0"
             >
-              <span className="material-symbols-outlined text-[24px]">arrow_back</span>
+              <Icon name="arrow_back" className="text-[24px]" />
             </button>
             <div className="relative h-7 w-28 shrink-0">
               <Image
@@ -414,7 +413,7 @@ function PaymentContent() {
               }}
               className="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary transition-colors"
             >
-              <span className="material-symbols-outlined text-[20px]">share</span>
+              <Icon name="share" className="text-[20px]" />
             </button>
             <div className="relative w-8 h-8 rounded-full overflow-hidden ring-2 ring-primary-container/20 shrink-0">
               <Image
@@ -440,9 +439,7 @@ function PaymentContent() {
 
             {/* Dynamic Context Notification Banner */}
             <div className="bg-primary-fixed/40 rounded-xl p-space-md flex items-center gap-space-sm shadow-sm">
-              <span className="material-symbols-outlined text-primary text-[22px] shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>
-                verified_user
-              </span>
+              <Icon name="verified_user" className="text-primary text-[22px] shrink-0" />
               <div className="min-w-0 flex-1">
                 <p className="font-label-md text-label-md text-primary font-bold">
                   Session d&apos;achat sécurisée ({resource?.institution?.code || 'UJKZ'} - {resource?.institution?.shortName || 'Ouaga 1'})
@@ -461,14 +458,14 @@ function PaymentContent() {
             <div className="flex items-center justify-between mb-space-sm">
               <h3 className="font-headline-md text-headline-md text-on-surface">Mode de règlement</h3>
               <span className="font-label-sm text-label-sm text-primary flex items-center gap-1 bg-primary-fixed/40 px-2 py-0.5 rounded-full">
-                <span className="material-symbols-outlined text-[14px]">bolt</span> Sans frais
+                <Icon name="bolt" className="text-[14px]" /> Sans frais
               </span>
             </div>
 
             {/* Error banner if any */}
             {errorMessage && (
               <div className="mb-space-sm p-space-sm bg-error-container text-on-error-container rounded-xl text-body-sm flex items-center gap-2">
-                <span className="material-symbols-outlined text-[20px] text-error">error</span>
+                <Icon name="error" className="text-[20px] text-error" />
                 <span>{errorMessage}</span>
               </div>
             )}
@@ -485,7 +482,7 @@ function PaymentContent() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-space-md">
                     <div className="w-11 h-11 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm">
-                      <span className="material-symbols-outlined text-[24px]">account_balance_wallet</span>
+                      <Icon name="account_balance_wallet" className="text-[24px]" />
                     </div>
                     <div>
                       <div className="flex items-center gap-space-xs">
@@ -510,7 +507,7 @@ function PaymentContent() {
                     }`}
                   >
                     {selectedMethod === 'wallet' && (
-                      <span className="material-symbols-outlined text-[16px]">check</span>
+                      <Icon name="check" className="text-[16px]" />
                     )}
                   </div>
                 </div>
@@ -526,7 +523,7 @@ function PaymentContent() {
                       </span>
                     </div>
                     <p className="font-body-sm text-body-sm text-primary-container mt-1 flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[15px]">flash_on</span>
+                      <Icon name="flash_on" className="text-[15px]" />
                       Déblocage instantané sur votre bibliothèque sans délai.
                     </p>
                   </div>
@@ -562,7 +559,7 @@ function PaymentContent() {
                     }`}
                   >
                     {selectedMethod === 'orange' && (
-                      <span className="material-symbols-outlined text-[16px]">check</span>
+                      <Icon name="check" className="text-[16px]" />
                     )}
                   </div>
                 </div>
@@ -582,10 +579,10 @@ function PaymentContent() {
                         value={orangePhone}
                         onChange={(e) => setOrangePhone(e.target.value)}
                       />
-                      <span className="material-symbols-outlined text-primary text-[20px]">phone_android</span>
+                      <Icon name="phone_android" className="text-primary text-[20px]" />
                     </div>
                     <p className="font-body-sm text-body-sm text-outline flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[15px]">info</span>
+                      <Icon name="info" className="text-[15px]" />
                       Composez *144*4*6# si vous demandez un code OTP d&apos;autorisation.
                     </p>
                   </div>
@@ -621,7 +618,7 @@ function PaymentContent() {
                     }`}
                   >
                     {selectedMethod === 'moov' && (
-                      <span className="material-symbols-outlined text-[16px]">check</span>
+                      <Icon name="check" className="text-[16px]" />
                     )}
                   </div>
                 </div>
@@ -641,10 +638,10 @@ function PaymentContent() {
                         value={moovPhone}
                         onChange={(e) => setMoovPhone(e.target.value)}
                       />
-                      <span className="material-symbols-outlined text-primary-container text-[20px]">sim_card</span>
+                      <Icon name="sim_card" className="text-primary-container text-[20px]" />
                     </div>
                     <p className="font-body-sm text-body-sm text-outline flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[15px]">touch_app</span>
+                      <Icon name="touch_app" className="text-[15px]" />
                       Une invite push USSD apparaîtra automatiquement pour valider votre code PIN.
                     </p>
                   </div>
@@ -661,7 +658,7 @@ function PaymentContent() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-space-md">
                     <div className="w-11 h-11 rounded-xl bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center shadow-sm">
-                      <span className="material-symbols-outlined text-[22px]">diversity_3</span>
+                      <Icon name="diversity_3" className="text-[22px]" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-space-xs">
@@ -683,7 +680,7 @@ function PaymentContent() {
                     }`}
                   >
                     {selectedMethod === 'in-person' && (
-                      <span className="material-symbols-outlined text-[16px]">check</span>
+                      <Icon name="check" className="text-[16px]" />
                     )}
                   </div>
                 </div>
@@ -716,7 +713,7 @@ function PaymentContent() {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <span className="material-symbols-outlined text-[18px]">chat</span>
+                      <Icon name="chat" className="text-[18px]" />
                       Écrire à {resource?.author?.profile?.firstName || "l'auteur"} sur WhatsApp
                     </a>
                   </div>
@@ -745,12 +742,12 @@ function PaymentContent() {
                   className="w-full bg-primary text-on-primary py-space-md rounded-xl font-label-lg text-label-lg flex items-center justify-center gap-space-sm shadow-lg active:scale-98 transition-all duration-150 relative overflow-hidden group disabled:opacity-75 cursor-pointer"
                 >
                   <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <span className="material-symbols-outlined text-[20px] text-primary-fixed animate-pulse">lock</span>
+                  <Icon name="lock" className="text-[20px] text-primary-fixed animate-pulse" />
                   <span className="font-bold tracking-wide">{getCtaLabel()}</span>
-                  <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                  <Icon name="arrow_forward" className="text-[18px]" />
                 </button>
                 <div className="mt-space-xs text-center flex items-center justify-center gap-1.5 text-on-surface-variant">
-                  <span className="material-symbols-outlined text-[14px] text-primary">verified</span>
+                  <Icon name="verified" className="text-[14px] text-primary" />
                   <span className="font-body-sm text-body-sm text-[11px]">
                     Garantie de téléchargement immédiat par token signé
                   </span>
@@ -763,7 +760,7 @@ function PaymentContent() {
               <div className="mt-2">
                 <div className="bg-primary text-on-primary rounded-xl p-space-md shadow-md flex items-center justify-between">
                   <div className="flex items-center gap-space-sm">
-                    <span className="material-symbols-outlined text-[28px] text-primary-fixed">check_circle</span>
+                    <Icon name="check_circle" className="text-[28px] text-primary-fixed" />
                     <div>
                       <h4 className="font-headline-md text-body-lg font-bold">Fichier débloqué avec succès !</h4>
                       <p className="font-body-sm text-body-sm text-primary-fixed">
@@ -796,10 +793,10 @@ function PaymentContent() {
             <div className="bg-surface-container-lowest rounded-2xl p-space-xl w-full max-w-sm flex flex-col items-center text-center shadow-2xl relative">
               <div className="relative mb-space-md">
                 <div className="w-16 h-16 rounded-full bg-primary-fixed flex items-center justify-center text-primary">
-                  <span className="material-symbols-outlined text-[32px] animate-spin">sync</span>
+                  <Icon name="sync" className="text-[32px] animate-spin" />
                 </div>
                 <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-secondary-container text-white flex items-center justify-center text-[12px]">
-                  <span className="material-symbols-outlined text-[14px]">shield</span>
+                  <Icon name="shield" className="text-[14px]" />
                 </div>
               </div>
               <h3 className="font-headline-md text-headline-md text-on-surface mb-1">
@@ -815,7 +812,7 @@ function PaymentContent() {
                 />
               </div>
               <div className="bg-surface-container-high/60 rounded-lg p-space-sm w-full flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-[18px]">key</span>
+                <Icon name="key" className="text-primary text-[18px]" />
                 <p className="font-body-sm text-body-sm text-on-surface-variant text-left truncate text-[11px]">
                   Token SHA256 : <span className="font-mono text-on-surface font-bold">{downloadToken}</span>
                 </p>

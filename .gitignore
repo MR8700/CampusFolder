@@ -39,3 +39,10 @@ next-env.d.ts
 Thumbs.db
 .vscode/
 .idea/
+
+# Large local media uploads (ingested locally via scripts/seed-real-catalog.js)
+public/uploads/courses/*.pdf
+public/uploads/videos/*.mp4
+public/uploads/videos/*.webm
+!public/uploads/courses/.gitkeep
+!public/uploads/videos/.gitkeep

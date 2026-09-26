@@ -28,6 +28,7 @@ export default function PublishResourcePage() {
   const [selectedLevel, setSelectedLevel] = useState('L3');
   const [selectedCategory, setSelectedCategory] = useState('EXAM_CORRECTION');
   const [title, setTitle] = useState('');
+  const [currentUser, setCurrentUser] = useState<any>(null);
 
   // Target audience: STUDENTS, PUBLIC, STUDENTS_AND_PUBLIC
   const [targetAudience, setTargetAudience] = useState<'STUDENTS' | 'PUBLIC' | 'STUDENTS_AND_PUBLIC'>('STUDENTS_AND_PUBLIC');
@@ -49,6 +50,18 @@ export default function PublishResourcePage() {
   // Pricing state: gratuit (0 FCFA), monetise (>= 50 FCFA), presentiel
   const [pricingModel, setPricingModel] = useState<'gratuit' | 'monetise' | 'presentiel'>('monetise');
   const [price, setPrice] = useState(500);
+  const [platformCommissionPercent, setPlatformCommissionPercent] = useState(40);
+
+  useEffect(() => {
+    fetch('/api/v1/admin/commission')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.settings?.platformCommissionPercent !== undefined) {
+          setPlatformCommissionPercent(data.settings.platformCommissionPercent);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Legal agreement checkbox
   const [legalAgreement, setLegalAgreement] = useState(false);
@@ -84,13 +97,15 @@ export default function PublishResourcePage() {
       fetch('/api/v1/academic/institutions').then((r) => r.json()),
       fetch('/api/v1/academic/levels').then((r) => r.json()),
       fetch('/api/v1/admin/pricing-rules').then((r) => r.json()),
-    ]).then(([instData, levelData, rulesData]) => {
+      fetch('/api/v1/auth/me').then((r) => r.json()),
+    ]).then(([instData, levelData, rulesData, userData]) => {
       if (instData.success && instData.institutions?.length > 0) {
         setInstitutions(instData.institutions);
         setSelectedUniv(instData.institutions[0].id);
       }
       if (levelData.success) setLevels(levelData.levels);
       if (rulesData.success) setPricingRules(rulesData.rules);
+      if (userData.success && userData.user) setCurrentUser(userData.user);
     });
   }, []);
 
@@ -209,7 +224,7 @@ export default function PublishResourcePage() {
     setAttachedFiles((prev) => prev.filter((_, i) => i !== idx));
   };
 
-  const authorGain = Math.round(price * 0.85);
+  const authorGain = Math.round(price * ((100 - platformCommissionPercent) / 100));
   const platformFee = price - authorGain;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -327,14 +342,14 @@ export default function PublishResourcePage() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-space-xs">
                 <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">
-                  <span className="material-symbols-outlined text-[16px]">drive_folder_upload</span>
+                  <Icon name="drive_folder_upload" className="text-[16px]" />
                 </span>
                 <span className="font-label-sm text-label-sm text-primary uppercase tracking-wider font-bold">
                   Création de ressource
                 </span>
               </div>
               <div className="flex items-center gap-1.5 bg-surface-container-high px-2.5 py-1 rounded-full text-on-surface-variant font-label-sm text-label-sm font-semibold">
-                <span className="material-symbols-outlined text-[14px] text-secondary">bolt</span>
+                <Icon name="bolt" className="text-[14px] text-secondary" />
                 <span>Revue en ~12 min</span>
               </div>
             </div>
@@ -396,7 +411,7 @@ export default function PublishResourcePage() {
               <section className="flex flex-col gap-space-md">
                 <div className="bg-surface-container-lowest rounded-2xl p-space-md shadow-xs border-2 border-outline-variant/40 flex flex-col gap-space-md">
                   <div className="flex items-center gap-space-xs text-primary">
-                    <span className="material-symbols-outlined text-[20px]">account_balance</span>
+                    <Icon name="account_balance" className="text-[20px]" />
                     <h2 className="font-headline-md text-headline-md text-on-surface font-bold">
                       1. Cadre universitaire
                     </h2>
@@ -420,9 +435,7 @@ export default function PublishResourcePage() {
 
                     {/* Search bar Universités */}
                     <div className="relative">
-                      <span className="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[18px]">
-                        search
-                      </span>
+                      <Icon name="search" className="absolute left-3 top-2.5 text-outline text-[18px]" />
                       <input
                         type="text"
                         value={univSearchQuery}
@@ -436,7 +449,7 @@ export default function PublishResourcePage() {
                           onClick={() => setUnivSearchQuery('')}
                           className="absolute right-2.5 top-2.5 text-outline hover:text-on-surface"
                         >
-                          <span className="material-symbols-outlined text-[16px]">close</span>
+                          <Icon name="close" className="text-[16px]" />
                         </button>
                       )}
                     </div>
@@ -461,7 +474,7 @@ export default function PublishResourcePage() {
                             }`}
                           >
                             {selectedUniv === inst.id && (
-                              <span className="material-symbols-outlined text-[14px]">check</span>
+                              <Icon name="check" className="text-[14px]" />
                             )}
                             {inst.name}
                           </button>
@@ -486,9 +499,7 @@ export default function PublishResourcePage() {
 
                     {/* Search bar Facultés */}
                     <div className="relative">
-                      <span className="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[18px]">
-                        search
-                      </span>
+                      <Icon name="search" className="absolute left-3 top-2.5 text-outline text-[18px]" />
                       <input
                         type="text"
                         value={facSearchQuery}
@@ -502,7 +513,7 @@ export default function PublishResourcePage() {
                           onClick={() => setFacSearchQuery('')}
                           className="absolute right-2.5 top-2.5 text-outline hover:text-on-surface"
                         >
-                          <span className="material-symbols-outlined text-[16px]">close</span>
+                          <Icon name="close" className="text-[16px]" />
                         </button>
                       )}
                     </div>
@@ -526,7 +537,7 @@ export default function PublishResourcePage() {
                             }`}
                           >
                             {selectedFaculty === fac.id && (
-                              <span className="material-symbols-outlined text-[14px]">check</span>
+                              <Icon name="check" className="text-[14px]" />
                             )}
                             {fac.name} ({fac.code})
                           </button>
@@ -552,9 +563,7 @@ export default function PublishResourcePage() {
 
                       {/* Search bar Filières */}
                       <div className="relative">
-                        <span className="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[18px]">
-                          search
-                        </span>
+                        <Icon name="search" className="absolute left-3 top-2.5 text-outline text-[18px]" />
                         <input
                           type="text"
                           value={filiereSearchQuery}
@@ -568,7 +577,7 @@ export default function PublishResourcePage() {
                             onClick={() => setFiliereSearchQuery('')}
                             className="absolute right-2.5 top-2.5 text-outline hover:text-on-surface"
                           >
-                            <span className="material-symbols-outlined text-[16px]">close</span>
+                            <Icon name="close" className="text-[16px]" />
                           </button>
                         )}
                       </div>
@@ -592,7 +601,7 @@ export default function PublishResourcePage() {
                               }`}
                             >
                               {selectedFiliere === fil.id && (
-                                <span className="material-symbols-outlined text-[14px]">check</span>
+                                <Icon name="check" className="text-[14px]" />
                               )}
                               {fil.name} ({fil.code})
                             </button>
@@ -616,9 +625,7 @@ export default function PublishResourcePage() {
 
                     {/* Search bar Niveaux & Doctorant */}
                     <div className="relative">
-                      <span className="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[18px]">
-                        search
-                      </span>
+                      <Icon name="search" className="absolute left-3 top-2.5 text-outline text-[18px]" />
                       <input
                         type="text"
                         value={levelSearchQuery}
@@ -632,7 +639,7 @@ export default function PublishResourcePage() {
                           onClick={() => setLevelSearchQuery('')}
                           className="absolute right-2.5 top-2.5 text-outline hover:text-on-surface"
                         >
-                          <span className="material-symbols-outlined text-[16px]">close</span>
+                          <Icon name="close" className="text-[16px]" />
                         </button>
                       )}
                     </div>
@@ -666,7 +673,7 @@ export default function PublishResourcePage() {
                             }`}
                           >
                             {selectedLevel === lvl.code && (
-                              <span className="material-symbols-outlined text-[14px]">check</span>
+                              <Icon name="check" className="text-[14px]" />
                             )}
                             <span className="truncate">{lvl.label}</span>
                           </button>
@@ -740,9 +747,7 @@ export default function PublishResourcePage() {
                               : 'bg-surface-container text-on-surface-variant'
                           }`}
                         >
-                          <span className="material-symbols-outlined text-primary text-[20px]">
-                            {cat.icon}
-                          </span>
+                          <Icon name={cat.icon} className="text-primary text-[20px]" />
                           <div className="flex flex-col min-w-0">
                             <span className="font-label-md text-label-md truncate font-bold">
                               {cat.title}
@@ -770,19 +775,19 @@ export default function PublishResourcePage() {
                         {
                           id: 'STUDENTS',
                           title: 'Étudiants',
-                          sub: 'Cette ressource s’adresse principalement aux étudiants.',
+                          sub: 'Votre ressource sera proposée aux utilisateurs concernés par les espaces étudiants.',
                           icon: 'school',
                         },
                         {
                           id: 'PUBLIC',
                           title: 'Public',
-                          sub: 'Cette ressource peut être consultée par tout le monde.',
+                          sub: 'Votre ressource pourra être découverte par tous les utilisateurs.',
                           icon: 'public',
                         },
                         {
                           id: 'STUDENTS_AND_PUBLIC',
-                          title: 'Étudiants & Public',
-                          sub: 'Cette ressource peut être utile aux étudiants comme au grand public.',
+                          title: 'Étudiants et public',
+                          sub: 'Votre ressource pourra être découverte par les étudiants et les autres utilisateurs.',
                           icon: 'public',
                         },
                       ].map((aud) => {
@@ -834,7 +839,7 @@ export default function PublishResourcePage() {
                     type="button"
                   >
                     <span>Continuer vers les Fichiers</span>
-                    <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                    <Icon name="arrow_forward" className="text-[18px]" />
                   </button>
                 </div>
               </section>
@@ -846,7 +851,7 @@ export default function PublishResourcePage() {
                 <div className="bg-surface-container-lowest rounded-2xl p-space-md shadow-xs border-2 border-outline-variant/40 flex flex-col gap-space-md">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-space-xs text-primary">
-                      <span className="material-symbols-outlined text-[20px]">perm_media</span>
+                      <Icon name="perm_media" className="text-[20px]" />
                       <h2 className="font-headline-md text-headline-md text-on-surface font-bold">
                         2. Médias polymorphiques
                       </h2>
@@ -888,7 +893,7 @@ export default function PublishResourcePage() {
                     onClick={() => fileInputRef.current?.click()}
                   >
                     <div className="w-12 h-12 rounded-full bg-primary-fixed text-primary flex items-center justify-center shadow-xs border border-primary/20">
-                      <span className="material-symbols-outlined text-[26px]">cloud_upload</span>
+                      <Icon name="cloud_upload" className="text-[26px]" />
                     </div>
                     <div className="flex flex-col">
                       <span className="font-label-lg text-label-lg text-on-surface font-bold">
@@ -899,7 +904,7 @@ export default function PublishResourcePage() {
                       </span>
                     </div>
                     <span className="inline-flex items-center gap-1 font-label-sm text-[11px] text-primary bg-surface-container-lowest px-2.5 py-1 rounded-full shadow-xs border border-outline-variant/30 font-bold">
-                      <span className="material-symbols-outlined text-[14px]">picture_as_pdf</span>
+                      <Icon name="picture_as_pdf" className="text-[14px]" />
                       Optimisation compression automatique
                     </span>
                   </div>
@@ -921,7 +926,7 @@ export default function PublishResourcePage() {
                             : 'bg-surface-container-highest text-secondary'
                         }`}
                       >
-                        <span className="material-symbols-outlined text-[20px]">mic</span>
+                        <Icon name="mic" className="text-[20px]" />
                       </div>
                       <span className="font-label-sm text-[11px] font-bold">Note Vocale</span>
                       <span
@@ -940,7 +945,7 @@ export default function PublishResourcePage() {
                       className="flex flex-col items-center justify-center p-3 rounded-xl bg-surface-container text-on-surface gap-1.5 transition-all active:scale-95 text-center"
                     >
                       <div className="w-9 h-9 rounded-full bg-surface-container-highest text-primary flex items-center justify-center">
-                        <span className="material-symbols-outlined text-[20px]">videocam</span>
+                        <Icon name="videocam" className="text-[20px]" />
                       </div>
                       <span className="font-label-sm text-[11px] font-bold">Extrait Amphi</span>
                       <span className="font-body-sm text-[10px] text-on-surface-variant">
@@ -955,7 +960,7 @@ export default function PublishResourcePage() {
                       className="flex flex-col items-center justify-center p-3 rounded-xl bg-surface-container text-on-surface gap-1.5 transition-all active:scale-95 text-center"
                     >
                       <div className="w-9 h-9 rounded-full bg-surface-container-highest text-tertiary-container flex items-center justify-center">
-                        <span className="material-symbols-outlined text-[20px]">photo_camera</span>
+                        <Icon name="photo_camera" className="text-[20px]" />
                       </div>
                       <span className="font-label-sm text-[11px] font-bold">Photo / Scan</span>
                       <span className="font-body-sm text-[10px] text-on-surface-variant">
@@ -1015,7 +1020,7 @@ export default function PublishResourcePage() {
 
                     {attachedFiles.length === 0 ? (
                       <div className="p-4 rounded-xl bg-error/5 border border-error/20 flex flex-col items-center justify-center text-center gap-1.5 text-error">
-                        <span className="material-symbols-outlined text-[26px]">upload_file</span>
+                        <Icon name="upload_file" className="text-[26px]" />
                         <p className="text-xs font-bold">Média obligatoire : Aucun document n'est joint</p>
                         <p className="text-[11px] text-on-surface-variant max-w-sm">
                           Pour soumettre votre document à la validation administrative, déposez au moins un fichier principal (PDF du devoir, audio d'amphi ou photos).
@@ -1053,7 +1058,7 @@ export default function PublishResourcePage() {
                             onClick={() => removeFile(idx)}
                             className="w-7 h-7 flex items-center justify-center rounded-full text-error hover:bg-error-container active:scale-90 transition-transform"
                           >
-                            <span className="material-symbols-outlined text-[18px]">close</span>
+                            <Icon name="close" className="text-[18px]" />
                           </button>
                         </div>
                       ))
@@ -1085,7 +1090,7 @@ export default function PublishResourcePage() {
                       type="button"
                     >
                       <span>{attachedFiles.length === 0 ? 'Fichier média requis pour continuer' : 'Passer à la Tarification'}</span>
-                      <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                      <Icon name="arrow_forward" className="text-[18px]" />
                     </button>
                   </div>
                 </div>
@@ -1097,7 +1102,7 @@ export default function PublishResourcePage() {
               <section className="flex flex-col gap-space-md">
                 <div className="bg-surface-container-lowest rounded-2xl p-space-md shadow-xs border-2 border-outline-variant/40 flex flex-col gap-space-md">
                   <div className="flex items-center gap-space-xs text-primary">
-                    <span className="material-symbols-outlined text-[20px]">payments</span>
+                    <Icon name="payments" className="text-[20px]" />
                     <h2 className="font-headline-md text-headline-md text-on-surface font-bold">
                       3. Rétribution & Modèle de Vente
                     </h2>
@@ -1172,7 +1177,7 @@ export default function PublishResourcePage() {
                           </span>
                         </div>
                         <p className="font-body-sm text-body-sm opacity-90 mt-0.5">
-                          Paiement instantané par Orange Money et Moov Money Burkina. Rétribution de 85% reversée sur votre portefeuille.
+                          Paiement instantané par Orange Money et Moov Money Burkina. Rétribution de {100 - platformCommissionPercent}% reversée sur votre portefeuille.
                         </p>
                       </div>
                     </div>
@@ -1187,7 +1192,7 @@ export default function PublishResourcePage() {
                       }`}
                     >
                       <span className="w-8 h-8 rounded-full bg-surface-container-highest text-secondary flex items-center justify-center shrink-0 mt-0.5">
-                        <span className="material-symbols-outlined text-[20px]">handshake</span>
+                        <Icon name="handshake" className="text-[20px]" />
                       </span>
                       <div className="flex flex-col flex-1">
                         <div className="flex items-center justify-between">
@@ -1338,7 +1343,7 @@ export default function PublishResourcePage() {
                         <div className="flex items-center gap-1.5">
                           <span className="w-2 h-2 rounded-full bg-primary"></span>
                           <span className="font-label-sm text-label-sm text-on-surface font-bold">
-                            Votre part auteur (85%)
+                            Votre part auteur ({100 - platformCommissionPercent}%)
                           </span>
                         </div>
                         <span className="font-label-lg text-label-lg text-primary font-extrabold">
@@ -1349,7 +1354,7 @@ export default function PublishResourcePage() {
                         <div className="flex items-center gap-1.5">
                           <span className="w-2 h-2 rounded-full bg-outline"></span>
                           <span className="font-label-sm text-label-sm text-on-surface-variant font-semibold">
-                            Frais Campus Folder & Télécoms (15%)
+                            Frais Campus Folder & Télécoms ({platformCommissionPercent}%)
                           </span>
                         </div>
                         <span className="font-label-sm text-label-sm text-on-surface-variant font-bold">
@@ -1357,8 +1362,8 @@ export default function PublishResourcePage() {
                         </span>
                       </div>
                       <div className="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden flex mt-1">
-                        <div className="bg-primary-container h-full" style={{ width: '85%' }}></div>
-                        <div className="bg-secondary-container h-full" style={{ width: '15%' }}></div>
+                        <div className="bg-primary-container h-full" style={{ width: `${100 - platformCommissionPercent}%` }}></div>
+                        <div className="bg-secondary-container h-full" style={{ width: `${platformCommissionPercent}%` }}></div>
                       </div>
                     </div>
                   </div>
@@ -1413,42 +1418,99 @@ export default function PublishResourcePage() {
                     </h2>
                   </div>
 
-                  {/* PREVIEW SUMMARY CARD */}
-                  <div className="bg-surface-container-low rounded-2xl p-4 flex flex-col gap-3 border border-outline-variant/30">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-primary uppercase tracking-wider">
-                        Récapitulatif de la ressource
-                      </span>
-                      <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
-                        {pricingModel === 'gratuit' ? 'GRATUIT (0 FCFA)' : `${price.toLocaleString('fr-FR')} FCFA`}
+                  {/* PREVIEW SUMMARY CARD (SYNTHÈSE AVANT PUBLICATION - SECTION 11) */}
+                  <div className="bg-surface-container-lowest rounded-2xl p-4 sm:p-5 shadow-xs border-2 border-primary/20 flex flex-col gap-3">
+                    <div className="flex items-center justify-between pb-2 border-b border-outline-variant/30">
+                      <div className="flex items-center gap-2">
+                        <Icon name="description" size={18} className="text-primary" />
+                        <h3 className="font-bold text-sm sm:text-base text-on-surface">Votre ressource</h3>
+                      </div>
+                      <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+                        {pricingModel === 'gratuit' ? 'Gratuit' : `${price.toLocaleString('fr-FR')} FCFA`}
                       </span>
                     </div>
 
-                    <div className="flex flex-col gap-1">
-                      <h3 className="font-black text-sm text-on-surface leading-snug">
-                        {title || 'Titre non renseigné'}
-                      </h3>
-                      <div className="flex flex-wrap items-center gap-2 text-[11px] text-on-surface-variant mt-1">
-                        <span className="px-2 py-0.5 rounded-md bg-surface-container font-semibold">
-                          {institutions.find((i) => i.id === selectedUniv)?.shortName || 'Université'}
-                        </span>
-                        <span>•</span>
-                        <span>Niveau {selectedLevel}</span>
-                        <span>•</span>
-                        <span className="text-primary font-bold">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2.5 gap-x-4 text-xs">
+                      <div>
+                        <span className="text-[10px] text-outline uppercase font-semibold block">Titre</span>
+                        <p className="font-bold text-on-surface text-sm mt-0.5 leading-snug">
+                          {title.trim() || 'Titre non renseigné'}
+                        </p>
+                      </div>
+
+                      <div>
+                        <span className="text-[10px] text-outline uppercase font-semibold block">Type</span>
+                        <p className="font-medium text-on-surface mt-0.5">
+                          {selectedCategory === 'EXAM_CORRECTION'
+                            ? 'Corrigé d’examen'
+                            : selectedCategory === 'COURSE_NOTES'
+                            ? 'Cours magistral'
+                            : selectedCategory === 'TD_EXERCISE'
+                            ? 'Travaux Dirigés (TD)'
+                            : selectedCategory === 'EXAM_PAPER'
+                            ? 'Sujet d’examen'
+                            : selectedCategory === 'AUDIO_SYNTHESIS'
+                            ? 'Note vocale explicative'
+                            : selectedCategory === 'VIDEO_CONFERENCE'
+                            ? 'Vidéo explicative'
+                            : selectedCategory}
+                        </p>
+                      </div>
+
+                      <div>
+                        <span className="text-[10px] text-outline uppercase font-semibold block">Matière</span>
+                        <p className="font-medium text-on-surface mt-0.5">
+                          {filieres.find((f) => f.id === selectedFiliere)?.name || 'Matière générale'}
+                        </p>
+                      </div>
+
+                      <div>
+                        <span className="text-[10px] text-outline uppercase font-semibold block">Niveau</span>
+                        <p className="font-medium text-on-surface mt-0.5">
+                          Niveau {selectedLevel || 'Non spécifié'}
+                        </p>
+                      </div>
+
+                      <div>
+                        <span className="text-[10px] text-outline uppercase font-semibold block">Auteur</span>
+                        <p className="font-medium text-on-surface mt-0.5">
+                          {currentUser?.profile?.displayName ||
+                            `${currentUser?.profile?.firstName || ''} ${currentUser?.profile?.lastName || ''}`.trim() ||
+                            currentUser?.email ||
+                            'Contributeur'}
+                        </p>
+                      </div>
+
+                      <div>
+                        <span className="text-[10px] text-outline uppercase font-semibold block">Accès</span>
+                        <p className="font-medium text-on-surface mt-0.5">
+                          {pricingModel === 'gratuit' ? 'Gratuit' : 'Payant'}
+                        </p>
+                      </div>
+
+                      <div>
+                        <span className="text-[10px] text-outline uppercase font-semibold block">Prix éventuel</span>
+                        <p className="font-bold text-secondary mt-0.5 font-mono">
+                          {pricingModel === 'gratuit' ? '0 FCFA' : `${price.toLocaleString('fr-FR')} FCFA`}
+                        </p>
+                      </div>
+
+                      <div>
+                        <span className="text-[10px] text-outline uppercase font-semibold block">Destination</span>
+                        <p className="font-bold text-primary mt-0.5">
                           {targetAudience === 'STUDENTS'
-                            ? 'Destiné aux Étudiants'
-                            : (targetAudience === 'PUBLIC'
-                            ? 'Accessible au Public'
-                            : 'Étudiants & Grand Public')}
-                        </span>
+                            ? 'Destinée aux étudiants'
+                            : targetAudience === 'PUBLIC'
+                            ? 'Accessible au public'
+                            : 'Accessible aux étudiants et au public'}
+                        </p>
                       </div>
                     </div>
 
-                    <div className="border-t border-outline-variant/20 pt-2 flex flex-wrap items-center justify-between gap-2 text-[11px]">
-                      <span className="flex items-center gap-1 text-on-surface font-semibold">
+                    <div className="border-t border-outline-variant/20 pt-2.5 flex flex-wrap items-center justify-between gap-2 text-[11px] text-on-surface-variant">
+                      <span className="flex items-center gap-1">
                         <Icon name="attach_file" size={14} className="text-outline" />
-                        <span>{attachedFiles.length} fichier{attachedFiles.length > 1 ? 's' : ''} joint{attachedFiles.length > 1 ? 's' : ''}</span>
+                        <span>{attachedFiles.length} support{attachedFiles.length > 1 ? 's' : ''} joint{attachedFiles.length > 1 ? 's' : ''}</span>
                       </span>
                       {youtubeUrl.trim() && (
                         <span className="flex items-center gap-1 text-error font-bold">
@@ -1535,7 +1597,7 @@ export default function PublishResourcePage() {
             <div className="bg-surface-container-lowest rounded-3xl p-5 border-2 border-primary/25 ring-1 ring-primary/10 shadow-xs flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary-fixed border border-primary/20 text-primary font-label-sm text-[11px] font-bold uppercase tracking-wider">
-                  <span className="material-symbols-outlined text-[14px]">visibility</span>
+                  <Icon name="visibility" className="text-[14px]" />
                   Aperçu dans l'Amphi
                 </span>
                 <span className="font-label-sm text-xs text-outline">En direct</span>
@@ -1547,7 +1609,7 @@ export default function PublishResourcePage() {
                   <div className="flex flex-wrap items-center gap-1.5">
                     {attachedFiles.some((f) => f.mediaType === 'AUDIO') && (
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#DCFCE7] text-[#15803D] text-[10px] font-bold uppercase border border-[#15803D]/20">
-                        <span className="material-symbols-outlined text-[12px]">mic</span>
+                        <Icon name="mic" className="text-[12px]" />
                         Vocal
                       </span>
                     )}
@@ -1556,13 +1618,13 @@ export default function PublishResourcePage() {
                     </span>
                   </div>
                   <span className="text-secondary">
-                    <span className="material-symbols-outlined text-[18px]">bookmark</span>
+                    <Icon name="bookmark" className="text-[18px]" />
                   </span>
                 </div>
 
                 <div className="flex gap-3 items-center">
                   <div className="w-14 h-14 rounded-xl bg-primary-fixed/30 flex items-center justify-center shrink-0">
-                    <span className="material-symbols-outlined text-primary text-[28px]">description</span>
+                    <Icon name="description" className="text-primary text-[28px]" />
                   </div>
                   <div className="flex flex-col min-w-0 flex-1">
                     <h4 className="font-bold text-sm text-on-surface line-clamp-1">
@@ -1572,7 +1634,7 @@ export default function PublishResourcePage() {
                       {institutions.find((i) => i.id === selectedUniv)?.name || 'Université'}
                     </span>
                     <div className="flex items-center gap-1 mt-1 text-[11px] text-on-surface font-bold">
-                      <span className="material-symbols-outlined text-[13px] text-secondary">star</span>
+                      <Icon name="star" className="text-[13px] text-secondary" />
                       <span>5.0</span>
                       <span className="text-outline font-normal">({attachedFiles.length} fichiers attachés)</span>
                     </div>
@@ -1596,19 +1658,19 @@ export default function PublishResourcePage() {
             {/* Royalties Calculator Card */}
             <div className="bg-surface-container-lowest rounded-3xl p-5 border-2 border-outline-variant/40 shadow-xs flex flex-col gap-4">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-[20px]">calculate</span>
-                <h3 className="font-bold text-sm text-on-surface">Simulateur Rémunération 85%</h3>
+                <Icon name="calculate" className="text-primary text-[20px]" />
+                <h3 className="font-bold text-sm text-on-surface">Simulateur Rémunération {100 - platformCommissionPercent}%</h3>
               </div>
 
               <div className="flex flex-col gap-2 text-xs">
                 <div className="flex items-center justify-between p-2.5 rounded-xl bg-surface-container-low">
-                  <span className="text-on-surface-variant">Reversé à l'auteur (85%)</span>
+                  <span className="text-on-surface-variant">Reversé à l'auteur ({100 - platformCommissionPercent}%)</span>
                   <span className="font-bold text-primary font-mono text-sm">
                     {pricingModel === 'monetise' ? `${authorGain} FCFA` : '0 FCFA'}
                   </span>
                 </div>
                 <div className="flex items-center justify-between p-2.5 rounded-xl bg-surface-container-low">
-                  <span className="text-on-surface-variant">Frais infrastructure (15%)</span>
+                  <span className="text-on-surface-variant">Frais infrastructure ({platformCommissionPercent}%)</span>
                   <span className="font-bold text-outline font-mono text-sm">
                     {pricingModel === 'monetise' ? `${platformFee} FCFA` : '0 FCFA'}
                   </span>
@@ -1618,7 +1680,7 @@ export default function PublishResourcePage() {
               {pricingModel === 'monetise' && (
                 <div className="p-3 rounded-xl bg-primary-fixed/20 border border-primary/20 text-xs flex flex-col gap-1 text-primary">
                   <span className="font-bold flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[16px]">bolt</span>
+                    <Icon name="bolt" className="text-[16px]" />
                     Impact Promo Amphi :
                   </span>
                   <span>
@@ -1632,20 +1694,20 @@ export default function PublishResourcePage() {
             {/* Integrity Shield Card */}
             <div className="bg-surface-container-lowest rounded-2xl p-5 border border-surface-container-high shadow-xs flex flex-col gap-3">
               <div className="flex items-center gap-2 text-on-surface font-bold text-xs uppercase tracking-wider">
-                <span className="material-symbols-outlined text-[18px] text-tertiary-container">verified_user</span>
+                <Icon name="verified_user" className="text-[18px] text-tertiary-container" />
                 <span>Garanties & Intégrité UJKZ</span>
               </div>
               <ul className="text-xs text-on-surface-variant flex flex-col gap-2 list-none">
                 <li className="flex items-start gap-2">
-                  <span className="material-symbols-outlined text-[16px] text-primary shrink-0 mt-0.5">check</span>
+                  <Icon name="check" className="text-[16px] text-primary shrink-0 mt-0.5" />
                   <span>Filigrane anti-fuite dynamique avec numéro INE de l'acheteur.</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="material-symbols-outlined text-[16px] text-primary shrink-0 mt-0.5">check</span>
+                  <Icon name="check" className="text-[16px] text-primary shrink-0 mt-0.5" />
                   <span>Compression adaptative pour réseaux étudiants à faible débit.</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="material-symbols-outlined text-[16px] text-primary shrink-0 mt-0.5">check</span>
+                  <Icon name="check" className="text-[16px] text-primary shrink-0 mt-0.5" />
                   <span>Paiements réversibles et audités sur le double-entry ledger.</span>
                 </li>
               </ul>
@@ -1656,7 +1718,7 @@ export default function PublishResourcePage() {
             <div className="fixed inset-0 z-50 bg-inverse-surface/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
               <div className="bg-surface-container-lowest rounded-3xl p-6 sm:p-7 w-full max-w-lg flex flex-col items-center text-center gap-4 shadow-2xl border border-primary/20 animate-fade-in">
                 <div className="w-16 h-16 rounded-2xl bg-primary-container text-on-primary flex items-center justify-center shadow-md">
-                  <span className="material-symbols-outlined text-[34px]">hourglass_top</span>
+                  <Icon name="hourglass_top" className="text-[34px]" />
                 </div>
 
                 <div className="flex flex-col gap-1">
@@ -1673,9 +1735,7 @@ export default function PublishResourcePage() {
 
                 {/* 24h SLA Promise Banner */}
                 <div className="w-full bg-primary-fixed/20 border border-primary/30 rounded-2xl p-3.5 flex items-start gap-3 text-left">
-                  <span className="material-symbols-outlined text-primary text-[24px] shrink-0 mt-0.5">
-                    timer
-                  </span>
+                  <Icon name="timer" className="text-primary text-[24px] shrink-0 mt-0.5" />
                   <div className="flex flex-col min-w-0">
                     <span className="font-bold text-xs text-primary">
                       Engagement Campus Folder : Validation en 24h max
@@ -1695,7 +1755,7 @@ export default function PublishResourcePage() {
                     </span>
                   </div>
                   <div className="flex justify-between items-center text-xs">
-                    <span className="text-on-surface-variant">Rétribution auteur (85%)</span>
+                    <span className="text-on-surface-variant">Rétribution auteur ({100 - platformCommissionPercent}%)</span>
                     <span className="text-primary font-black font-mono">
                       {authorGain.toLocaleString('fr-FR')} FCFA / achat
                     </span>
@@ -1719,7 +1779,7 @@ export default function PublishResourcePage() {
                 <div className="w-full bg-surface-container rounded-2xl p-4 flex flex-col gap-2.5 text-left border border-outline-variant/30">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-xs text-on-surface flex items-center gap-1.5">
-                      <span className="material-symbols-outlined text-[16px] text-error">notification_important</span>
+                      <Icon name="notification_important" className="text-[16px] text-error" />
                       Besoin d'accélérer la modération ?
                     </span>
                     {reminderSent && (
@@ -1741,9 +1801,7 @@ export default function PublishResourcePage() {
                         : 'bg-error/10 hover:bg-error/20 text-error border border-error/30 active:scale-98'
                     }`}
                   >
-                    <span className="material-symbols-outlined text-[18px]">
-                      {reminderSent ? 'done_all' : 'notifications_active'}
-                    </span>
+                    <Icon name={reminderSent ? 'done_all' : 'notifications_active'} className="text-[18px]" />
                     <span>
                       {reminderLoading
                         ? 'Transmission du rappel...'
@@ -1761,7 +1819,7 @@ export default function PublishResourcePage() {
                     className="flex-1 h-12 rounded-xl bg-primary-container text-on-primary font-label-lg text-xs sm:text-sm flex items-center justify-center gap-2 active:scale-98 transition-transform font-bold shadow-md"
                   >
                     <span>Voir l'accueil</span>
-                    <span className="material-symbols-outlined text-[18px]">home</span>
+                    <Icon name="home" className="text-[18px]" />
                   </button>
                   <button
                     type="button"
@@ -1769,7 +1827,7 @@ export default function PublishResourcePage() {
                     className="flex-1 h-12 rounded-xl bg-surface-container text-on-surface font-label-lg text-xs sm:text-sm flex items-center justify-center gap-2 active:scale-98 transition-transform font-bold hover:bg-surface-container-high"
                   >
                     <span>Explorer</span>
-                    <span className="material-symbols-outlined text-[18px]">explore</span>
+                    <Icon name="explore" className="text-[18px]" />
                   </button>
                 </div>
               </div>
@@ -1779,7 +1837,7 @@ export default function PublishResourcePage() {
           {/* Toast feedback */}
           {uploadToast && (
             <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-primary-container text-on-primary px-4 py-2 rounded-full font-label-md text-label-md shadow-lg z-50 flex items-center gap-2 animate-fade-in">
-              <span className="material-symbols-outlined text-[18px]">upload_file</span>
+              <Icon name="upload_file" className="text-[18px]" />
               <span>{uploadToast}</span>
             </div>
           )}

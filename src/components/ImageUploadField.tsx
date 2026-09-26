@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import ImageUploadModal from './ImageUploadModal';
+import Icon from '@/components/ui/Icon';
 
 interface ImageUploadFieldProps {
   value: string;
@@ -56,14 +57,16 @@ export default function ImageUploadField({
               className="w-full h-full object-cover group-hover:scale-105 transition-transform"
             />
           ) : (
-            <span className="material-symbols-outlined text-2xl text-outline group-hover:text-primary transition-colors">
-              {shape === 'circle' ? 'account_circle' : 'image'}
-            </span>
+            <Icon
+              name={shape === 'circle' ? 'account_circle' : 'image'}
+              size={28}
+              className="text-outline group-hover:text-primary transition-colors"
+            />
           )}
 
           {/* Hover Overlay */}
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition-opacity">
-            <span className="material-symbols-outlined text-[18px]">photo_camera</span>
+            <Icon name="photo_camera" size={18} />
           </div>
         </div>
 
@@ -84,7 +87,7 @@ export default function ImageUploadField({
                 className="w-8 h-8 rounded-lg text-outline hover:text-error hover:bg-error/10 flex items-center justify-center transition-colors shrink-0"
                 title="Supprimer l'image"
               >
-                <span className="material-symbols-outlined text-[16px]">close</span>
+                <Icon name="close" size={16} />
               </button>
             )}
           </div>
@@ -100,7 +103,7 @@ export default function ImageUploadField({
                 onClick={() => setIsModalOpen(true)}
                 className="px-2.5 py-1 rounded-lg bg-primary text-on-primary text-[11px] font-bold shadow-xs hover:bg-primary/90 active:scale-95 transition-all flex items-center gap-1"
               >
-                <span className="material-symbols-outlined text-[14px]">upload</span>
+                <Icon name="upload" size={14} />
                 <span>Charger / Photo</span>
               </button>
             </div>

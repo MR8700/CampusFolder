@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Icon from '@/components/ui/Icon';
 
 interface NotificationItem {
   id: string;
@@ -168,7 +169,7 @@ export default function NotificationDrawer({
         {/* Header */}
         <div className="p-4 border-b border-surface-container-high flex items-center justify-between bg-surface/80 backdrop-blur-md">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary text-[24px]">notifications_active</span>
+            <Icon name="notifications_active" size={24} className="text-primary" />
             <div>
               <h2 className="font-extrabold text-base text-on-surface leading-tight">Notifications & E-mails</h2>
               <p className="text-[11px] text-on-surface-variant">Moteur d&apos;envoi académique • SSL 256-bit</p>
@@ -179,7 +180,7 @@ export default function NotificationDrawer({
             onClick={onClose}
             className="w-9 h-9 rounded-full flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"
           >
-            <span className="material-symbols-outlined text-[20px]">close</span>
+            <Icon name="close" size={20} />
           </button>
         </div>
 
@@ -197,7 +198,7 @@ export default function NotificationDrawer({
                 : 'text-on-surface-variant hover:text-on-surface'
             }`}
           >
-            <span className="material-symbols-outlined text-[16px]">mail</span>
+            <Icon name="mail" size={16} />
             <span>Boîte ({notifications.length})</span>
             {unreadCount > 0 && (
               <span className="px-1.5 py-0.2 rounded-full text-[10px] font-black bg-secondary text-on-secondary">
@@ -217,7 +218,7 @@ export default function NotificationDrawer({
                 : 'text-on-surface-variant hover:text-on-surface'
             }`}
           >
-            <span className="material-symbols-outlined text-[16px]">tune</span>
+            <Icon name="tune" size={16} />
             <span>Consentement (&quot;s&apos;il accepte&quot;)</span>
           </button>
         </div>
@@ -234,7 +235,7 @@ export default function NotificationDrawer({
                       onClick={() => setSelectedEmail(null)}
                       className="flex items-center gap-1 text-xs font-bold text-primary hover:underline"
                     >
-                      <span className="material-symbols-outlined text-[16px]">arrow_back</span>
+                      <Icon name="arrow_back" size={16} />
                       <span>Retour aux notifications</span>
                     </button>
                     <button
@@ -243,7 +244,7 @@ export default function NotificationDrawer({
                       className="flex items-center gap-1 text-xs font-bold text-error hover:bg-error/10 px-2 py-1 rounded-lg transition-colors"
                       title="Supprimer cet email"
                     >
-                      <span className="material-symbols-outlined text-[16px]">delete</span>
+                      <Icon name="delete" size={16} />
                       <span>Effacer</span>
                     </button>
                   </div>
@@ -283,7 +284,7 @@ export default function NotificationDrawer({
                             className="text-[11px] font-bold text-primary hover:underline flex items-center gap-0.5"
                             title="Tout marquer comme lu"
                           >
-                            <span className="material-symbols-outlined text-[15px]">done_all</span>
+                            <Icon name="done_all" size={15} />
                             <span>Tout marquer lu</span>
                           </button>
                         )}
@@ -293,7 +294,7 @@ export default function NotificationDrawer({
                           className="text-[11px] font-bold text-error/80 hover:text-error hover:underline flex items-center gap-0.5"
                           title="Effacer toutes les notifications"
                         >
-                          <span className="material-symbols-outlined text-[15px]">delete_sweep</span>
+                          <Icon name="delete_sweep" size={15} />
                           <span>Tout effacer</span>
                         </button>
                       </div>
@@ -308,7 +309,7 @@ export default function NotificationDrawer({
                   ) : notifications.length === 0 ? (
                     <div className="py-16 flex flex-col items-center justify-center text-center px-4">
                       <div className="w-12 h-12 rounded-full bg-primary-fixed/60 flex items-center justify-center text-primary mb-3">
-                        <span className="material-symbols-outlined text-[24px]">mark_email_read</span>
+                        <Icon name="mark_email_read" size={24} />
                       </div>
                       <p className="font-bold text-sm text-on-surface">Aucune notification</p>
                       <p className="text-xs text-on-surface-variant mt-1">
@@ -337,15 +338,18 @@ export default function NotificationDrawer({
                               : 'bg-surface-container-high text-on-surface'
                           }`}
                         >
-                          <span className="material-symbols-outlined text-[18px]">
-                            {item.eventType === 'ORDER_PURCHASED'
-                              ? 'shopping_bag'
-                              : item.eventType === 'RESOURCE_SOLD'
-                              ? 'payments'
-                              : item.eventType === 'WALLET_WITHDRAWAL'
-                              ? 'account_balance_wallet'
-                              : 'mail'}
-                          </span>
+                          <Icon
+                            name={
+                              item.eventType === 'ORDER_PURCHASED'
+                                ? 'shopping_bag'
+                                : item.eventType === 'RESOURCE_SOLD'
+                                ? 'payments'
+                                : item.eventType === 'WALLET_WITHDRAWAL'
+                                ? 'account_balance_wallet'
+                                : 'mail'
+                            }
+                            size={18}
+                          />
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center justify-between gap-1">
@@ -381,7 +385,7 @@ export default function NotificationDrawer({
                                 className="px-2 py-0.5 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary text-[10px] font-bold flex items-center gap-0.5 transition-all"
                                 title="Marquer comme lu"
                               >
-                                <span className="material-symbols-outlined text-[13px]">check</span>
+                                <Icon name="check" size={13} />
                                 <span>Marquer lu</span>
                               </button>
                             )}
@@ -391,7 +395,7 @@ export default function NotificationDrawer({
                               className="p-1 rounded-lg text-outline hover:text-error hover:bg-error/10 transition-all flex items-center gap-0.5 text-[10px]"
                               title="Effacer cette notification"
                             >
-                              <span className="material-symbols-outlined text-[14px]">delete</span>
+                              <Icon name="delete" size={14} />
                               <span>Effacer</span>
                             </button>
                           </div>
@@ -408,7 +412,7 @@ export default function NotificationDrawer({
             <div className="flex flex-col gap-4">
               <div className="p-3 bg-primary-fixed/40 rounded-xl border border-primary/20">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="material-symbols-outlined text-primary text-[18px]">verified_user</span>
+                  <Icon name="verified_user" size={18} className="text-primary" />
                   <h3 className="text-xs font-bold text-primary">Gestion du Consentement Étudiant</h3>
                 </div>
                 <p className="text-[11px] text-on-surface-variant leading-relaxed">
@@ -454,7 +458,7 @@ export default function NotificationDrawer({
 
                   <div className="flex items-center justify-between p-2.5 bg-surface-container-lowest rounded-xl border border-surface-container-high">
                     <div>
-                      <p className="text-xs font-semibold text-on-surface">Ventes de vos documents & Gains 85%</p>
+                      <p className="text-xs font-semibold text-on-surface">Ventes de vos documents & Gains 60%</p>
                       <p className="text-[10px] text-on-surface-variant">Avis dès qu&apos;un camarade achète votre cours</p>
                     </div>
                     <input

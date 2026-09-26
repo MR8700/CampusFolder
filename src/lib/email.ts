@@ -312,8 +312,8 @@ export async function sendSaleNotificationEmail(params: {
     <div class="highlight-box">
       <h3 style="margin:0 0 8px; color:#131B2E;">${resourceTitle}</h3>
       <p style="margin:4px 0;">• Prix brut : <strong>${grossAmount} FCFA</strong></p>
-      <p style="margin:4px 0;">• Votre gain net (85%) : <strong style="color:#10B981; font-size:16px;">+${authorNetShare.toLocaleString('fr-FR')} FCFA</strong></p>
-      <p style="margin:4px 0;">• Commission plateforme (15%) : -${grossAmount - authorNetShare} FCFA</p>
+      <p style="margin:4px 0;">• Votre gain net (60%) : <strong style="color:#10B981; font-size:16px;">+${authorNetShare.toLocaleString('fr-FR')} FCFA</strong></p>
+      <p style="margin:4px 0;">• Commission plateforme (40%) : -${grossAmount - authorNetShare} FCFA</p>
       <hr style="border:0; border-top:1px solid #dae2fd; margin:10px 0;">
       <p style="margin:4px 0; font-weight:bold;">Nouveau solde disponible : <span style="color:#0D5C3A;">${newBalance.toLocaleString('fr-FR')} FCFA</span></p>
     </div>
@@ -348,7 +348,7 @@ export async function sendPublishConfirmationEmail(params: {
       <p style="margin:2px 0;">• UFR / Faculté : <strong>${facultyCode}</strong></p>
       <p style="margin:2px 0;">• Campus : <strong>${institutionName}</strong></p>
     </div>
-    <p>Chaque fois qu'un camarade achètera ou consultera votre document, votre solde sera automatiquement crédité à 85%.</p>
+    <p>Chaque fois qu'un camarade achètera ou consultera votre document, votre solde sera automatiquement crédité à 60%.</p>
   `;
   return sendAcademicEmail({ userId, to, subject, eventType: 'RESOURCE_PUBLISHED', htmlContent: html });
 }

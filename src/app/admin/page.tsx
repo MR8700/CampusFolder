@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Icon from '@/components/ui/Icon';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import ImageUploadField from '@/components/ImageUploadField';
@@ -75,6 +76,10 @@ export default function AdminDashboardPage() {
   const [faculties, setFaculties] = useState<any[]>([]);
   const [filieres, setFilieres] = useState<any[]>([]);
   const [pricingRules, setPricingRules] = useState<any[]>([]);
+  const [platformCommission, setPlatformCommission] = useState<number>(40);
+  const [commissionUpdatedAt, setCommissionUpdatedAt] = useState<string | null>(null);
+  const [isUpdatingCommission, setIsUpdatingCommission] = useState<boolean>(false);
+  const [commissionFeedback, setCommissionFeedback] = useState<string | null>(null);
   const [students, setStudents] = useState<any[]>([]);
 
   // Filter States
@@ -313,8 +318,42 @@ export default function AdminDashboardPage() {
       const res = await fetch('/api/v1/admin/pricing-rules');
       const data = await res.json();
       if (data.success) setPricingRules(data.rules);
+
+      const commRes = await fetch('/api/v1/admin/commission');
+      const commData = await commRes.json();
+      if (commData.success && commData.settings) {
+        setPlatformCommission(commData.settings.platformCommissionPercent ?? 40);
+        setCommissionUpdatedAt(commData.settings.updatedAt ?? null);
+      }
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const handleSaveCommission = async (targetRate?: number) => {
+    const rateToSave = targetRate !== undefined ? targetRate : platformCommission;
+    setIsUpdatingCommission(true);
+    setCommissionFeedback(null);
+    try {
+      const res = await fetch('/api/v1/admin/commission', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ platformCommissionPercent: rateToSave, updatedBy: 'SUPER_ADMIN' }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setPlatformCommission(data.settings.platformCommissionPercent);
+        setCommissionUpdatedAt(data.settings.updatedAt);
+        setCommissionFeedback(data.message);
+        setTimeout(() => setCommissionFeedback(null), 4500);
+      } else {
+        setCommissionFeedback(data.error || 'Erreur lors de la mise à jour de la commission');
+      }
+    } catch (err) {
+      console.error(err);
+      setCommissionFeedback('Erreur de connexion au serveur');
+    } finally {
+      setIsUpdatingCommission(false);
     }
   };
 
@@ -867,7 +906,7 @@ export default function AdminDashboardPage() {
       {/* Global Toast */}
       {toastMsg && (
         <div className="fixed bottom-6 right-6 z-50 bg-on-surface text-surface px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2 font-bold text-xs animate-bounce">
-          <span className="material-symbols-outlined text-[18px] text-primary">check_circle</span>
+          <Icon name="check_circle" className="text-[18px] text-primary" />
           <span>{toastMsg}</span>
         </div>
       )}
@@ -876,9 +915,7 @@ export default function AdminDashboardPage() {
         {/* Auth Guard Screen if not admin */}
         {authChecking ? (
           <div className="flex flex-col items-center justify-center min-h-[50vh]">
-            <span className="material-symbols-outlined text-4xl text-primary animate-spin">
-              autorenew
-            </span>
+            <Icon name="autorenew" className="text-4xl text-primary animate-spin" />
             <p className="mt-3 text-sm font-semibold text-on-surface-variant">
               Vérification des droits d'accès administrateur...
             </p>
@@ -886,7 +923,7 @@ export default function AdminDashboardPage() {
         ) : !isAdmin ? (
           <div className="max-w-md mx-auto my-12 p-6 bg-surface-container-lowest rounded-3xl border border-outline-variant/30 shadow-xl flex flex-col gap-4 text-center">
             <div className="w-16 h-16 rounded-2xl bg-error-container text-on-error-container mx-auto flex items-center justify-center">
-              <span className="material-symbols-outlined text-3xl">admin_panel_settings</span>
+              <Icon name="admin_panel_settings" className="text-3xl" />
             </div>
 
             <div className="flex flex-col gap-1">
@@ -940,12 +977,10 @@ export default function AdminDashboardPage() {
                 className="mt-2 w-full h-12 rounded-xl bg-primary text-on-primary font-bold text-xs flex items-center justify-center gap-2 shadow-md active:scale-98 transition-all disabled:opacity-50"
               >
                 {loginLoading ? (
-                  <span className="material-symbols-outlined text-[18px] animate-spin">
-                    progress_activity
-                  </span>
+                  <Icon name="progress_activity" className="text-[18px] animate-spin" />
                 ) : (
                   <>
-                    <span className="material-symbols-outlined text-[18px]">lock_open</span>
+                    <Icon name="lock_open" className="text-[18px]" />
                     <span>Déverrouiller le Pupitre d'Administration</span>
                   </>
                 )}
@@ -953,7 +988,7 @@ export default function AdminDashboardPage() {
 
               <div className="p-3 bg-surface-container rounded-xl text-[11px] text-on-surface-variant flex flex-col gap-1">
                 <span className="font-bold text-primary flex items-center gap-1">
-                  <span className="material-symbols-outlined text-[14px]">info</span>
+                  <Icon name="info" className="text-[14px]" />
                   Accès d'évaluation immédiat
                 </span>
                 <span>Email : <code className="font-mono font-bold">admin@campusfolder.bf</code></span>
@@ -968,7 +1003,7 @@ export default function AdminDashboardPage() {
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-surface-container-lowest p-5 rounded-3xl border-2 border-primary/25 ring-1 ring-primary/10 shadow-xs">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-2xl bg-primary text-on-primary flex items-center justify-center shadow-md">
-                  <span className="material-symbols-outlined text-2xl">shield_person</span>
+                  <Icon name="shield_person" className="text-2xl" />
                 </div>
                 <div className="flex flex-col">
                   <span className="text-[10px] font-black uppercase tracking-widest text-primary">
@@ -989,7 +1024,7 @@ export default function AdminDashboardPage() {
                   href="/explorer"
                   className="px-3.5 py-2 rounded-xl bg-surface-container-high text-on-surface text-xs font-bold hover:bg-surface-container transition-all flex items-center gap-1.5"
                 >
-                  <span className="material-symbols-outlined text-[16px]">visibility</span>
+                  <Icon name="visibility" className="text-[16px]" />
                   <span>Voir le site public</span>
                 </Link>
                 <button
@@ -1000,7 +1035,7 @@ export default function AdminDashboardPage() {
                   }}
                   className="px-3.5 py-2 rounded-xl bg-error/10 text-error hover:bg-error/20 text-xs font-bold transition-all flex items-center gap-1.5"
                 >
-                  <span className="material-symbols-outlined text-[16px]">logout</span>
+                  <Icon name="logout" className="text-[16px]" />
                   <span>Déconnexion</span>
                 </button>
               </div>
@@ -1066,7 +1101,7 @@ export default function AdminDashboardPage() {
                       : 'bg-surface-container-low text-on-surface hover:bg-surface-container'
                   } ${tab.highlight ? 'ring-2 ring-error animate-pulse' : ''}`}
                 >
-                  <span className="material-symbols-outlined text-[18px]">{tab.icon}</span>
+                  <Icon name={tab.icon} className="text-[18px]" />
                   <span>{tab.label}</span>
                   <span
                     className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
@@ -1091,7 +1126,7 @@ export default function AdminDashboardPage() {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-surface-container-lowest p-5 rounded-3xl border-2 border-outline-variant/40 shadow-xs">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="material-symbols-outlined text-primary text-xl">fact_check</span>
+                      <Icon name="fact_check" className="text-primary text-xl" />
                       <h2 id="tab-validations-heading" className="text-base font-black text-on-surface">
                         Centre d'Examen Pédagogique & Validations 24h
                       </h2>
@@ -1130,9 +1165,7 @@ export default function AdminDashboardPage() {
 
                 {/* Search Bar for Validations */}
                 <div className="relative">
-                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">
-                    search
-                  </span>
+                  <Icon name="search" className="absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]" />
                   <input
                     type="text"
                     value={validationSearchTerm}
@@ -1146,7 +1179,7 @@ export default function AdminDashboardPage() {
                       onClick={() => setValidationSearchTerm('')}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface"
                     >
-                      <span className="material-symbols-outlined text-[16px]">close</span>
+                      <Icon name="close" className="text-[16px]" />
                     </button>
                   )}
                 </div>
@@ -1154,9 +1187,7 @@ export default function AdminDashboardPage() {
                 {/* Validations List */}
                 {loadingValidations ? (
                   <div className="flex flex-col items-center justify-center p-12 bg-surface-container-lowest rounded-3xl border border-outline-variant/30">
-                    <span className="material-symbols-outlined text-4xl text-primary animate-spin">
-                      progress_activity
-                    </span>
+                    <Icon name="progress_activity" className="text-4xl text-primary animate-spin" />
                     <span className="text-xs font-bold text-on-surface-variant mt-2">
                       Chargement des dossiers d'examen...
                     </span>
@@ -1179,9 +1210,7 @@ export default function AdminDashboardPage() {
                     if (filtered.length === 0) {
                       return (
                         <div className="flex flex-col items-center justify-center p-12 bg-surface-container-lowest rounded-3xl border border-outline-variant/30 text-center gap-2">
-                          <span className="material-symbols-outlined text-4xl text-primary/40">
-                            task_alt
-                          </span>
+                          <Icon name="task_alt" className="text-4xl text-primary/40" />
                           <h3 className="text-sm font-black text-on-surface">
                             Aucun document en attente dans cette catégorie
                           </h3>
@@ -1233,7 +1262,7 @@ export default function AdminDashboardPage() {
                                   {/* Reminder alert badge */}
                                   {hasReminders && (
                                     <span className="px-2.5 py-1 rounded-full text-[10px] font-black bg-error text-white flex items-center gap-1 animate-pulse">
-                                      <span className="material-symbols-outlined text-[13px]">notification_important</span>
+                                      <Icon name="notification_important" className="text-[13px]" />
                                       URGENT • {res.reminderCount} RAPPEL(S) ÉTUDIANT (Priorité +{res.priorityScore || 0})
                                     </span>
                                   )}
@@ -1247,9 +1276,7 @@ export default function AdminDashboardPage() {
                                           : 'bg-surface-container-high text-on-surface-variant border-outline-variant/30'
                                       }`}
                                     >
-                                      <span className="material-symbols-outlined text-[13px]">
-                                        {isSlaBreached ? 'timer_off' : 'schedule'}
-                                      </span>
+                                      <Icon name={isSlaBreached ? 'timer_off' : 'schedule'} className="text-[13px]" />
                                       {isSlaBreached
                                         ? `⚠️ Engagement 24h dépassé (${hoursElapsed}h d'attente)`
                                         : `Temps écoulé : ${hoursElapsed}h / 24h promis`}
@@ -1258,7 +1285,7 @@ export default function AdminDashboardPage() {
 
                                   {res.validationStatus === 'APPROVED' && res.validatedAt && (
                                     <span className="text-[11px] text-green-600 font-bold flex items-center gap-1">
-                                      <span className="material-symbols-outlined text-[14px]">check_circle</span>
+                                      <Icon name="check_circle" className="text-[14px]" />
                                       Validé le {new Date(res.validatedAt).toLocaleDateString('fr-FR')} par {res.validatedBy || 'Admin'}
                                     </span>
                                   )}
@@ -1303,7 +1330,7 @@ export default function AdminDashboardPage() {
                                   {/* Author identity */}
                                   <div className="p-3 bg-surface-container rounded-2xl flex items-center justify-between text-xs mt-1">
                                     <div className="flex items-center gap-2">
-                                      <span className="material-symbols-outlined text-primary text-[18px]">person</span>
+                                      <Icon name="person" className="text-primary text-[18px]" />
                                       <div>
                                         <span className="font-black text-on-surface block">
                                           {res.author?.profile?.displayName || `${res.author?.profile?.firstName || ''} ${res.author?.profile?.lastName || ''}` || res.author?.email}
@@ -1318,7 +1345,7 @@ export default function AdminDashboardPage() {
                                         {res.price} FCFA
                                       </span>
                                       <span className="text-[10px] text-outline">
-                                        Gain auteur : {Math.round(res.price * 0.85)} F (85%)
+                                        Gain auteur : {Math.round(res.price * ((100 - platformCommission) / 100))} F ({100 - platformCommission}%)
                                       </span>
                                     </div>
                                   </div>
@@ -1328,11 +1355,11 @@ export default function AdminDashboardPage() {
                                 <div className="p-3.5 bg-surface-container-low rounded-2xl border border-outline-variant/30 flex flex-col gap-2">
                                   <div className="flex items-center justify-between text-[11px] font-black text-on-surface border-b border-outline-variant/20 pb-1.5">
                                     <span className="flex items-center gap-1">
-                                      <span className="material-symbols-outlined text-[15px] text-primary">attachment</span>
+                                      <Icon name="attachment" className="text-[15px] text-primary" />
                                       Médias Attachés ({res.files?.length || 0})
                                     </span>
                                     <span className="text-[10px] text-green-600 font-bold flex items-center gap-0.5">
-                                      <span className="material-symbols-outlined text-[12px]">verified</span>
+                                      <Icon name="verified" className="text-[12px]" />
                                       Vérifié
                                     </span>
                                   </div>
@@ -1345,9 +1372,7 @@ export default function AdminDashboardPage() {
                                           className="flex items-center justify-between p-2 rounded-xl bg-surface-container-lowest border border-outline-variant/20 text-[11px]"
                                         >
                                           <div className="flex items-center gap-1.5 min-w-0 pr-2">
-                                            <span className="material-symbols-outlined text-[15px] text-primary shrink-0">
-                                              {file.format === 'PDF' ? 'picture_as_pdf' : file.format === 'AUDIO' ? 'audio_file' : 'videocam'}
-                                            </span>
+                                            <Icon name={file.format === 'PDF' ? 'picture_as_pdf' : file.format === 'AUDIO' ? 'audio_file' : 'videocam'} className="text-[15px] text-primary shrink-0" />
                                             <span className="truncate font-semibold text-on-surface">
                                               {file.name || `Fichier ${fIdx + 1}`}
                                             </span>
@@ -1392,7 +1417,7 @@ export default function AdminDashboardPage() {
                                   className="px-3 py-1.5 rounded-xl bg-error/10 hover:bg-error/20 text-error text-xs font-bold transition-all flex items-center gap-1"
                                   title="Supprimer définitivement de la base de données avec justification obligatoire"
                                 >
-                                  <span className="material-symbols-outlined text-[16px]">delete_forever</span>
+                                  <Icon name="delete_forever" className="text-[16px]" />
                                   <span>Supprimer définitivement</span>
                                 </button>
 
@@ -1407,7 +1432,7 @@ export default function AdminDashboardPage() {
                                         }}
                                         className="px-4 py-2 rounded-xl bg-error/10 text-error hover:bg-error/20 text-xs font-bold transition-all flex items-center gap-1.5"
                                       >
-                                        <span className="material-symbols-outlined text-[16px]">cancel</span>
+                                        <Icon name="cancel" className="text-[16px]" />
                                         <span>Rejeter avec motif</span>
                                       </button>
                                       <button
@@ -1418,7 +1443,7 @@ export default function AdminDashboardPage() {
                                         }}
                                         className="px-4 py-2 rounded-xl bg-primary text-on-primary hover:bg-primary/90 text-xs font-black shadow-md transition-all flex items-center gap-1.5"
                                       >
-                                        <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                                        <Icon name="check_circle" className="text-[16px]" />
                                         <span>Valider & Publier au Catalogue</span>
                                       </button>
                                     </>
@@ -1432,7 +1457,7 @@ export default function AdminDashboardPage() {
                                       }}
                                       className="px-3.5 py-1.5 rounded-xl bg-surface-container-high text-on-surface text-xs font-bold hover:bg-surface-container transition-all flex items-center gap-1"
                                     >
-                                      <span className="material-symbols-outlined text-[15px]">edit_note</span>
+                                      <Icon name="edit_note" className="text-[15px]" />
                                       <span>Modifier le statut ({res.validationStatus === 'APPROVED' ? 'Rejeter' : 'Valider'})</span>
                                     </button>
                                   )}
@@ -1480,7 +1505,7 @@ export default function AdminDashboardPage() {
                     }}
                     className="px-4 py-2 rounded-xl bg-primary text-on-primary text-xs font-bold hover:bg-primary/90 transition-all flex items-center gap-1.5 shadow-sm shrink-0"
                   >
-                    <span className="material-symbols-outlined text-[18px]">add</span>
+                    <Icon name="add" className="text-[18px]" />
                     <span>Ajouter un établissement</span>
                   </button>
                 </div>
@@ -1488,9 +1513,7 @@ export default function AdminDashboardPage() {
                 {/* Filters */}
                 <div className="flex flex-wrap items-center gap-2 bg-surface-container-low p-3 rounded-2xl border border-outline-variant/20">
                   <span className="text-xs font-bold text-on-surface-variant flex items-center gap-1 mr-1">
-                    <span className="material-symbols-outlined text-[16px] text-primary">
-                      filter_alt
-                    </span>
+                    <Icon name="filter_alt" className="text-[16px] text-primary" />
                     Filtres :
                   </span>
 
@@ -1547,9 +1570,7 @@ export default function AdminDashboardPage() {
                               className="w-full h-full object-contain p-1"
                             />
                           ) : (
-                            <span className="material-symbols-outlined text-primary text-2xl">
-                              account_balance
-                            </span>
+                            <Icon name="account_balance" className="text-primary text-2xl" />
                           )}
                         </div>
                         <div className="flex flex-col min-w-0 flex-1">
@@ -1572,9 +1593,7 @@ export default function AdminDashboardPage() {
                           </h3>
                           <div className="flex items-center gap-2 text-[11px] text-on-surface-variant mt-1">
                             <span className="flex items-center gap-0.5 font-semibold">
-                              <span className="material-symbols-outlined text-[13px] text-secondary">
-                                location_on
-                              </span>
+                              <Icon name="location_on" className="text-[13px] text-secondary" />
                               {inst.city} ({inst.region})
                             </span>
                           </div>
@@ -1604,7 +1623,7 @@ export default function AdminDashboardPage() {
                             className="p-1.5 rounded-lg text-primary hover:bg-primary-fixed/30 transition-colors"
                             title="Modifier"
                           >
-                            <span className="material-symbols-outlined text-[18px]">edit</span>
+                            <Icon name="edit" className="text-[18px]" />
                           </button>
                           <button
                             type="button"
@@ -1616,9 +1635,7 @@ export default function AdminDashboardPage() {
                             }`}
                             title={inst.isArchived ? 'Désarchiver' : 'Archiver'}
                           >
-                            <span className="material-symbols-outlined text-[18px]">
-                              {inst.isArchived ? 'unarchive' : 'archive'}
-                            </span>
+                            <Icon name={inst.isArchived ? 'unarchive' : 'archive'} className="text-[18px]" />
                           </button>
                         </div>
                       </div>
@@ -1661,7 +1678,7 @@ export default function AdminDashboardPage() {
                     }}
                     className="px-4 py-2 rounded-xl bg-primary text-on-primary text-xs font-bold hover:bg-primary/90 transition-all flex items-center gap-1.5 shadow-sm shrink-0"
                   >
-                    <span className="material-symbols-outlined text-[18px]">add</span>
+                    <Icon name="add" className="text-[18px]" />
                     <span>Ajouter une UFR / Faculté</span>
                   </button>
                 </div>
@@ -1755,7 +1772,7 @@ export default function AdminDashboardPage() {
                                 className="p-1 rounded-md text-primary hover:bg-primary-fixed/30"
                                 title="Modifier"
                               >
-                                <span className="material-symbols-outlined text-[16px]">edit</span>
+                                <Icon name="edit" className="text-[16px]" />
                               </button>
                               <button
                                 type="button"
@@ -1767,9 +1784,7 @@ export default function AdminDashboardPage() {
                                 }`}
                                 title={fac.isArchived ? 'Restaurer' : 'Archiver'}
                               >
-                                <span className="material-symbols-outlined text-[16px]">
-                                  {fac.isArchived ? 'unarchive' : 'archive'}
-                                </span>
+                                <Icon name={fac.isArchived ? 'unarchive' : 'archive'} className="text-[16px]" />
                               </button>
                             </div>
                           </td>
@@ -1811,7 +1826,7 @@ export default function AdminDashboardPage() {
                     }}
                     className="px-4 py-2 rounded-xl bg-primary text-on-primary text-xs font-bold hover:bg-primary/90 transition-all flex items-center gap-1.5 shadow-sm shrink-0"
                   >
-                    <span className="material-symbols-outlined text-[18px]">add</span>
+                    <Icon name="add" className="text-[18px]" />
                     <span>Ajouter une Filière</span>
                   </button>
                 </div>
@@ -1924,7 +1939,7 @@ export default function AdminDashboardPage() {
                                 className="p-1 rounded-md text-primary hover:bg-primary-fixed/30"
                                 title="Modifier"
                               >
-                                <span className="material-symbols-outlined text-[16px]">edit</span>
+                                <Icon name="edit" className="text-[16px]" />
                               </button>
                               <button
                                 type="button"
@@ -1936,9 +1951,7 @@ export default function AdminDashboardPage() {
                                 }`}
                                 title={fil.isArchived ? 'Restaurer' : 'Archiver'}
                               >
-                                <span className="material-symbols-outlined text-[16px]">
-                                  {fil.isArchived ? 'unarchive' : 'archive'}
-                                </span>
+                                <Icon name={fil.isArchived ? 'unarchive' : 'archive'} className="text-[16px]" />
                               </button>
                             </div>
                           </td>
@@ -1988,9 +2001,164 @@ export default function AdminDashboardPage() {
                     }}
                     className="px-4 py-2 rounded-xl bg-primary text-on-primary text-xs font-bold hover:bg-primary/90 transition-all flex items-center gap-1.5 shadow-sm shrink-0"
                   >
-                    <span className="material-symbols-outlined text-[18px]">add</span>
+                    <Icon name="add" className="text-[18px]" />
                     <span>Ajouter un Barème Plafond</span>
                   </button>
+                </div>
+
+                {/* ======================================================== */}
+                {/* SECTION 4.1: PARAMÉTRAGE CENTRALISÉ COMMISSION & ROYALTIES */}
+                {/* ======================================================== */}
+                <div className="p-5 md:p-6 rounded-3xl bg-gradient-to-br from-surface-container-lowest via-surface-container-low to-primary/5 border-2 border-primary/20 shadow-sm flex flex-col gap-5">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-outline-variant/20 pb-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                        <Icon name="payments" className="text-[22px]" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-sm md:text-base font-black text-on-surface">
+                            Paramétrage Centralisé des Commissions & Royalties
+                          </h3>
+                          <span className="px-2 py-0.5 rounded-full bg-primary text-on-primary text-[10px] font-black uppercase">
+                            Global
+                          </span>
+                        </div>
+                        <p className="text-xs text-on-surface-variant mt-0.5">
+                          Définit automatiquement la répartition financière sur chaque monétisation (téléchargement payant, billet masterclass).
+                        </p>
+                      </div>
+                    </div>
+
+                    {commissionUpdatedAt && (
+                      <span className="text-[10px] font-mono text-outline self-start sm:self-center">
+                        Dernière modif : {new Date(commissionUpdatedAt).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                    )}
+                  </div>
+
+                  {commissionFeedback && (
+                    <div className="p-3 rounded-2xl bg-green-500/10 border border-green-500/30 text-green-700 dark:text-green-300 text-xs font-bold flex items-center gap-2 animate-in fade-in duration-200">
+                      <Icon name="check_circle" className="text-[18px] text-green-600 shrink-0" />
+                      <span>{commissionFeedback}</span>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-center">
+                    {/* Gauge Visual */}
+                    <div className="flex flex-col gap-2 p-4 rounded-2xl bg-surface-container-lowest border border-outline-variant/30">
+                      <span className="text-[11px] font-extrabold text-on-surface-variant uppercase tracking-wider">
+                        Répartition Active
+                      </span>
+                      <div className="flex items-baseline justify-between">
+                        <div className="flex flex-col">
+                          <span className="text-xs font-semibold text-outline">Part Plateforme</span>
+                          <span className="text-2xl font-black text-primary font-mono">{platformCommission}%</span>
+                        </div>
+                        <div className="text-right flex flex-col">
+                          <span className="text-xs font-semibold text-outline">Part Auteur / Net</span>
+                          <span className="text-2xl font-black text-green-600 font-mono">{100 - platformCommission}%</span>
+                        </div>
+                      </div>
+                      <div className="w-full h-3 rounded-full bg-surface-container-high overflow-hidden flex">
+                        <div className="bg-primary h-full transition-all duration-300" style={{ width: `${platformCommission}%` }} />
+                        <div className="bg-green-500 h-full transition-all duration-300" style={{ width: `${100 - platformCommission}%` }} />
+                      </div>
+                      <div className="flex justify-between text-[10px] font-bold text-on-surface-variant pt-1">
+                        <span className="flex items-center gap-1">
+                          <span className="w-2 h-2 rounded-full bg-primary"></span> Campus Folder ({platformCommission}%)
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <span className="w-2 h-2 rounded-full bg-green-500"></span> Auteur ({100 - platformCommission}%)
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Interactive Slider & Controls */}
+                    <div className="flex flex-col gap-3 lg:col-span-2">
+                      <div className="flex items-center justify-between">
+                        <label className="text-xs font-bold text-on-surface">
+                          Ajuster la commission de la plateforme :
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="number"
+                            min="0"
+                            max="100"
+                            value={platformCommission}
+                            onChange={(e) => setPlatformCommission(Math.max(0, Math.min(100, Number(e.target.value) || 0)))}
+                            className="w-16 h-8 text-center font-mono font-black text-sm rounded-xl bg-surface-container-low border border-outline-variant/40 text-primary focus:outline-none"
+                          />
+                          <span className="text-xs font-bold text-on-surface-variant">%</span>
+                        </div>
+                      </div>
+
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        step="1"
+                        value={platformCommission}
+                        onChange={(e) => setPlatformCommission(Number(e.target.value))}
+                        className="w-full accent-primary h-2 bg-surface-container-high rounded-lg cursor-pointer"
+                      />
+
+                      {/* Presets */}
+                      <div className="flex flex-wrap items-center gap-2 pt-1">
+                        <span className="text-[11px] font-semibold text-outline">Raccourcis :</span>
+                        <button
+                          type="button"
+                          onClick={() => { setPlatformCommission(40); handleSaveCommission(40); }}
+                          className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                            platformCommission === 40
+                              ? 'bg-primary text-on-primary shadow-xs'
+                              : 'bg-surface-container hover:bg-surface-container-high text-on-surface'
+                          }`}
+                        >
+                          40% Plateforme / 60% Auteur (Officiel)
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => { setPlatformCommission(30); handleSaveCommission(30); }}
+                          className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                            platformCommission === 30
+                              ? 'bg-primary text-on-primary shadow-xs'
+                              : 'bg-surface-container hover:bg-surface-container-high text-on-surface'
+                          }`}
+                        >
+                          30% / 70%
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => { setPlatformCommission(50); handleSaveCommission(50); }}
+                          className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                            platformCommission === 50
+                              ? 'bg-primary text-on-primary shadow-xs'
+                              : 'bg-surface-container hover:bg-surface-container-high text-on-surface'
+                          }`}
+                        >
+                          50% / 50%
+                        </button>
+                      </div>
+
+                      {/* Simulation & Save CTA */}
+                      <div className="p-3 rounded-xl bg-surface-container/60 border border-outline-variant/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3 mt-1">
+                        <div className="text-[11px] text-on-surface-variant flex items-center gap-2">
+                          <Icon name="calculate" className="text-primary text-[18px]" />
+                          <span>Exemple document à <strong>1 000 FCFA</strong> : Plateforme <strong>{Math.round(1000 * platformCommission / 100)} FCFA</strong> • Auteur <strong>{Math.round(1000 * (100 - platformCommission) / 100)} FCFA</strong></span>
+                        </div>
+                        <button
+                          type="button"
+                          disabled={isUpdatingCommission}
+                          onClick={() => handleSaveCommission()}
+                          className="px-4 py-2 rounded-xl bg-primary text-on-primary font-bold text-xs shadow-sm hover:bg-primary/90 transition-all flex items-center justify-center gap-1.5 shrink-0 disabled:opacity-50"
+                        >
+                          <Icon name={isUpdatingCommission ? 'progress_activity' : 'save'} className={`text-[16px] ${isUpdatingCommission ? 'animate-spin' : ''}`} />
+                          <span>{isUpdatingCommission ? 'Enregistrement...' : 'Enregistrer le Taux'}</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Regulatory Cards */}
@@ -2059,9 +2227,7 @@ export default function AdminDashboardPage() {
                             className="p-1 rounded-md text-secondary hover:bg-secondary/10"
                             title={rule.isActive ? 'Désactiver' : 'Activer'}
                           >
-                            <span className="material-symbols-outlined text-[16px]">
-                              {rule.isActive ? 'toggle_on' : 'toggle_off'}
-                            </span>
+                            <Icon name={rule.isActive ? 'toggle_on' : 'toggle_off'} className="text-[16px]" />
                           </button>
                           <button
                             type="button"
@@ -2084,7 +2250,7 @@ export default function AdminDashboardPage() {
                             className="p-1 rounded-md text-primary hover:bg-primary-fixed/30"
                             title="Modifier"
                           >
-                            <span className="material-symbols-outlined text-[16px]">edit</span>
+                            <Icon name="edit" className="text-[16px]" />
                           </button>
                           <button
                             type="button"
@@ -2092,7 +2258,7 @@ export default function AdminDashboardPage() {
                             className="p-1 rounded-md text-error hover:bg-error/10"
                             title="Supprimer"
                           >
-                            <span className="material-symbols-outlined text-[16px]">delete</span>
+                            <Icon name="delete" className="text-[16px]" />
                           </button>
                         </div>
                       </div>
@@ -2122,9 +2288,7 @@ export default function AdminDashboardPage() {
                 {/* Student Search & Filters */}
                 <div className="flex flex-wrap items-center gap-3 bg-surface-container-low p-3 rounded-2xl border border-outline-variant/20">
                   <div className="flex items-center gap-2 flex-1 min-w-[240px] bg-surface-container-lowest px-3 py-1.5 rounded-xl border border-outline-variant/30">
-                    <span className="material-symbols-outlined text-[18px] text-primary">
-                      search
-                    </span>
+                    <Icon name="search" className="text-[18px] text-primary" />
                     <input
                       type="text"
                       placeholder="Rechercher par INE, email ou nom..."
@@ -2206,7 +2370,7 @@ export default function AdminDashboardPage() {
                                 className="px-2.5 py-1 rounded-lg text-xs font-bold bg-primary/10 text-primary hover:bg-primary/20 transition-all flex items-center gap-1 shrink-0"
                                 title="Modifier toutes les informations de l'étudiant (transfert, coordonnées, points)"
                               >
-                                <span className="material-symbols-outlined text-[15px]">edit</span>
+                                <Icon name="edit" className="text-[15px]" />
                                 <span>Éditer</span>
                               </button>
                               <button
@@ -2242,7 +2406,7 @@ export default function AdminDashboardPage() {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-surface-container-lowest p-5 rounded-3xl border border-outline-variant/30 shadow-xs">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="material-symbols-outlined text-primary text-xl">admin_panel_settings</span>
+                      <Icon name="admin_panel_settings" className="text-primary text-xl" />
                       <h2 id="tab-admins-heading" className="text-base font-black text-on-surface">
                         Collège d'Administration & Super Gouvernance
                       </h2>
@@ -2258,12 +2422,12 @@ export default function AdminDashboardPage() {
                       onClick={() => setShowAdminModal(true)}
                       className="px-4 py-2.5 rounded-2xl bg-primary text-on-primary font-bold text-xs flex items-center gap-2 shadow-md hover:bg-primary/90 transition-all shrink-0"
                     >
-                      <span className="material-symbols-outlined text-[18px]">person_add</span>
+                      <Icon name="person_add" className="text-[18px]" />
                       <span>+ Nouvel Administrateur</span>
                     </button>
                   ) : (
                     <div className="px-3 py-1.5 rounded-xl bg-amber-500/10 text-amber-700 text-xs font-bold border border-amber-500/20 flex items-center gap-1.5">
-                      <span className="material-symbols-outlined text-[16px]">lock</span>
+                      <Icon name="lock" className="text-[16px]" />
                       <span>Lecture seule (Réservé au Super Admin)</span>
                     </div>
                   )}
@@ -2271,9 +2435,7 @@ export default function AdminDashboardPage() {
 
                 {!currentUser?.isSuperAdmin && (
                   <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl flex items-center gap-3 text-xs text-amber-800 dark:text-amber-200">
-                    <span className="material-symbols-outlined text-2xl text-amber-600 shrink-0">
-                      verified_user
-                    </span>
+                    <Icon name="verified_user" className="text-2xl text-amber-600 shrink-0" />
                     <p>
                       <strong>Information de sécurité :</strong> Vous êtes connecté en tant qu'administrateur standard. Seul le <strong>Super Administrateur</strong> ({currentUser?.email?.includes('admin@') ? 'Votre compte' : 'admin@campusfolder.bf'}) possède les droits de nomination, de promotion et de suspension des gestionnaires.
                     </p>
@@ -2298,9 +2460,7 @@ export default function AdminDashboardPage() {
                         {loadingAdmins ? (
                           <tr>
                             <td colSpan={6} className="p-8 text-center text-on-surface-variant font-medium">
-                              <span className="material-symbols-outlined text-2xl animate-spin align-middle mr-2">
-                                progress_activity
-                              </span>
+                              <Icon name="progress_activity" className="text-2xl animate-spin align-middle mr-2" />
                               Chargement du collège d'administration...
                             </td>
                           </tr>
@@ -2321,13 +2481,9 @@ export default function AdminDashboardPage() {
                                   <div className="flex items-center gap-2.5">
                                     <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-black shrink-0">
                                       {adm.isSuperAdmin ? (
-                                        <span className="material-symbols-outlined text-[18px] text-amber-600">
-                                          stars
-                                        </span>
+                                        <Icon name="stars" className="text-[18px] text-amber-600" />
                                       ) : (
-                                        <span className="material-symbols-outlined text-[18px]">
-                                          shield_person
-                                        </span>
+                                        <Icon name="shield_person" className="text-[18px]" />
                                       )}
                                     </div>
                                     <div>
@@ -2353,12 +2509,12 @@ export default function AdminDashboardPage() {
                                 <td className="p-3.5">
                                   {adm.isSuperAdmin ? (
                                     <span className="px-2.5 py-1 rounded-full text-[10px] font-black bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 inline-flex items-center gap-1">
-                                      <span className="material-symbols-outlined text-[13px]">verified_user</span>
+                                      <Icon name="verified_user" className="text-[13px]" />
                                       SUPER ADMIN
                                     </span>
                                   ) : (
                                     <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-surface-container-high text-on-surface-variant border border-outline-variant/30 inline-flex items-center gap-1">
-                                      <span className="material-symbols-outlined text-[13px]">shield</span>
+                                      <Icon name="shield" className="text-[13px]" />
                                       ADMIN STANDARD
                                     </span>
                                   )}
@@ -2443,7 +2599,7 @@ export default function AdminDashboardPage() {
                   onClick={() => setShowInstModal(false)}
                   className="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface"
                 >
-                  <span className="material-symbols-outlined text-[20px]">close</span>
+                  <Icon name="close" className="text-[20px]" />
                 </button>
               </div>
 
@@ -2559,7 +2715,7 @@ export default function AdminDashboardPage() {
                   onClick={() => setShowFacultyModal(false)}
                   className="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface"
                 >
-                  <span className="material-symbols-outlined text-[20px]">close</span>
+                  <Icon name="close" className="text-[20px]" />
                 </button>
               </div>
 
@@ -2675,7 +2831,7 @@ export default function AdminDashboardPage() {
                   onClick={() => setShowFiliereModal(false)}
                   className="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface"
                 >
-                  <span className="material-symbols-outlined text-[20px]">close</span>
+                  <Icon name="close" className="text-[20px]" />
                 </button>
               </div>
 
@@ -2771,7 +2927,7 @@ export default function AdminDashboardPage() {
                   onClick={() => setShowPricingModal(false)}
                   className="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface"
                 >
-                  <span className="material-symbols-outlined text-[20px]">close</span>
+                  <Icon name="close" className="text-[20px]" />
                 </button>
               </div>
 
@@ -2909,7 +3065,7 @@ export default function AdminDashboardPage() {
                   onClick={() => setShowStudentModal(false)}
                   className="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface"
                 >
-                  <span className="material-symbols-outlined text-[20px]">close</span>
+                  <Icon name="close" className="text-[20px]" />
                 </button>
               </div>
 
@@ -2980,17 +3136,18 @@ export default function AdminDashboardPage() {
             <div className="w-full max-w-lg bg-surface-container-lowest rounded-3xl p-6 border border-outline-variant/30 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between pb-2 border-b border-outline-variant/20">
                 <div className="flex items-center gap-2">
-                  <span
-                    className={`material-symbols-outlined text-xl ${
+                  <Icon
+                    name={
+                      validationActionModal.type === 'APPROVE'
+                        ? 'check_circle'
+                        : validationActionModal.type === 'DELETE'
+                        ? 'delete_forever'
+                        : 'cancel'
+                    }
+                    className={`text-xl ${
                       validationActionModal.type === 'APPROVE' ? 'text-green-600' : 'text-error'
                     }`}
-                  >
-                    {validationActionModal.type === 'APPROVE'
-                      ? 'check_circle'
-                      : validationActionModal.type === 'DELETE'
-                      ? 'delete_forever'
-                      : 'cancel'}
-                  </span>
+                  />
                   <h3 className="text-base font-black text-on-surface">
                     {validationActionModal.type === 'APPROVE'
                       ? 'Valider & Publier la Ressource'
@@ -3004,14 +3161,14 @@ export default function AdminDashboardPage() {
                   onClick={() => setValidationActionModal(null)}
                   className="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface"
                 >
-                  <span className="material-symbols-outlined text-[20px]">close</span>
+                  <Icon name="close" className="text-[20px]" />
                 </button>
               </div>
 
               {/* Warning if DELETE */}
               {validationActionModal.type === 'DELETE' && (
                 <div className="p-3.5 bg-error/10 border border-error/30 rounded-2xl flex items-start gap-2.5 text-xs text-error font-medium">
-                  <span className="material-symbols-outlined text-lg shrink-0 mt-0.5">warning</span>
+                  <Icon name="warning" className="text-lg shrink-0 mt-0.5" />
                   <div>
                     <strong className="block font-bold">Action Irréversible</strong>
                     <span>
@@ -3098,9 +3255,7 @@ export default function AdminDashboardPage() {
                     }`}
                   >
                     {validationActionLoading && (
-                      <span className="material-symbols-outlined text-[16px] animate-spin">
-                        progress_activity
-                      </span>
+                      <Icon name="progress_activity" className="text-[16px] animate-spin" />
                     )}
                     <span>
                       {validationActionModal.type === 'APPROVE'
@@ -3122,7 +3277,7 @@ export default function AdminDashboardPage() {
             <div className="w-full max-w-lg bg-surface-container-lowest rounded-3xl p-6 border border-outline-variant/30 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between pb-2 border-b border-outline-variant/20">
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary text-xl">admin_panel_settings</span>
+                  <Icon name="admin_panel_settings" className="text-primary text-xl" />
                   <h3 className="text-base font-black text-on-surface">
                     Nommer un Nouvel Administrateur
                   </h3>
@@ -3132,7 +3287,7 @@ export default function AdminDashboardPage() {
                   onClick={() => setShowAdminModal(false)}
                   className="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface"
                 >
-                  <span className="material-symbols-outlined text-[20px]">close</span>
+                  <Icon name="close" className="text-[20px]" />
                 </button>
               </div>
 
@@ -3236,9 +3391,7 @@ export default function AdminDashboardPage() {
                     className="px-4 py-2 rounded-xl bg-primary text-on-primary font-bold shadow-md hover:bg-primary/90 flex items-center gap-1.5 disabled:opacity-50"
                   >
                     {adminCreating && (
-                      <span className="material-symbols-outlined text-[16px] animate-spin">
-                        progress_activity
-                      </span>
+                      <Icon name="progress_activity" className="text-[16px] animate-spin" />
                     )}
                     <span>Enregistrer l'Administrateur</span>
                   </button>
@@ -3255,7 +3408,7 @@ export default function AdminDashboardPage() {
               <div className="flex items-center justify-between pb-2 border-b border-outline-variant/20">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                    <span className="material-symbols-outlined text-[20px]">manage_accounts</span>
+                    <Icon name="manage_accounts" className="text-[20px]" />
                   </div>
                   <div>
                     <h3 className="text-base font-black text-on-surface">
@@ -3271,7 +3424,7 @@ export default function AdminDashboardPage() {
                   onClick={() => setShowStudentEditModal(false)}
                   className="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface"
                 >
-                  <span className="material-symbols-outlined text-[20px]">close</span>
+                  <Icon name="close" className="text-[20px]" />
                 </button>
               </div>
 
@@ -3357,7 +3510,7 @@ export default function AdminDashboardPage() {
                 {/* Affiliation Universitaire (Transfert réservé à l'Admin) */}
                 <div className="p-3.5 bg-primary/5 rounded-2xl border border-primary/20 flex flex-col gap-3">
                   <div className="flex items-center gap-1.5 text-primary font-black">
-                    <span className="material-symbols-outlined text-[18px]">transfer_within_a_station</span>
+                    <Icon name="transfer_within_a_station" className="text-[18px]" />
                     <span>Rattachement & Transfert Universitaire (Prérogative Admin)</span>
                   </div>
 
@@ -3464,7 +3617,7 @@ export default function AdminDashboardPage() {
                 <div className="flex flex-col gap-1 p-3 rounded-2xl bg-surface-container-low border border-primary/20">
                   <label className="font-bold text-on-surface flex items-center justify-between">
                     <span className="flex items-center gap-1 text-primary">
-                      <span className="material-symbols-outlined text-[16px]">verified</span>
+                      <Icon name="verified" className="text-[16px]" />
                       <span>Justification en faveur de la qualité du contenu (Obligatoire)</span>
                     </span>
                     <span className="text-[10px] text-outline font-semibold">Audit admin</span>
@@ -3496,7 +3649,7 @@ export default function AdminDashboardPage() {
                     className="px-4 py-2 rounded-xl bg-primary text-on-primary font-bold shadow-md hover:bg-primary/90 flex items-center gap-1.5 disabled:opacity-50"
                   >
                     {savingStudent && (
-                      <span className="material-symbols-outlined text-[16px] animate-spin">progress_activity</span>
+                      <Icon name="progress_activity" className="text-[16px] animate-spin" />
                     )}
                     <span>Sauvegarder les modifications</span>
                   </button>

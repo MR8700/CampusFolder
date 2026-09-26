@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Icon from '@/components/ui/Icon';
 
 export interface MediaItem {
   type: 'PDF' | 'IMAGE' | 'VIDEO' | 'AUDIO' | 'YOUTUBE';
@@ -73,7 +74,7 @@ export default function MediaViewerModal({ isOpen, onClose, media }: MediaViewer
             aria-label="Fermer la visionneuse"
             className="w-10 h-10 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 active:scale-95 transition-all text-white shrink-0"
           >
-            <span className="material-symbols-outlined text-[24px]">close</span>
+            <Icon name="close" className="text-[24px]" />
           </button>
           <div className="min-w-0">
             <h3 className="font-headline-md text-sm sm:text-base font-bold truncate text-white">
@@ -96,7 +97,7 @@ export default function MediaViewerModal({ isOpen, onClose, media }: MediaViewer
                 onClick={() => setZoomLevel((z) => Math.max(0.5, z - 0.25))}
                 className="hover:text-primary transition-colors p-1"
               >
-                <span className="material-symbols-outlined text-[18px]">zoom_out</span>
+                <Icon name="zoom_out" className="text-[18px]" />
               </button>
               <span>{Math.round(zoomLevel * 100)}%</span>
               <button
@@ -104,7 +105,7 @@ export default function MediaViewerModal({ isOpen, onClose, media }: MediaViewer
                 onClick={() => setZoomLevel((z) => Math.min(2.5, z + 0.25))}
                 className="hover:text-primary transition-colors p-1"
               >
-                <span className="material-symbols-outlined text-[18px]">zoom_in</span>
+                <Icon name="zoom_in" className="text-[18px]" />
               </button>
             </div>
           )}
@@ -125,7 +126,7 @@ export default function MediaViewerModal({ isOpen, onClose, media }: MediaViewer
               download={media.title}
               className="h-9 px-3 rounded-xl bg-primary text-on-primary font-label-sm text-xs font-bold flex items-center gap-1.5 shadow-sm active:scale-95 transition-all"
             >
-              <span className="material-symbols-outlined text-[18px]">download</span>
+              <Icon name="download" className="text-[18px]" />
               <span className="hidden sm:inline">Télécharger</span>
             </a>
           )}
@@ -202,7 +203,7 @@ export default function MediaViewerModal({ isOpen, onClose, media }: MediaViewer
               <div className="w-full py-6 flex flex-col gap-4 text-xs sm:text-sm leading-relaxed text-on-surface">
                 <div className="p-4 rounded-xl bg-surface-container-low border border-outline-variant/20 flex flex-col gap-2">
                   <h5 className="font-bold text-primary flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-[18px]">school</span>
+                    <Icon name="school" className="text-[18px]" />
                     Module : Algorithmique Avancée & Structures de Données
                   </h5>
                   <p>
@@ -233,7 +234,7 @@ export default function MediaViewerModal({ isOpen, onClose, media }: MediaViewer
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/20 disabled:opacity-30 disabled:hover:bg-transparent"
               >
-                <span className="material-symbols-outlined text-[20px]">chevron_left</span>
+                <Icon name="chevron_left" className="text-[20px]" />
               </button>
               <span className="font-label-md text-xs font-bold">
                 {currentPage} / {media.pageCount || 14}
@@ -244,7 +245,7 @@ export default function MediaViewerModal({ isOpen, onClose, media }: MediaViewer
                 onClick={() => setCurrentPage((p) => Math.min(media.pageCount || 14, p + 1))}
                 className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/20 disabled:opacity-30 disabled:hover:bg-transparent"
               >
-                <span className="material-symbols-outlined text-[20px]">chevron_right</span>
+                <Icon name="chevron_right" className="text-[20px]" />
               </button>
             </div>
           </div>
@@ -255,7 +256,7 @@ export default function MediaViewerModal({ isOpen, onClose, media }: MediaViewer
           <div className="w-full max-w-lg bg-surface-container-lowest text-on-surface p-6 rounded-3xl shadow-2xl border border-outline-variant/30 flex flex-col gap-6">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 rounded-2xl bg-primary-container text-on-primary flex items-center justify-center shrink-0 shadow-md">
-                <span className="material-symbols-outlined text-[32px]">mic</span>
+                <Icon name="mic" className="text-[32px]" />
               </div>
               <div className="min-w-0">
                 <span className="font-label-sm text-[10px] text-primary uppercase font-bold">
@@ -302,7 +303,7 @@ export default function MediaViewerModal({ isOpen, onClose, media }: MediaViewer
                   onClick={() => setAudioProgress((p) => Math.max(0, p - 0.1))}
                   className="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all"
                 >
-                  <span className="material-symbols-outlined text-[22px]">replay_10</span>
+                  <Icon name="replay_10" className="text-[22px]" />
                 </button>
 
                 <button
@@ -310,9 +311,7 @@ export default function MediaViewerModal({ isOpen, onClose, media }: MediaViewer
                   onClick={() => setIsPlayingAudio(!isPlayingAudio)}
                   className="w-14 h-14 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-lg active:scale-95 transition-all"
                 >
-                  <span className="material-symbols-outlined text-[30px]">
-                    {isPlayingAudio ? 'pause' : 'play_arrow'}
-                  </span>
+                  <Icon name={isPlayingAudio ? 'pause' : 'play_arrow'} className="text-[30px]" />
                 </button>
 
                 <button
@@ -320,7 +319,7 @@ export default function MediaViewerModal({ isOpen, onClose, media }: MediaViewer
                   onClick={() => setAudioProgress((p) => Math.min(1, p + 0.1))}
                   className="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all"
                 >
-                  <span className="material-symbols-outlined text-[22px]">forward_10</span>
+                  <Icon name="forward_10" className="text-[22px]" />
                 </button>
               </div>
 

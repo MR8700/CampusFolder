@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Icon from '@/components/ui/Icon';
 
 interface UniversityManagerModalProps {
   isOpen: boolean;
@@ -143,9 +144,7 @@ export default function UniversityManagerModal({
         <div className="bg-primary px-6 py-5 text-on-primary flex items-start justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-surface-container-lowest/20 flex items-center justify-center">
-              <span className="material-symbols-outlined text-[24px] text-on-primary">
-                school
-              </span>
+              <Icon name="school" size={24} className="text-on-primary" />
             </div>
             <div>
               <h2 className="text-lg font-bold">Université de Rattachement</h2>
@@ -159,7 +158,7 @@ export default function UniversityManagerModal({
             className="w-8 h-8 rounded-full bg-surface-container-lowest/20 hover:bg-surface-container-lowest/30 flex items-center justify-center transition-colors text-on-primary"
             type="button"
           >
-            <span className="material-symbols-outlined text-[20px]">close</span>
+            <Icon name="close" size={20} />
           </button>
         </div>
 
@@ -167,7 +166,7 @@ export default function UniversityManagerModal({
         <form onSubmit={handleSave} className="p-6 space-y-4 overflow-y-auto">
           <div className="p-3.5 bg-secondary-container/20 rounded-xl border border-secondary/20 text-xs text-on-surface leading-relaxed">
             <div className="flex items-center gap-1.5 font-bold text-secondary mb-1">
-              <span className="material-symbols-outlined text-[16px]">info</span>
+              <Icon name="info" size={16} />
               <span>Règle de gouvernance universitaire BF</span>
             </div>
             {!isAdmin ? (
@@ -203,7 +202,7 @@ export default function UniversityManagerModal({
               </label>
               {!isAdmin && (
                 <span className="text-[10px] text-primary font-bold flex items-center gap-0.5">
-                  <span className="material-symbols-outlined text-[12px]">lock</span>
+                  <Icon name="lock" size={12} />
                   Scellée
                 </span>
               )}
@@ -299,7 +298,7 @@ export default function UniversityManagerModal({
                 </>
               ) : (
                 <>
-                  <span className="material-symbols-outlined text-[16px]">save</span>
+                  <Icon name="save" size={16} />
                   <span>Enregistrer dans mon profil</span>
                 </>
               )}

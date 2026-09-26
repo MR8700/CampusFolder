@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Icon from '@/components/ui/Icon';
 
 interface VoiceRecorderProps {
   onSendVoice: (voiceData: {
@@ -118,7 +119,7 @@ export default function VoiceRecorder({ onSendVoice, onCancel }: VoiceRecorderPr
           aria-label="Annuler l'enregistrement"
           className="w-8 h-8 rounded-full flex items-center justify-center text-error hover:bg-error-container/40 active:scale-90 transition-all"
         >
-          <span className="material-symbols-outlined text-[20px]">delete</span>
+          <Icon name="delete" className="text-[20px]" />
         </button>
 
         <button
@@ -127,7 +128,7 @@ export default function VoiceRecorder({ onSendVoice, onCancel }: VoiceRecorderPr
           aria-label="Envoyer la note vocale"
           className="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-md active:scale-95 transition-all"
         >
-          <span className="material-symbols-outlined text-[22px]">send</span>
+          <Icon name="send" className="text-[22px]" />
         </button>
       </div>
     </div>

@@ -5,7 +5,7 @@
 * **Sonnerie & Réception :** Bannière d'appel entrant temps réel avec options Accepter / Décliner.
 * **Partage d'Écran (`ScreenShareSession`) :** Affichage prioritaire en plein écran avec changement de source à la volée.
 * **Chat Pendant l'Appel :** Volet de discussion synchronisé permettant de poser des questions sans couper le flux vidéo.
-* **Monétisation de Conférences (`CallOffer` & `CallPurchase`) :** Billetterie avec déduction de portefeuille et versement de 85% à l'hôte.
+* **Monétisation de Conférences (`CallOffer` & `CallPurchase`) :** Billetterie avec déduction de portefeuille et versement de 60% à l'hôte (40% commission plateforme paramétrable).
 
 ---
 

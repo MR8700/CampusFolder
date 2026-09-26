@@ -69,23 +69,33 @@ export async function GET(
 
     // Check student status for student-restricted content
     let isBurkinaStudent = false;
+    let isAuthor = false;
     const cookieStore = await cookies();
     const sessionUserId = cookieStore.get('campus_user_id')?.value;
 
     if (sessionUserId) {
+      isAuthor = sessionUserId === resource.authorId;
       const user = await prisma.user.findUnique({
         where: { id: sessionUserId },
-        include: { roles: { include: { role: true } } },
+        include: { profile: true, roles: { include: { role: true } } },
       });
       if (user) {
         const hasStudentRole = user.roles.some(
           (r) => r.role.code === 'STUDENT' || r.role.code === 'DELEGATE' || r.role.code === 'ADMIN'
         );
-        isBurkinaStudent = Boolean(user.ine || user.isSuperAdmin || hasStudentRole);
+        isBurkinaStudent = Boolean(
+          user.ine ||
+          user.isSuperAdmin ||
+          hasStudentRole ||
+          user.profile?.profileType === 'STUDENT'
+        );
       }
     }
 
-    const isRestrictedForUser = resource.visibility === 'BURKINA_STUDENTS_ONLY' && !isBurkinaStudent;
+    const isRestrictedForUser =
+      !isAuthor &&
+      (resource.targetAudience === 'STUDENTS' || resource.visibility === 'BURKINA_STUDENTS_ONLY') &&
+      !isBurkinaStudent;
 
     return NextResponse.json({
       success: true,

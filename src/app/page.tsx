@@ -8,6 +8,7 @@ import BottomNavigation from '@/components/BottomNavigation';
 import SplashScreen from '@/components/SplashScreen';
 import AuthGatewayModal from '@/components/AuthGatewayModal';
 import UniversityManagerModal from '@/components/UniversityManagerModal';
+import Icon from '@/components/ui/Icon';
 
 export default function HomeFeedPage() {
   const router = useRouter();
@@ -103,10 +104,10 @@ export default function HomeFeedPage() {
                   ) : (
                     <>
                       <span className="font-headline-lg-mobile md:text-2xl text-on-surface tracking-tight font-extrabold">
-                        Bienvenue sur Campus Folder 🇧🇫
+                        Partagez & découvrez des ressources utiles 🇧🇫
                       </span>
                       <span className="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
-                        Plateforme académique collaborative des universités du Burkina Faso
+                        Cours, exercices, corrigés, sujets, documents et ressources partagées par la communauté.
                       </span>
                     </>
                   )}
@@ -114,7 +115,7 @@ export default function HomeFeedPage() {
 
                 {currentUser ? (
                   <div className="bg-surface-container-high px-space-sm py-1 rounded-full flex items-center gap-1 shadow-sm">
-                    <span className="material-symbols-outlined text-[16px] text-secondary">bolt</span>
+                    <Icon name="bolt" size={16} className="text-secondary" />
                     <span className="font-label-sm text-label-sm text-on-surface font-bold">
                       {currentUser?.points || 0} pts
                     </span>
@@ -125,7 +126,7 @@ export default function HomeFeedPage() {
                     onClick={() => setShowAuthGateway(true)}
                     className="px-3 py-1.5 rounded-full bg-primary text-on-primary text-xs font-bold hover:bg-primary/90 transition-all flex items-center gap-1"
                   >
-                    <span className="material-symbols-outlined text-[15px]">login</span>
+                    <Icon name="login" size={15} />
                     <span>Connexion</span>
                   </button>
                 )}
@@ -223,17 +224,17 @@ export default function HomeFeedPage() {
                       : 'bg-surface-container-lowest text-on-surface border-primary/20 hover:border-primary/40 hover:bg-surface-container-low'
                   }`}
                 >
-                  <span
-                    className={`material-symbols-outlined text-[16px] ${
+                  <Icon
+                    name={chip.icon}
+                    size={16}
+                    className={
                       activeFilter === chip.id
                         ? 'text-on-primary'
                         : chip.isSecondary
                         ? 'text-secondary'
                         : 'text-primary'
-                    }`}
-                  >
-                    {chip.icon}
-                  </span>
+                    }
+                  />
                   <span>{chip.label}</span>
                   {chip.dot && <span className="w-2 h-2 rounded-full bg-secondary"></span>}
                 </button>
@@ -243,9 +244,7 @@ export default function HomeFeedPage() {
             {/* Interactive Search Bar directly below the category chips */}
             <div className="pt-1">
               <div className="flex items-center gap-2 bg-surface-container-lowest rounded-2xl p-1.5 shadow-xs border border-primary/25 hover:border-primary/50 transition-all">
-                <span className="material-symbols-outlined text-primary text-[20px] pl-2.5">
-                  search
-                </span>
+                <Icon name="search" size={20} className="text-primary pl-2" />
                 <input
                   type="text"
                   value={homeSearchQuery}
@@ -264,7 +263,7 @@ export default function HomeFeedPage() {
                     onClick={() => setHomeSearchQuery('')}
                     className="w-6 h-6 flex items-center justify-center rounded-full text-outline hover:text-on-surface shrink-0"
                   >
-                    <span className="material-symbols-outlined text-[16px]">close</span>
+                    <Icon name="close" size={16} />
                   </button>
                 )}
                 <button
@@ -273,7 +272,7 @@ export default function HomeFeedPage() {
                   className="px-3.5 py-1.5 rounded-xl bg-primary text-on-primary text-xs font-bold hover:bg-primary/90 active:scale-95 transition-all shrink-0 flex items-center gap-1 shadow-xs"
                 >
                   <span>Chercher</span>
-                  <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                  <Icon name="arrow_forward" size={14} />
                 </button>
               </div>
             </div>
@@ -638,7 +637,7 @@ export default function HomeFeedPage() {
           {/* Desktop Sidebar Column (4 cols on Desktop, hidden on mobile) */}
           <aside className="hidden lg:flex lg:col-span-4 flex-col gap-6 pt-space-md sticky top-20 self-start">
             {/* 1. Quick FinTech Wallet Widget */}
-            <div className="bg-surface-container-lowest p-5 rounded-2xl border border-surface-container-high shadow-sm flex flex-col gap-4">
+            <div className="bg-surface-container-lowest p-5 rounded-2xl border border-surface-container-high shadow-xs flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <span className="font-label-sm text-label-sm text-outline uppercase font-mono">
                   Portefeuille FinTech
@@ -647,30 +646,53 @@ export default function HomeFeedPage() {
                   CF-PAY
                 </span>
               </div>
-              <div>
-                <p className="text-xs text-on-surface-variant font-medium">Solde disponible amphi</p>
-                <p className="text-2xl font-extrabold text-primary font-mono tracking-tight mt-0.5">
-                  {currentUser?.wallet?.availableBalance ? `${currentUser.wallet.availableBalance.toLocaleString('fr-FR')} FCFA` : '2 400 FCFA'}
-                </p>
-              </div>
-              <div className="grid grid-cols-2 gap-2 pt-2 border-t border-surface-container-high">
-                <button
-                  type="button"
-                  onClick={() => router.push('/portefeuille')}
-                  className="py-2 px-3 bg-primary text-on-primary rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm hover:bg-primary-container transition-all"
-                >
-                  <span className="material-symbols-outlined text-[16px]">account_balance_wallet</span>
-                  <span>Portefeuille</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => router.push('/portefeuille')}
-                  className="py-2 px-3 bg-surface-container-high text-on-surface rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-surface-container transition-all"
-                >
-                  <span className="material-symbols-outlined text-[16px] text-secondary">payments</span>
-                  <span>Retirer gains</span>
-                </button>
-              </div>
+              {currentUser ? (
+                <>
+                  <div>
+                    <p className="text-xs text-on-surface-variant font-medium">Solde disponible</p>
+                    <p className="text-2xl font-extrabold text-primary font-mono tracking-tight mt-0.5">
+                      {`${(currentUser.wallet?.availableBalance ?? 0).toLocaleString('fr-FR')} FCFA`}
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-surface-container-high">
+                    <button
+                      type="button"
+                      onClick={() => router.push('/portefeuille')}
+                      className="py-2 px-3 bg-primary text-on-primary rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm hover:bg-primary-container transition-all"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">account_balance_wallet</span>
+                      <span>Portefeuille</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => router.push('/portefeuille')}
+                      className="py-2 px-3 bg-surface-container-high text-on-surface rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-surface-container transition-all"
+                    >
+                      <span className="material-symbols-outlined text-[16px] text-secondary">payments</span>
+                      <span>Retirer gains</span>
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <p className="text-xs text-on-surface-variant font-medium">Solde sécurisé</p>
+                    <p className="text-xs text-on-surface mt-1 leading-relaxed">
+                      Connectez-vous pour consulter votre solde réel CF-PAY et gérer vos royalties.
+                    </p>
+                  </div>
+                  <div className="pt-2 border-t border-surface-container-high">
+                    <button
+                      type="button"
+                      onClick={() => setShowAuthGateway(true)}
+                      className="w-full py-2.5 px-3 bg-primary text-on-primary rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm hover:bg-primary-container active:scale-95 transition-all"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">login</span>
+                      <span>Se connecter</span>
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
 
             {/* 2. Live University Amphi Network with Search Bar */}

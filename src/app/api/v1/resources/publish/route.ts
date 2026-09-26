@@ -13,9 +13,11 @@ export async function POST(req: NextRequest) {
       academicLevelId,
       resourceType,
       moduleName,
-      accessMode,
+      accessMode = 'PAID', // 'FREE' | 'PAID' | 'IN_PERSON'
       priceAmount,
-      files,
+      targetAudience = 'STUDENTS_AND_PUBLIC', // 'STUDENTS' | 'PUBLIC' | 'STUDENTS_AND_PUBLIC'
+      youtubeUrl,
+      files = [],
       whatsappPhone,
       filiereId,
       whatsappLocation,
@@ -29,42 +31,59 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Support YouTube video link if provided
+    const allFiles = Array.isArray(files) ? [...files] : [];
+    if (youtubeUrl && typeof youtubeUrl === 'string' && (youtubeUrl.includes('youtube.com') || youtubeUrl.includes('youtu.be'))) {
+      allFiles.push({
+        mediaType: 'VIDEO',
+        originalFilename: 'Vidéo explicative (YouTube)',
+        storagePath: youtubeUrl.trim(),
+        mimeType: 'video/youtube',
+        sizeBytes: 1024 * 1024,
+        labelBadge: 'YOUTUBE HD',
+      });
+    }
+
     // 1. Media is strictly required
-    if (!files || !Array.isArray(files) || files.length === 0) {
+    if (allFiles.length === 0) {
       return NextResponse.json(
-        { error: 'Média pédagogique obligatoire : Vous ne pouvez pas publier une ressource sans joindre au moins un fichier média valide (PDF, audio, etc.).' },
+        { error: 'Média pédagogique obligatoire : Vous ne pouvez pas publier une ressource sans joindre au moins un fichier média valide (PDF, audio, vidéo, etc.).' },
         { status: 400 }
       );
     }
 
-    // 2. Price 0F is strictly prohibited (must be at least 50 FCFA)
-    const price = Number(priceAmount) || 0;
-    if (price <= 0 || accessMode === 'FREE') {
+    // 2. Pricing Validation: Allow FREE (0 FCFA) or PAID (>= 50 FCFA)
+    const isFree = accessMode === 'FREE' || Number(priceAmount) === 0;
+    const price = isFree ? 0 : (Number(priceAmount) || 500);
+
+    if (!isFree && price < 50) {
       return NextResponse.json(
-        { error: 'Tarification obligatoire : Les prix à 0 FCFA ou gratuits ne sont pas acceptés sur Campus Folder. Une rétribution minimale de 50 FCFA est exigée.' },
+        { error: 'Tarification payante minimale : Pour une ressource payante, le prix minimum est de 50 FCFA. Pour une ressource gratuite, sélectionnez le mode Gratuit.' },
         { status: 400 }
       );
     }
 
-    // 3. Check pricing ceiling rule (barème strict)
-    const matchingRule = await prisma.pricingCeilingRule.findFirst({
-      where: {
-        isActive: true,
-        OR: [
-          { documentType: resourceType },
-          { documentType: 'ALL' },
-        ],
-      },
-      orderBy: { documentType: 'asc' },
-    });
-
-    if (matchingRule && price > matchingRule.maxPrice) {
-      return NextResponse.json(
-        {
-          error: `Plafond barème dépassé : Le tarif maximum autorisé pour ce type de document est de ${matchingRule.maxPrice} FCFA. Votre saisie (${price} FCFA) dépasse le barème.`,
+    // 3. Check pricing ceiling rule (barème strict) for paid resources
+    if (!isFree) {
+      const matchingRule = await prisma.pricingCeilingRule.findFirst({
+        where: {
+          isActive: true,
+          OR: [
+            { documentType: resourceType },
+            { documentType: 'ALL' },
+          ],
         },
-        { status: 400 }
-      );
+        orderBy: { documentType: 'asc' },
+      });
+
+      if (matchingRule && price > matchingRule.maxPrice) {
+        return NextResponse.json(
+          {
+            error: `Plafond barème dépassé : Le tarif maximum autorisé pour ce type de document est de ${matchingRule.maxPrice} FCFA. Votre saisie (${price} FCFA) dépasse le barème.`,
+          },
+          { status: 400 }
+        );
+      }
     }
 
     // Resolve authenticated user: from cookie session or fallback
@@ -126,10 +145,13 @@ export async function POST(req: NextRequest) {
         submittedAt: new Date(),
         priorityScore: 1,
         reminderCount: 0,
+        targetAudience: ['STUDENTS', 'PUBLIC', 'STUDENTS_AND_PUBLIC'].includes(targetAudience)
+          ? targetAudience
+          : 'STUDENTS_AND_PUBLIC',
         accessPolicy: {
           create: {
-            mode: accessMode || 'PAID',
-            priceAmount: accessMode === 'PAID' ? Number(priceAmount) || 500 : 50,
+            mode: isFree ? 'FREE' : (accessMode === 'IN_PERSON' ? 'IN_PERSON' : 'PAID'),
+            priceAmount: isFree ? 0 : price,
             currency: 'XOF',
             platformFeeRate: 0.15,
             contributorRate: 0.85,
@@ -147,7 +169,7 @@ export async function POST(req: NextRequest) {
               }
             : undefined,
         media: {
-          create: (files || []).map((f: any, idx: number) => ({
+          create: allFiles.map((f: any, idx: number) => ({
             mediaType: f.mediaType || 'PDF',
             originalFilename: f.originalFilename || 'document.pdf',
             storagePath: f.storagePath || '/uploads/sample_linguistique_examen_2025.pdf',
@@ -156,7 +178,7 @@ export async function POST(req: NextRequest) {
             durationSeconds: f.durationSeconds || null,
             isMasterFile: idx === 0,
             orderIndex: idx + 1,
-            labelBadge: f.labelBadge || 'Nouveau',
+            labelBadge: f.labelBadge || (f.mediaType === 'VIDEO' ? 'VIDEO HD' : 'Nouveau'),
           })),
         },
       },

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { validatePassword, validateIne } from '@/lib/auth';
 import Logo from '@/components/Logo';
 import ImageUploadField from '@/components/ImageUploadField';
+import Icon from '@/components/ui/Icon';
 
 interface Institution {
   id: string;
@@ -27,6 +28,57 @@ interface AcademicLevel {
   label?: string;
   code: string;
 }
+
+const PROFILES = [
+  {
+    type: 'STUDENT',
+    title: 'Étudiant',
+    badge: 'Université BF',
+    icon: 'school',
+    desc: 'Accès amphi, cours, corrigés, examens et TD avec INE officiel',
+    isStudent: true,
+  },
+  {
+    type: 'TEACHER',
+    title: 'Enseignant',
+    badge: 'Pédagogie',
+    icon: 'history_edu',
+    desc: 'Partage de cours, travaux dirigés et supports académiques',
+    isStudent: false,
+  },
+  {
+    type: 'TRAINER',
+    title: 'Formateur',
+    badge: 'Ateliers & Pro',
+    icon: 'workspace_premium',
+    desc: 'Ateliers pratiques, certifications et modules métiers',
+    isStudent: false,
+  },
+  {
+    type: 'PROFESSIONAL',
+    title: 'Professionnel',
+    badge: 'Concours & Carrière',
+    icon: 'work',
+    desc: 'Préparation aux concours d’État, mémoires et documentation',
+    isStudent: false,
+  },
+  {
+    type: 'CONTRIBUTOR',
+    title: 'Contributeur',
+    badge: 'Partage & Annales',
+    icon: 'edit_note',
+    desc: 'Partage libre ou rémunéré de synthèses, fiches et annales',
+    isStudent: false,
+  },
+  {
+    type: 'OTHER',
+    title: 'Grand Public',
+    badge: 'Consultation',
+    icon: 'public',
+    desc: 'Accès aux ressources et documents ouverts à toute la communauté',
+    isStudent: false,
+  },
+];
 
 const BURKINA_REGIONS = [
   'Centre (Ouagadougou)',
@@ -58,8 +110,9 @@ const COUNTRIES = [
 export default function RegisterPage() {
   const router = useRouter();
 
-  // Account Type: 'STUDENT' or 'GENERAL'
-  const [accountType, setAccountType] = useState<'STUDENT' | 'GENERAL'>('STUDENT');
+  // Profile Type: STUDENT, TEACHER, TRAINER, PROFESSIONAL, CONTRIBUTOR, OTHER
+  const [profileType, setProfileType] = useState('STUDENT');
+  const isStudent = profileType === 'STUDENT';
 
   // Form Fields
   const [ine, setIne] = useState('');
@@ -73,6 +126,8 @@ export default function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState('');
   const [profession, setProfession] = useState('');
+  const [organization, setOrganization] = useState('');
+  const [bio, setBio] = useState('');
 
   // Academic & Geographic
   const [countryCode, setCountryCode] = useState('BF');
@@ -159,7 +214,7 @@ export default function RegisterPage() {
     setErrorMsg(null);
 
     // Strict validation checks
-    if (accountType === 'STUDENT') {
+    if (isStudent) {
       if (!ine.trim()) {
         setErrorMsg("L'Identifiant National de l'Étudiant (INE) est obligatoire pour les étudiants burkinabés.");
         return;
@@ -190,8 +245,9 @@ export default function RegisterPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          accountType,
-          ine: accountType === 'STUDENT' ? ine.trim().toUpperCase() : undefined,
+          accountType: isStudent ? 'STUDENT' : 'GENERAL',
+          profileType,
+          ine: isStudent ? ine.trim().toUpperCase() : undefined,
           firstName,
           lastName,
           email,
@@ -199,12 +255,13 @@ export default function RegisterPage() {
           password,
           countryCode,
           region,
-          profession: accountType === 'GENERAL' ? profession : undefined,
-          institutionId: accountType === 'STUDENT' ? institutionId : undefined,
-          facultyId: accountType === 'STUDENT' ? facultyId : undefined,
-          academicLevelId: accountType === 'STUDENT' ? academicLevelId : undefined,
-          filiere: accountType === 'STUDENT' ? filiere : undefined,
-          address,
+          profession: !isStudent ? profession : undefined,
+          bio: !isStudent ? bio : undefined,
+          address: !isStudent ? (organization || address) : address,
+          institutionId: isStudent ? institutionId : undefined,
+          facultyId: isStudent ? facultyId : undefined,
+          academicLevelId: isStudent ? academicLevelId : undefined,
+          filiere: isStudent ? filiere : undefined,
           avatarUrl: avatarUrl || undefined,
         }),
       });
@@ -303,7 +360,7 @@ export default function RegisterPage() {
               aria-label="Retour"
               className="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface active:scale-95 transition-transform"
             >
-              <span className="material-symbols-outlined text-[24px]">arrow_back</span>
+              <Icon name="arrow_back" size={22} />
             </button>
             <Link href="/" className="flex items-center gap-2">
               <Logo size={32} showWordmark={false} />
@@ -313,7 +370,7 @@ export default function RegisterPage() {
 
           <div className="flex items-center gap-2">
             <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-fixed/30 border border-primary/20 text-primary text-[11px] font-bold">
-              <span className="material-symbols-outlined text-[14px]">lock</span>
+              <Icon name="lock" size={14} />
               <span>SSL 256 bits</span>
             </div>
             <Link
@@ -333,70 +390,73 @@ export default function RegisterPage() {
           <div className="mb-6 sm:mb-8 text-center flex flex-col items-center">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary-fixed/40 border border-primary/20 text-primary text-xs font-bold mb-3 shadow-xs">
               <span className="text-sm">🇧🇫</span>
-              <span>Plateforme Universitaire & Professionnelle du Burkina Faso</span>
+              <span>Plateforme Académique & de Partage du Burkina Faso</span>
             </div>
             <h1 className="font-black text-2xl sm:text-3xl text-on-surface tracking-tight leading-tight">
-              Créer votre Compte Officiel
+              Parlez-nous un peu de vous
             </h1>
             <p className="text-on-surface-variant text-xs sm:text-sm mt-1.5 max-w-lg">
-              Rejoignez Campus Folder pour accéder aux corrigés d'examen, mémoires, annales de concours et formations du Burkina.
+              Rejoignez Campus Folder pour accéder, partager ou publier des cours, corrigés, mémoires et ressources utiles.
             </p>
 
-            {/* Account Type Selector */}
-            <div className="mt-5 grid grid-cols-2 gap-3 w-full max-w-md">
-              <button
-                type="button"
-                onClick={() => setAccountType('STUDENT')}
-                className={`p-3.5 rounded-2xl border text-left transition-all flex items-center gap-3 ${
-                  accountType === 'STUDENT'
-                    ? 'border-primary bg-primary/10 shadow-sm ring-1 ring-primary'
-                    : 'border-outline-variant/40 bg-surface-container hover:bg-surface-container-high'
-                }`}
-              >
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                  accountType === 'STUDENT' ? 'bg-primary text-on-primary' : 'bg-surface text-on-surface'
-                }`}>
-                  <span className="material-symbols-outlined text-[22px]">school</span>
-                </div>
-                <div>
-                  <div className="text-xs font-black text-on-surface">Étudiant Burkinabé</div>
-                  <div className="text-[10px] text-on-surface-variant">Avec N° INE officiel (Accès amphi complet)</div>
-                </div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setAccountType('GENERAL')}
-                className={`p-3.5 rounded-2xl border text-left transition-all flex items-center gap-3 ${
-                  accountType === 'GENERAL'
-                    ? 'border-primary bg-primary/10 shadow-sm ring-1 ring-primary'
-                    : 'border-outline-variant/40 bg-surface-container hover:bg-surface-container-high'
-                }`}
-              >
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                  accountType === 'GENERAL' ? 'bg-primary text-on-primary' : 'bg-surface text-on-surface'
-                }`}>
-                  <span className="material-symbols-outlined text-[22px]">person</span>
-                </div>
-                <div>
-                  <div className="text-xs font-black text-on-surface">Grand Public / Pro</div>
-                  <div className="text-[10px] text-on-surface-variant">Sans INE (Concours, formations, mémoires)</div>
-                </div>
-              </button>
+            {/* Profile Selection - 6 Human Choices */}
+            <div className="mt-5 w-full">
+              <div className="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2 text-left sm:text-center">
+                Quel profil vous correspond ?
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 w-full">
+                {PROFILES.map((p) => {
+                  const isSelected = profileType === p.type;
+                  return (
+                    <button
+                      key={p.type}
+                      type="button"
+                      onClick={() => setProfileType(p.type)}
+                      className={`p-3 rounded-2xl border text-left transition-all flex flex-col gap-1.5 ${
+                        isSelected
+                          ? 'border-primary bg-primary/10 shadow-sm ring-2 ring-primary/40'
+                          : 'border-outline-variant/40 bg-surface-container hover:bg-surface-container-high'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <div
+                          className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
+                            isSelected ? 'bg-primary text-on-primary' : 'bg-surface text-on-surface'
+                          }`}
+                        >
+                          <Icon name={p.icon} size={20} />
+                        </div>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-surface-container-lowest text-on-surface-variant border border-outline-variant/20">
+                          {p.badge}
+                        </span>
+                      </div>
+                      <div>
+                        <div className="text-xs font-black text-on-surface flex items-center gap-1">
+                          <span>{p.title}</span>
+                          {isSelected && <span className="text-primary text-[10px]">✓</span>}
+                        </div>
+                        <div className="text-[10px] text-on-surface-variant line-clamp-2 mt-0.5 leading-tight">
+                          {p.desc}
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
           {/* Feedback alerts */}
           {errorMsg && (
             <div className="mb-6 p-4 bg-error-container text-on-error-container rounded-2xl text-xs sm:text-sm flex items-start gap-3 shadow-sm border border-error/20 animate-shake">
-              <span className="material-symbols-outlined text-[20px] text-error shrink-0">error</span>
+              <Icon name="error" size={20} className="text-error shrink-0" />
               <span className="flex-1 font-semibold leading-relaxed">{errorMsg}</span>
             </div>
           )}
 
           {successMsg && (
             <div className="mb-6 p-4 bg-primary-fixed/60 text-primary rounded-2xl text-xs sm:text-sm flex items-center gap-3 shadow-sm border border-primary/20">
-              <span className="material-symbols-outlined text-[20px] text-primary shrink-0">check_circle</span>
+              <Icon name="check_circle" size={20} className="text-primary shrink-0" />
               <span className="flex-1 font-bold">{successMsg}</span>
             </div>
           )}
@@ -416,11 +476,11 @@ export default function RegisterPage() {
               </div>
 
               {/* INE Section (Only for STUDENT) */}
-              {accountType === 'STUDENT' && (
+              {isStudent && (
                 <div className="p-4 rounded-2xl bg-primary-fixed/20 border border-primary/25 flex flex-col gap-2">
                   <div className="flex items-center justify-between">
                     <label className="text-xs font-black text-primary flex items-center gap-1.5">
-                      <span className="material-symbols-outlined text-[16px]">verified</span>
+                      <Icon name="verified" size={16} />
                       <span>Identifiant National de l'Étudiant (INE) *</span>
                     </label>
                     <span className="text-[10px] font-mono font-bold bg-primary text-on-primary px-2 py-0.5 rounded">
@@ -431,7 +491,7 @@ export default function RegisterPage() {
                     Votre numéro INE officiel (ex: N0145892301) vous identifie auprès de votre université et débloque les cours réservés aux étudiants burkinabés.
                   </p>
                   <div className="flex items-center bg-surface-container-lowest rounded-xl px-3.5 py-2.5 border border-primary/30 focus-within:border-primary transition-all">
-                    <span className="material-symbols-outlined text-primary text-[18px] mr-2">badge</span>
+                    <Icon name="badge" size={18} className="text-primary mr-2" />
                     <input
                       type="text"
                       required
@@ -478,9 +538,9 @@ export default function RegisterPage() {
               {/* Email & Phone */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-on-surface-variant mb-1.5">Email (Gmail / Univ) *</label>
+                  <label className="block text-xs font-bold text-on-surface-variant mb-1.5">Email (Personnel ou Pro) *</label>
                   <div className="flex items-center bg-surface-container-low rounded-xl px-3.5 py-2.5 border border-outline-variant/30 focus-within:border-primary focus-within:bg-surface-container-lowest transition-all">
-                    <span className="material-symbols-outlined text-outline text-[18px] mr-2">mail</span>
+                    <Icon name="mail" size={18} className="text-outline mr-2" />
                     <input
                       type="email"
                       required
@@ -508,30 +568,62 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              {/* Profession for General Account */}
-              {accountType === 'GENERAL' && (
-                <div>
-                  <label className="block text-xs font-bold text-on-surface-variant mb-1.5">
-                    Profession / Statut / Intérêt
-                  </label>
-                  <div className="flex items-center bg-surface-container-low rounded-xl px-3.5 py-2.5 border border-outline-variant/30 focus-within:border-primary focus-within:bg-surface-container-lowest transition-all">
-                    <span className="material-symbols-outlined text-outline text-[18px] mr-2">work</span>
-                    <input
-                      type="text"
-                      placeholder="Ex: Enseignant, Candidat Concours ENA, Ingénieur, Chercheur"
-                      value={profession}
-                      onChange={(e) => setProfession(e.target.value)}
-                      className="w-full bg-transparent text-xs sm:text-sm font-semibold outline-none placeholder:text-outline"
+              {/* Profile fields for Non-Students */}
+              {!isStudent && (
+                <div className="p-4 rounded-2xl bg-surface-container-low border border-outline-variant/30 flex flex-col gap-3.5">
+                  <div className="text-xs font-black text-on-surface flex items-center gap-1.5">
+                    <Icon name="work" size={16} className="text-primary" />
+                    <span>Informations Professionnelles ou Publiques</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-bold text-on-surface-variant mb-1">
+                        Profession ou Titre
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Ex: Enseignant, Formateur, Cadre, Auteur"
+                        value={profession}
+                        onChange={(e) => setProfession(e.target.value)}
+                        className="w-full bg-surface-container-lowest text-xs font-semibold rounded-xl p-2.5 border border-outline-variant/40 outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-on-surface-variant mb-1">
+                        Organisation ou Ville
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Ex: Ouagadougou, Cabinet Alpha, Lycée..."
+                        value={organization}
+                        onChange={(e) => setOrganization(e.target.value)}
+                        className="w-full bg-surface-container-lowest text-xs font-semibold rounded-xl p-2.5 border border-outline-variant/40 outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-on-surface-variant mb-1">
+                      Courte présentation (Bio) <span className="text-outline font-normal">(Optionnel)</span>
+                    </label>
+                    <textarea
+                      rows={2}
+                      placeholder="Ex: Passionné par la transmission des savoirs et le partage de ressources utiles..."
+                      value={bio}
+                      onChange={(e) => setBio(e.target.value)}
+                      className="w-full bg-surface-container-lowest text-xs font-semibold rounded-xl p-2.5 border border-outline-variant/40 outline-none resize-none"
                     />
                   </div>
                 </div>
               )}
 
               {/* Academic dropdowns (Only for STUDENT) */}
-              {accountType === 'STUDENT' && (
+              {isStudent && (
                 <div className="p-4 rounded-2xl bg-surface-container-low border border-outline-variant/30 flex flex-col gap-4">
                   <div className="text-xs font-black text-on-surface flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-[16px] text-primary">apartment</span>
+                    <Icon name="apartment" size={16} className="text-primary" />
                     <span>Établissement & Cursus Universitaire</span>
                   </div>
 
@@ -600,7 +692,7 @@ export default function RegisterPage() {
                 <div>
                   <label className="block text-xs font-bold text-on-surface-variant mb-1.5">Mot de passe *</label>
                   <div className="flex items-center bg-surface-container-low rounded-xl px-3.5 py-2.5 border border-outline-variant/30 focus-within:border-primary focus-within:bg-surface-container-lowest transition-all">
-                    <span className="material-symbols-outlined text-outline text-[18px] mr-2">lock</span>
+                    <Icon name="lock" size={18} className="text-outline mr-2" />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       required
@@ -614,9 +706,7 @@ export default function RegisterPage() {
                       onClick={() => setShowPassword(!showPassword)}
                       className="text-on-surface-variant hover:text-on-surface p-1"
                     >
-                      <span className="material-symbols-outlined text-[18px]">
-                        {showPassword ? 'visibility_off' : 'visibility'}
-                      </span>
+                      <Icon name="visibility" size={18} />
                     </button>
                   </div>
                 </div>
@@ -624,7 +714,7 @@ export default function RegisterPage() {
                 <div>
                   <label className="block text-xs font-bold text-on-surface-variant mb-1.5">Confirmer le mot de passe *</label>
                   <div className="flex items-center bg-surface-container-low rounded-xl px-3.5 py-2.5 border border-outline-variant/30 focus-within:border-primary focus-within:bg-surface-container-lowest transition-all">
-                    <span className="material-symbols-outlined text-outline text-[18px] mr-2">lock_clock</span>
+                    <Icon name="lock" size={18} className="text-outline mr-2" />
                     <input
                       type={showConfirmPassword ? 'text' : 'password'}
                       required
@@ -638,9 +728,7 @@ export default function RegisterPage() {
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                       className="text-on-surface-variant hover:text-on-surface p-1"
                     >
-                      <span className="material-symbols-outlined text-[18px]">
-                        {showConfirmPassword ? 'visibility_off' : 'visibility'}
-                      </span>
+                      <Icon name="visibility" size={18} />
                     </button>
                   </div>
                 </div>
@@ -686,12 +774,12 @@ export default function RegisterPage() {
               >
                 {loading ? (
                   <>
-                    <span className="material-symbols-outlined text-[18px] animate-spin">autorenew</span>
+                    <Icon name="autorenew" size={18} className="animate-spin" />
                     <span>Création du compte en cours...</span>
                   </>
                 ) : (
                   <>
-                    <span className="material-symbols-outlined text-[18px]">how_to_reg</span>
+                    <Icon name="how_to_reg" size={18} />
                     <span>S'inscrire et Recevoir mon Code de Vérification</span>
                   </>
                 )}
@@ -714,7 +802,7 @@ export default function RegisterPage() {
           <div className="bg-surface-container-lowest w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl border border-outline-variant/40 flex flex-col gap-4">
             <div className="text-center flex flex-col items-center">
               <div className="w-12 h-12 rounded-2xl bg-primary-fixed/40 text-primary flex items-center justify-center mb-2 shadow-xs">
-                <span className="material-symbols-outlined text-[24px]">mark_email_read</span>
+                <Icon name="mark_email_read" size={24} />
               </div>
               <h3 className="font-black text-xl text-on-surface">Vérification de votre Email</h3>
               <p className="text-xs text-on-surface-variant mt-1">
@@ -741,7 +829,7 @@ export default function RegisterPage() {
             >
               {loading ? (
                 <>
-                  <span className="material-symbols-outlined text-[18px] animate-spin">autorenew</span>
+                  <Icon name="autorenew" size={18} className="animate-spin" />
                   <span>Validation du code...</span>
                 </>
               ) : (

@@ -6,6 +6,7 @@ import MediaViewerModal, { MediaItem } from '@/components/messaging/MediaViewerM
 import VoiceRecorder from '@/components/messaging/VoiceRecorder';
 import ResourcePickerModal from '@/components/messaging/ResourcePickerModal';
 import CallModal from '@/components/messaging/CallModal';
+import Icon from '@/components/ui/Icon';
 
 export default function ConversationDetailPage() {
   const router = useRouter();
@@ -300,13 +301,13 @@ export default function ConversationDetailPage() {
       {/* 1. Header (Exact Wireframe: ← Amina  📞 🎥) */}
       <header className="h-16 px-4 bg-surface/90 backdrop-blur-xl border-b border-surface-container-high/40 flex items-center justify-between shrink-0 z-30 shadow-xs">
         <div className="flex items-center gap-3 min-w-0">
-          <button
+            <button
             type="button"
             onClick={() => router.push('/messages')}
             aria-label="Retour"
             className="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container active:scale-95 transition-all shrink-0"
           >
-            <span className="material-symbols-outlined text-[24px]">arrow_back</span>
+            <Icon name="arrow_back" size={24} />
           </button>
 
           {/* User info */}
@@ -346,7 +347,7 @@ export default function ConversationDetailPage() {
             aria-label="Appel vocal"
             className="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary-fixed/40 active:scale-95 transition-all"
           >
-            <span className="material-symbols-outlined text-[22px]">call</span>
+            <Icon name="call" size={22} />
           </button>
           <button
             type="button"
@@ -354,7 +355,7 @@ export default function ConversationDetailPage() {
             aria-label="Appel vidéo"
             className="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary-fixed/40 active:scale-95 transition-all"
           >
-            <span className="material-symbols-outlined text-[22px]">videocam</span>
+            <Icon name="videocam" size={22} />
           </button>
         </div>
       </header>
@@ -436,7 +437,7 @@ export default function ConversationDetailPage() {
                           </div>
                         </div>
                         <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/70 backdrop-blur-xs text-[10px] font-bold text-white flex items-center gap-1">
-                          <span className="material-symbols-outlined text-red-500 text-[14px]">smart_display</span>
+                          <Icon name="smart_display" size={14} className="text-red-500" />
                           <span>YouTube Vidéo</span>
                         </div>
                       </div>
@@ -461,7 +462,7 @@ export default function ConversationDetailPage() {
                               : 'bg-primary text-on-primary hover:bg-primary-container'
                           }`}
                         >
-                          <span className="material-symbols-outlined text-[15px]">open_in_full</span>
+                          <Icon name="open_in_full" size={15} />
                           <span>Visionner</span>
                         </button>
                       </div>
@@ -532,7 +533,7 @@ export default function ConversationDetailPage() {
                                     : 'bg-primary text-on-primary hover:bg-primary-container'
                                 }`}
                               >
-                                <span className="material-symbols-outlined text-[16px]">visibility</span>
+                                <Icon name="visibility" size={16} />
                                 <span>Ouvrir</span>
                               </button>
 
@@ -542,7 +543,7 @@ export default function ConversationDetailPage() {
                                   onClick={() => router.push(`/paiement?resourceId=${snap.id}`)}
                                   className="h-8 px-3 rounded-lg bg-secondary text-on-secondary font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-all shadow-xs"
                                 >
-                                  <span className="material-symbols-outlined text-[16px]">shopping_cart</span>
+                                  <Icon name="shopping_cart" size={16} />
                                   <span>Acheter</span>
                                 </button>
                               )}
@@ -574,7 +575,7 @@ export default function ConversationDetailPage() {
                           isMe ? 'bg-white text-primary' : 'bg-primary text-on-primary'
                         }`}
                       >
-                        <span className="material-symbols-outlined text-[22px]">play_arrow</span>
+                        <Icon name="play_arrow" size={22} />
                       </button>
 
                       <div className="flex-1 flex flex-col gap-1 min-w-0">
@@ -609,7 +610,7 @@ export default function ConversationDetailPage() {
                       })}
                     </span>
                     {isMe && (
-                      <span className="material-symbols-outlined text-[13px]">done_all</span>
+                      <Icon name="done_all" size={13} />
                     )}
                   </div>
                 </div>
@@ -646,7 +647,7 @@ export default function ConversationDetailPage() {
               aria-label="Joindre une ressource pédagogique"
               className="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-container active:scale-95 transition-all shrink-0"
             >
-              <span className="material-symbols-outlined text-[22px]">attach_file</span>
+              <Icon name="attach_file" size={22} />
             </button>
 
             {/* Voice Recording Button (🎙) */}
@@ -656,7 +657,7 @@ export default function ConversationDetailPage() {
               aria-label="Enregistrer une note vocale"
               className="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-container active:scale-95 transition-all shrink-0"
             >
-              <span className="material-symbols-outlined text-[22px]">mic</span>
+              <Icon name="mic" size={22} />
             </button>
 
             {/* Photo / Camera Button (📷) */}
@@ -666,7 +667,7 @@ export default function ConversationDetailPage() {
               aria-label="Prendre ou choisir une photo"
               className="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-surface-container active:scale-95 transition-all shrink-0"
             >
-              <span className="material-symbols-outlined text-[22px]">photo_camera</span>
+              <Icon name="photo_camera" size={22} />
             </button>
             <input
               type="file"
@@ -698,7 +699,7 @@ export default function ConversationDetailPage() {
               aria-label="Envoyer le message"
               className="w-11 h-11 rounded-2xl bg-primary text-on-primary flex items-center justify-center shadow-md active:scale-95 disabled:opacity-40 disabled:hover:bg-primary transition-all shrink-0 hover:bg-primary-container"
             >
-              <span className="material-symbols-outlined text-[20px]">send</span>
+              <Icon name="send" size={20} />
             </button>
           </form>
         )}

@@ -7,6 +7,7 @@ import NotificationDrawer from '@/components/NotificationDrawer';
 import Logo from '@/components/Logo';
 import AuthGatewayModal from '@/components/AuthGatewayModal';
 import UniversityManagerModal from '@/components/UniversityManagerModal';
+import Icon from '@/components/ui/Icon';
 
 interface HeaderProps {
   title?: string;
@@ -79,7 +80,7 @@ export default function Header({
                 onClick={() => router.back()}
                 type="button"
               >
-                <span className="material-symbols-outlined text-[24px]">arrow_back</span>
+                <Icon name="arrow_back" size={24} />
               </button>
             ) : null}
 
@@ -214,7 +215,7 @@ export default function Header({
                   : 'text-on-surface hover:text-primary hover:bg-surface-container'
               }`}
             >
-              <span className="material-symbols-outlined text-[18px]">home</span>
+              <Icon name="home" size={18} />
               <span>Accueil</span>
             </Link>
 
@@ -226,7 +227,7 @@ export default function Header({
                   : 'text-on-surface hover:text-primary hover:bg-surface-container'
               }`}
             >
-              <span className="material-symbols-outlined text-[18px]">explore</span>
+              <Icon name="explore" size={18} />
               <span>Explorer</span>
             </Link>
 
@@ -238,7 +239,7 @@ export default function Header({
                   : 'bg-primary-container text-on-primary hover:bg-primary/90'
               }`}
             >
-              <span className="material-symbols-outlined text-[18px]">add_circle</span>
+              <Icon name="add" size={18} />
               <span>Publier</span>
             </Link>
 
@@ -251,7 +252,7 @@ export default function Header({
               }`}
             >
               <div className="relative flex items-center">
-                <span className="material-symbols-outlined text-[18px]">chat</span>
+                <Icon name="chat" size={18} />
                 <span className="absolute -top-1 -right-1 w-2 h-2 bg-secondary rounded-full" />
               </div>
               <span>Messages</span>
@@ -265,7 +266,7 @@ export default function Header({
                   : 'text-on-surface hover:text-primary hover:bg-surface-container'
               }`}
             >
-              <span className="material-symbols-outlined text-[18px]">account_balance_wallet</span>
+              <Icon name="account_balance_wallet" size={18} />
               <span>Portefeuille</span>
             </Link>
 
@@ -277,7 +278,7 @@ export default function Header({
                   : 'text-on-surface hover:text-primary hover:bg-surface-container'
               }`}
             >
-              <span className="material-symbols-outlined text-[18px]">person</span>
+              <Icon name="person" size={18} />
               <span>Mon Profil</span>
             </Link>
 
@@ -290,7 +291,7 @@ export default function Header({
                     : 'text-error bg-error/10 hover:bg-error/20'
                 }`}
               >
-                <span className="material-symbols-outlined text-[18px]">admin_panel_settings</span>
+                <Icon name="admin_panel_settings" size={18} />
                 <span>Admin</span>
               </Link>
             )}
@@ -305,7 +306,7 @@ export default function Header({
                 type="button"
                 onClick={() => setShowNotifications(true)}
               >
-                <span className="material-symbols-outlined text-[22px]">notifications</span>
+                <Icon name="notifications" size={22} />
                 <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-secondary ring-2 ring-surface"></span>
               </button>
             )}

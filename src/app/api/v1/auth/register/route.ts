@@ -7,7 +7,8 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const {
-      accountType = 'STUDENT', // 'STUDENT' | 'GENERAL'
+      accountType, // 'STUDENT' | 'GENERAL'
+      profileType = 'STUDENT', // 'STUDENT' | 'TEACHER' | 'TRAINER' | 'PROFESSIONAL' | 'CONTRIBUTOR' | 'OTHER'
       ine,
       firstName,
       lastName,
@@ -19,11 +20,15 @@ export async function POST(req: NextRequest) {
       academicLevelId,
       filiere,
       region,
+      city,
       address,
       avatarUrl,
       profession,
+      bio,
       countryCode = 'BF',
     } = body;
+
+    const isStudent = (profileType === 'STUDENT') || (accountType === 'STUDENT' && !body.profileType);
 
     // 1. Mandatory Fields Validation for all accounts
     if (!firstName || !lastName || !email || !phoneNumber || !password) {
@@ -33,9 +38,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 2. Validate INE strictly if STUDENT account
+    // 2. Validate INE strictly ONLY if STUDENT account
     let cleanedIne: string | undefined = undefined;
-    if (accountType === 'STUDENT') {
+    if (isStudent) {
       if (!ine || !ine.trim()) {
         return NextResponse.json(
           { error: "L'Identifiant National de l'Étudiant (INE) est obligatoire pour les étudiants burkinabés." },
@@ -125,13 +130,15 @@ export async function POST(req: NextRequest) {
             avatarUrl: avatarUrl || `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(firstName)}`,
             countryCode,
             region: region || 'Centre',
-            city: region === 'Hauts-Bassins' ? 'Bobo-Dioulasso' : 'Ouagadougou',
-            address: address || (accountType === 'STUDENT' ? 'Campus Universitaire' : 'Ouagadougou'),
-            filiere: filiere || (accountType === 'STUDENT' ? 'Études Supérieures' : undefined),
-            bio: profession ? `Activité : ${profession}` : (accountType === 'STUDENT' ? 'Étudiant Burkinabé' : 'Membre de la communauté'),
-            institutionId: accountType === 'STUDENT' ? (institutionId || undefined) : undefined,
-            facultyId: accountType === 'STUDENT' ? (facultyId || undefined) : undefined,
-            academicLevelId: accountType === 'STUDENT' ? (academicLevelId || undefined) : undefined,
+            city: city || (region === 'Hauts-Bassins' ? 'Bobo-Dioulasso' : 'Ouagadougou'),
+            address: address || (isStudent ? 'Campus Universitaire' : 'Ouagadougou'),
+            profileType: isStudent ? 'STUDENT' : (profileType || 'OTHER'),
+            profession: profession || undefined,
+            filiere: isStudent ? (filiere || 'Études Supérieures') : undefined,
+            bio: bio || (profession ? `${profession} • Campus Folder` : (isStudent ? 'Étudiant Burkinabé' : 'Membre de la communauté')),
+            institutionId: isStudent ? (institutionId || undefined) : undefined,
+            facultyId: isStudent ? (facultyId || undefined) : undefined,
+            academicLevelId: isStudent ? (academicLevelId || undefined) : undefined,
           },
         },
         wallet: {
@@ -155,9 +162,13 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // 8. Assign role (STUDENT or CONTRIBUTOR/GENERAL)
-    const roleCode = accountType === 'STUDENT' ? 'STUDENT' : 'CONTRIBUTOR';
-    const role = await prisma.role.findUnique({ where: { code: roleCode } });
+    // 8. Assign role (STUDENT or CONTRIBUTOR or GENERAL_USER)
+    const roleCandidate = isStudent
+      ? 'STUDENT'
+      : (['CONTRIBUTOR', 'TEACHER', 'TRAINER'].includes(profileType) ? 'CONTRIBUTOR' : 'GENERAL_USER');
+    const role = await prisma.role.findFirst({
+      where: { code: { in: [roleCandidate, 'CONTRIBUTOR', 'STUDENT'] } },
+    });
     if (role) {
       await prisma.userRole.create({
         data: {

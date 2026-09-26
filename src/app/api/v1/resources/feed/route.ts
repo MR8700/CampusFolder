@@ -31,14 +31,19 @@ export async function GET(req: NextRequest) {
         const hasStudentRole = user.roles.some(
           (r) => r.role.code === 'STUDENT' || r.role.code === 'DELEGATE' || r.role.code === 'ADMIN'
         );
-        isBurkinaStudent = Boolean(user.ine || user.isSuperAdmin || hasStudentRole);
+        isBurkinaStudent = Boolean(
+          user.ine ||
+          user.isSuperAdmin ||
+          hasStudentRole ||
+          user.profile?.profileType === 'STUDENT'
+        );
       }
     }
 
-    // 2. Determine allowed content visibilities
-    const allowedVisibilities = isBurkinaStudent
-      ? ['PUBLIC', 'BURKINA_STUDENTS_ONLY']
-      : ['PUBLIC'];
+    // 2. Determine allowed content audiences
+    const allowedAudiences = isBurkinaStudent
+      ? ['STUDENTS', 'PUBLIC', 'STUDENTS_AND_PUBLIC']
+      : ['PUBLIC', 'STUDENTS_AND_PUBLIC'];
 
     // 3. Get Active Campus
     let activeCampus = null;
@@ -60,7 +65,7 @@ export async function GET(req: NextRequest) {
     let trendingWhere: Record<string, any> = {
       isTrending: true,
       isArchived: false,
-      visibility: { in: allowedVisibilities },
+      targetAudience: { in: allowedAudiences },
     };
     if (requestedInstitutionId && requestedInstitutionId !== 'all') {
       trendingWhere.institutionId = requestedInstitutionId;
@@ -99,7 +104,7 @@ export async function GET(req: NextRequest) {
         where: {
           institutionId: requestedInstitutionId,
           isArchived: false,
-          visibility: { in: allowedVisibilities },
+          targetAudience: { in: allowedAudiences },
         },
         include: {
           author: {
@@ -122,7 +127,7 @@ export async function GET(req: NextRequest) {
     // 5. Query faculty live feed
     let feedWhere: Record<string, any> = {
       isArchived: false,
-      visibility: { in: allowedVisibilities },
+      targetAudience: { in: allowedAudiences },
     };
     if (requestedInstitutionId && requestedInstitutionId !== 'all') {
       feedWhere.institutionId = requestedInstitutionId;
@@ -164,7 +169,7 @@ export async function GET(req: NextRequest) {
     // 6. Aggregated stats
     const totalDocs = await prisma.academicResource.count({
       where: {
-        visibility: { in: allowedVisibilities },
+        targetAudience: { in: allowedAudiences },
         ...(requestedInstitutionId && requestedInstitutionId !== 'all' ? { institutionId: requestedInstitutionId } : {}),
       },
     });

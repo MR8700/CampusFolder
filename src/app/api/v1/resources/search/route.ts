@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
     const accessMode = searchParams.get('accessMode');
     const sort = searchParams.get('sort') || 'recent'; // recent, rated, exam, free
 
-    // Check student session for visibility filtering
+    // Check student session for visibility & target audience filtering
     let isBurkinaStudent = false;
     const cookieStore = await cookies();
     const sessionUserId = cookieStore.get('campus_user_id')?.value;
@@ -22,24 +22,29 @@ export async function GET(req: NextRequest) {
     if (sessionUserId) {
       const user = await prisma.user.findUnique({
         where: { id: sessionUserId },
-        include: { roles: { include: { role: true } } },
+        include: { profile: true, roles: { include: { role: true } } },
       });
       if (user) {
         const hasStudentRole = user.roles.some(
           (r) => r.role.code === 'STUDENT' || r.role.code === 'DELEGATE' || r.role.code === 'ADMIN'
         );
-        isBurkinaStudent = Boolean(user.ine || user.isSuperAdmin || hasStudentRole);
+        isBurkinaStudent = Boolean(
+          user.ine ||
+          user.isSuperAdmin ||
+          hasStudentRole ||
+          user.profile?.profileType === 'STUDENT'
+        );
       }
     }
 
-    const allowedVisibilities = isBurkinaStudent
-      ? ['PUBLIC', 'BURKINA_STUDENTS_ONLY']
-      : ['PUBLIC'];
+    const allowedAudiences = isBurkinaStudent
+      ? ['STUDENTS', 'PUBLIC', 'STUDENTS_AND_PUBLIC']
+      : ['PUBLIC', 'STUDENTS_AND_PUBLIC'];
 
     const andConditions: any[] = [
       { validationStatus: 'APPROVED' },
       { isArchived: false },
-      { visibility: { in: allowedVisibilities } },
+      { targetAudience: { in: allowedAudiences } },
     ];
 
     if (q.trim()) {

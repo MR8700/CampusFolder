@@ -269,7 +269,7 @@ function PaymentContent() {
   }, [resourceSlugParam]);
 
   const price = resource?.accessPolicy?.priceAmount || 500;
-  const availableBalance = user?.wallet?.availableBalance ?? 2400;
+  const availableBalance = user?.wallet?.availableBalance ?? 0;
   const newBalanceRemaining = availableBalance - price;
 
   const handleCheckout = async () => {

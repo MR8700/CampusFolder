@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Icon from '@/components/ui/Icon';
 
 export default function BottomNavigation() {
   const pathname = usePathname();
@@ -25,7 +26,7 @@ export default function BottomNavigation() {
               : 'text-on-surface-variant hover:text-on-surface'
           }`}
         >
-          <span className="material-symbols-outlined text-[22px]">school</span>
+          <Icon name="school" size={22} />
           <span className="font-label-sm text-[10px] mt-0.5 font-bold">Accueil</span>
         </Link>
 
@@ -38,7 +39,7 @@ export default function BottomNavigation() {
               : 'text-on-surface-variant hover:text-on-surface'
           }`}
         >
-          <span className="material-symbols-outlined text-[22px]">menu_book</span>
+          <Icon name="menu_book" size={22} />
           <span className="font-label-sm text-[10px] mt-0.5 font-bold">Ressources</span>
         </Link>
 
@@ -52,7 +53,7 @@ export default function BottomNavigation() {
                 : 'bg-primary-container'
             }`}
           >
-            <span className="material-symbols-outlined text-[26px]">add</span>
+            <Icon name="add" size={26} />
           </Link>
           <span className={`font-label-sm text-[10px] mt-1 font-bold ${
             isTab('/publier') ? 'text-primary font-black' : 'text-primary-container'
@@ -71,7 +72,7 @@ export default function BottomNavigation() {
           }`}
         >
           <div className="relative">
-            <span className="material-symbols-outlined text-[22px]">chat</span>
+            <Icon name="chat" size={22} />
             <span className="absolute -top-1 -right-1.5 w-2.5 h-2.5 bg-secondary rounded-full ring-2 ring-surface" />
           </div>
           <span className="font-label-sm text-[10px] mt-0.5 font-bold">Messages</span>
@@ -86,7 +87,7 @@ export default function BottomNavigation() {
               : 'text-on-surface-variant hover:text-on-surface'
           }`}
         >
-          <span className="material-symbols-outlined text-[22px]">person</span>
+          <Icon name="person" size={22} />
           <span className="font-label-sm text-[10px] mt-0.5 font-bold">Profil</span>
         </Link>
       </div>

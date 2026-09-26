@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import BottomNavigation from '@/components/BottomNavigation';
 import ImageUploadModal from '@/components/ImageUploadModal';
+import Icon from '@/components/ui/Icon';
 
 export default function PublishResourcePage() {
   const router = useRouter();
@@ -28,6 +29,10 @@ export default function PublishResourcePage() {
   const [selectedCategory, setSelectedCategory] = useState('EXAM_CORRECTION');
   const [title, setTitle] = useState('');
 
+  // Target audience: STUDENTS, PUBLIC, STUDENTS_AND_PUBLIC
+  const [targetAudience, setTargetAudience] = useState<'STUDENTS' | 'PUBLIC' | 'STUDENTS_AND_PUBLIC'>('STUDENTS_AND_PUBLIC');
+  const [youtubeUrl, setYoutubeUrl] = useState('');
+
   // Media files state (strictly user-provided, zero hardcoded media)
   const [attachedFiles, setAttachedFiles] = useState<any[]>([]);
 
@@ -41,8 +46,8 @@ export default function PublishResourcePage() {
   const [filiereSearchQuery, setFiliereSearchQuery] = useState('');
   const [levelSearchQuery, setLevelSearchQuery] = useState('');
 
-  // Pricing state (Prices < 50 FCFA or 0F are strictly disallowed)
-  const [pricingModel, setPricingModel] = useState<'monetise' | 'presentiel'>('monetise');
+  // Pricing state: gratuit (0 FCFA), monetise (>= 50 FCFA), presentiel
+  const [pricingModel, setPricingModel] = useState<'gratuit' | 'monetise' | 'presentiel'>('monetise');
   const [price, setPrice] = useState(500);
 
   // Legal agreement checkbox
@@ -211,19 +216,22 @@ export default function PublishResourcePage() {
     e.preventDefault();
     if (!legalAgreement) return;
 
-    if (attachedFiles.length === 0) {
-      alert('Média obligatoire : Vous devez joindre au moins un fichier pédagogique (PDF, audio ou photo) pour pouvoir publier.');
+    if (attachedFiles.length === 0 && !youtubeUrl.trim()) {
+      alert('Média obligatoire : Vous devez joindre au moins un fichier pédagogique (PDF, audio, photo ou vidéo YouTube) pour pouvoir publier.');
       setCurrentStep(2);
       return;
     }
 
-    if (price < 50) {
-      alert('Prix non conforme : Les publications à 0 FCFA ne sont pas acceptées sur Campus Folder. Le tarif minimum est de 50 FCFA.');
+    if (pricingModel === 'monetise' && price < 50) {
+      alert('Prix non conforme : Le montant minimum pour une ressource payante est de 50 FCFA. Pour une ressource gratuite, sélectionnez le mode Gratuit.');
       setCurrentStep(3);
       return;
     }
 
     setIsSubmitting(true);
+
+    const effectivePrice = pricingModel === 'gratuit' ? 0 : price;
+    const effectiveAccessMode = pricingModel === 'gratuit' ? 'FREE' : (pricingModel === 'monetise' ? 'PAID' : 'IN_PERSON');
 
     const payload = {
       title,
@@ -233,9 +241,11 @@ export default function PublishResourcePage() {
       filiereId: selectedFiliere || null,
       academicLevelId: levels.find((l) => l.code === selectedLevel)?.id || 'level-l3',
       resourceType: selectedCategory,
-      moduleName: title.split('-')[0]?.trim() || 'Économie',
-      accessMode: pricingModel === 'monetise' ? 'PAID' : 'IN_PERSON',
-      priceAmount: price,
+      moduleName: title.split('-')[0]?.trim() || 'Ressource',
+      accessMode: effectiveAccessMode,
+      priceAmount: effectivePrice,
+      targetAudience,
+      youtubeUrl: youtubeUrl.trim() || undefined,
       files: attachedFiles,
       agreementAccepted: legalAgreement,
       whatsappPhone: '+22676458812',
@@ -746,6 +756,64 @@ export default function PublishResourcePage() {
                     </div>
                   </div>
 
+                  {/* Target Audience selection */}
+                  <div className="flex flex-col gap-space-xs pt-1">
+                    <div className="flex items-center justify-between">
+                      <label className="font-label-md text-label-md text-on-surface font-bold flex items-center gap-1.5">
+                        <Icon name="visibility" size={16} className="text-primary" />
+                        <span>À qui cette ressource est-elle destinée ? *</span>
+                      </label>
+                      <span className="text-[11px] text-primary font-bold">Public cible</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      {[
+                        {
+                          id: 'STUDENTS',
+                          title: 'Étudiants',
+                          sub: 'Cette ressource s’adresse principalement aux étudiants.',
+                          icon: 'school',
+                        },
+                        {
+                          id: 'PUBLIC',
+                          title: 'Public',
+                          sub: 'Cette ressource peut être consultée par tout le monde.',
+                          icon: 'public',
+                        },
+                        {
+                          id: 'STUDENTS_AND_PUBLIC',
+                          title: 'Étudiants & Public',
+                          sub: 'Cette ressource peut être utile aux étudiants comme au grand public.',
+                          icon: 'public',
+                        },
+                      ].map((aud) => {
+                        const isSelected = targetAudience === aud.id;
+                        return (
+                          <button
+                            key={aud.id}
+                            type="button"
+                            onClick={() => setTargetAudience(aud.id as any)}
+                            className={`p-3 rounded-xl border text-left transition-all flex flex-col gap-1 ${
+                              isSelected
+                                ? 'border-primary bg-primary/10 shadow-xs ring-2 ring-primary/40'
+                                : 'border-outline-variant/40 bg-surface-container hover:bg-surface-container-high'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-1.5 font-bold text-xs text-on-surface">
+                                <Icon name={aud.icon} size={16} className="text-primary" />
+                                <span>{aud.title}</span>
+                              </div>
+                              {isSelected && <span className="text-primary text-xs font-black">✓</span>}
+                            </div>
+                            <span className="text-[11px] text-on-surface-variant leading-snug">
+                              {aud.sub}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
                   {/* Title input */}
                   <div className="flex flex-col gap-1">
                     <label className="font-label-md text-label-md text-on-surface-variant font-semibold">
@@ -896,15 +964,50 @@ export default function PublishResourcePage() {
                     </button>
                   </div>
 
+                  {/* YouTube Video Link Input */}
+                  <div className="bg-surface-container-low p-3.5 rounded-2xl border border-outline-variant/30 flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold text-on-surface flex items-center gap-1.5">
+                        <Icon name="smart_display" size={18} className="text-error" />
+                        <span>Vidéo explicative YouTube (Optionnel)</span>
+                      </label>
+                      <span className="text-[10px] font-bold text-primary bg-primary-fixed/40 px-2 py-0.5 rounded-full border border-primary/20">
+                        YouTube HD
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-on-surface-variant">
+                      Collez le lien YouTube d'un cours vidéo ou corrigé. Il sera directement consultable par les apprenants.
+                    </p>
+                    <div className="flex items-center bg-surface-container-lowest rounded-xl px-3 py-2.5 border border-outline-variant/40 focus-within:border-primary transition-all">
+                      <Icon name="smart_display" size={16} className="text-error mr-2 shrink-0" />
+                      <input
+                        type="url"
+                        placeholder="https://www.youtube.com/watch?v=... ou https://youtu.be/..."
+                        value={youtubeUrl}
+                        onChange={(e) => setYoutubeUrl(e.target.value)}
+                        className="w-full bg-transparent text-xs font-semibold outline-none placeholder:text-outline"
+                      />
+                      {youtubeUrl && (
+                        <button
+                          type="button"
+                          onClick={() => setYoutubeUrl('')}
+                          className="text-outline hover:text-on-surface ml-1"
+                        >
+                          <Icon name="close" size={16} />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
                   {/* Attached Files List */}
                   <div className="flex flex-col gap-2 pt-1">
                     <div className="flex items-center justify-between">
                       <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-bold">
-                        Fichiers attachés ({attachedFiles.length} prêt{attachedFiles.length > 1 ? 's' : ''})
+                        Fichiers attachés ({attachedFiles.length + (youtubeUrl.trim() ? 1 : 0)} prêt{attachedFiles.length + (youtubeUrl.trim() ? 1 : 0) > 1 ? 's' : ''})
                       </span>
-                      {attachedFiles.length === 0 && (
+                      {attachedFiles.length === 0 && !youtubeUrl.trim() && (
                         <span className="text-[11px] text-error font-bold flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[14px]">warning</span>
+                          <Icon name="error" size={14} />
                           Au moins 1 média requis
                         </span>
                       )}
@@ -1000,11 +1103,50 @@ export default function PublishResourcePage() {
                     </h2>
                   </div>
 
-                  {/* Pricing Models: strictly non-zero */}
+                  {/* Pricing Models: Gratuit, Téléchargement Payant, Présentiel */}
                   <div className="grid grid-cols-1 gap-2.5">
+                    {/* Model 0: Gratuit & Libre accès */}
+                    <div
+                      onClick={() => {
+                        setPricingModel('gratuit');
+                        setPrice(0);
+                      }}
+                      className={`p-3.5 rounded-2xl cursor-pointer transition-all flex items-start gap-3 border-2 ${
+                        pricingModel === 'gratuit'
+                          ? 'bg-secondary-fixed/50 border-secondary ring-1 ring-secondary/20 text-on-secondary-fixed-variant shadow-xs'
+                          : 'bg-surface-container-low border-outline-variant/30 text-on-surface hover:border-secondary/40'
+                      }`}
+                    >
+                      <span className="w-8 h-8 rounded-full bg-secondary text-on-secondary flex items-center justify-center shrink-0 mt-0.5">
+                        <Icon name="verified" size={18} />
+                      </span>
+                      <div className="flex flex-col flex-1">
+                        <div className="flex items-center justify-between">
+                          <span className="font-label-lg text-label-lg font-bold">
+                            Gratuit & Solidaire (0 FCFA)
+                          </span>
+                          <span
+                            className={`w-4 h-4 rounded-full flex items-center justify-center ${
+                              pricingModel === 'gratuit' ? 'bg-secondary' : 'bg-surface-variant'
+                            }`}
+                          >
+                            {pricingModel === 'gratuit' && (
+                              <span className="w-1.5 h-1.5 rounded-full bg-surface"></span>
+                            )}
+                          </span>
+                        </div>
+                        <p className="font-body-sm text-body-sm opacity-90 mt-0.5">
+                          Ressource libre d'accès pour toute la communauté. Aucun paiement exigé des apprenants.
+                        </p>
+                      </div>
+                    </div>
+
                     {/* Model 1: Téléchargement Mobile Money */}
                     <div
-                      onClick={() => setPricingModel('monetise')}
+                      onClick={() => {
+                        setPricingModel('monetise');
+                        if (price === 0) setPrice(500);
+                      }}
                       className={`p-3.5 rounded-2xl cursor-pointer transition-all flex items-start gap-3 border-2 ${
                         pricingModel === 'monetise'
                           ? 'bg-primary-fixed border-primary ring-1 ring-primary/20 text-on-primary-fixed shadow-xs'
@@ -1012,7 +1154,7 @@ export default function PublishResourcePage() {
                       }`}
                     >
                       <span className="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center shrink-0 mt-0.5">
-                        <span className="material-symbols-outlined text-[20px]">price_check</span>
+                        <Icon name="shopping_cart" size={18} />
                       </span>
                       <div className="flex flex-col flex-1">
                         <div className="flex items-center justify-between">
@@ -1070,81 +1212,97 @@ export default function PublishResourcePage() {
                   </div>
 
                   {/* Calculator & Price field */}
-                  <div className="bg-surface-container rounded-xl p-space-md flex flex-col gap-space-sm">
-                    {/* Regulatory Anti-Speculation Banner */}
-                    {(() => {
-                      const activeRule = pricingRules.find(
-                        (r) => r.isActive && (r.documentType === selectedCategory || r.documentType === 'ALL')
-                      );
-                      const ceilingPrice = activeRule?.maxPrice || 2000;
-
-                      return (
-                        <div className="p-2.5 rounded-xl bg-primary-fixed/20 border border-primary/20 flex flex-col gap-1 text-xs text-on-surface">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <span className="material-symbols-outlined text-[16px] text-primary">gavel</span>
-                              <span>
-                                Barème officiel Burkina Faso : <strong>Plafond maximum {ceilingPrice} FCFA</strong>
-                              </span>
-                            </div>
-                            <span className="text-[9px] bg-primary-container text-on-primary px-1.5 py-0.5 rounded font-bold uppercase shrink-0">
-                              Régulation MESRSI
-                            </span>
-                          </div>
-                          <p className="text-[11px] text-on-surface-variant">
-                            Conseillé : {activeRule?.suggestedPrice || 500} FCFA • Minimum : 50 FCFA (Les prix à 0F ne sont pas autorisés)
-                          </p>
-                        </div>
-                      );
-                    })()}
-
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <label className="font-label-md text-label-md text-on-surface font-bold">
-                          Prix unitaire fixé (FCFA)
-                        </label>
-                        <p className="text-[10px] text-outline">Saisie bloquée au barème plafond</p>
-                      </div>
-                      <div className="flex items-center gap-1 bg-surface-container-lowest px-2.5 py-1.5 rounded-xl border border-outline-variant/30">
-                        <input
-                          className="w-20 font-price-display text-price-display text-secondary font-black text-right bg-transparent focus:outline-none"
-                          type="number"
-                          min="50"
-                          max={
-                            pricingRules.find(
-                              (r) => r.isActive && (r.documentType === selectedCategory || r.documentType === 'ALL')
-                            )?.maxPrice || 2000
-                          }
-                          step="50"
-                          value={price}
-                          onChange={(e) => {
-                            const activeRule = pricingRules.find(
-                              (r) => r.isActive && (r.documentType === selectedCategory || r.documentType === 'ALL')
-                            );
-                            const ceilingPrice = activeRule?.maxPrice || 2000;
-                            let val = Number(e.target.value) || 0;
-                            if (val > ceilingPrice) {
-                              val = ceilingPrice;
-                              showToast(`Plafond barème atteint : La saisie ne peut pas dépasser ${ceilingPrice} FCFA.`);
-                            }
-                            setPrice(val);
-                          }}
-                        />
-                        <span className="font-label-sm text-label-sm text-on-surface-variant font-bold">
-                          FCFA
+                  {pricingModel === 'gratuit' ? (
+                    <div className="bg-secondary-fixed/20 border border-secondary/30 rounded-2xl p-4 flex items-start gap-3">
+                      <Icon name="verified" size={24} className="text-secondary shrink-0 mt-0.5" />
+                      <div className="flex flex-col gap-1">
+                        <span className="font-label-md text-label-md text-on-surface font-bold">
+                          Ressource Solidaire & 100% Libre d'accès
+                        </span>
+                        <p className="font-body-sm text-xs text-on-surface-variant leading-relaxed">
+                          Cette ressource sera téléchargeable et consultable gratuitement par toute la communauté autorisée.
+                        </p>
+                        <span className="text-[11px] font-bold text-secondary mt-1">
+                          0 FCFA pour l'apprenant • Aucun frais plateforme
                         </span>
                       </div>
                     </div>
+                  ) : (
+                    <div className="bg-surface-container rounded-xl p-space-md flex flex-col gap-space-sm">
+                      {/* Regulatory Anti-Speculation Banner */}
+                      {(() => {
+                        const activeRule = pricingRules.find(
+                          (r) => r.isActive && (r.documentType === selectedCategory || r.documentType === 'ALL')
+                        );
+                        const ceilingPrice = activeRule?.maxPrice || 2000;
 
-                    {/* Price validation error if < 50 */}
-                    {price < 50 && (
-                      <div className="p-2.5 rounded-xl bg-error/10 border border-error/30 text-error flex items-center gap-2">
-                        <span className="material-symbols-outlined text-[18px]">cancel</span>
-                        <span className="text-xs font-bold leading-tight">
-                          Prix non conforme : Les publications à 0 FCFA ne sont pas acceptées. Tarif minimum requis : 50 FCFA.
-                        </span>
+                        return (
+                          <div className="p-2.5 rounded-xl bg-primary-fixed/20 border border-primary/20 flex flex-col gap-1 text-xs text-on-surface">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <Icon name="lock" size={16} className="text-primary" />
+                                <span>
+                                  Barème officiel Burkina Faso : <strong>Plafond maximum {ceilingPrice} FCFA</strong>
+                                </span>
+                              </div>
+                              <span className="text-[9px] bg-primary-container text-on-primary px-1.5 py-0.5 rounded font-bold uppercase shrink-0">
+                                Régulation MESRSI
+                              </span>
+                            </div>
+                            <p className="text-[11px] text-on-surface-variant">
+                              Conseillé : {activeRule?.suggestedPrice || 500} FCFA • Minimum : 50 FCFA
+                            </p>
+                          </div>
+                        );
+                      })()}
+
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <label className="font-label-md text-label-md text-on-surface font-bold">
+                            Prix unitaire fixé (FCFA)
+                          </label>
+                          <p className="text-[10px] text-outline">Minimum 50 FCFA • Plafond réglementé</p>
+                        </div>
+                        <div className="flex items-center gap-1 bg-surface-container-lowest px-2.5 py-1.5 rounded-xl border border-outline-variant/30">
+                          <input
+                            className="w-20 font-price-display text-price-display text-secondary font-black text-right bg-transparent focus:outline-none"
+                            type="number"
+                            min="50"
+                            max={
+                              pricingRules.find(
+                                (r) => r.isActive && (r.documentType === selectedCategory || r.documentType === 'ALL')
+                              )?.maxPrice || 2000
+                            }
+                            step="50"
+                            value={price}
+                            onChange={(e) => {
+                              const activeRule = pricingRules.find(
+                                (r) => r.isActive && (r.documentType === selectedCategory || r.documentType === 'ALL')
+                              );
+                              const ceilingPrice = activeRule?.maxPrice || 2000;
+                              let val = Number(e.target.value) || 0;
+                              if (val > ceilingPrice) {
+                                val = ceilingPrice;
+                                showToast(`Plafond barème atteint : La saisie ne peut pas dépasser ${ceilingPrice} FCFA.`);
+                              }
+                              setPrice(val);
+                            }}
+                          />
+                          <span className="font-label-sm text-label-sm text-on-surface-variant font-bold">
+                            FCFA
+                          </span>
+                        </div>
                       </div>
-                    )}
+
+                      {/* Price validation error if < 50 */}
+                      {price < 50 && (
+                        <div className="p-2.5 rounded-xl bg-error/10 border border-error/30 text-error flex items-center gap-2">
+                          <Icon name="error" size={18} />
+                          <span className="text-xs font-bold leading-tight">
+                            Prix minimum requis pour une ressource payante : 50 FCFA. Pour une ressource gratuite, sélectionnez le mode Gratuit.
+                          </span>
+                        </div>
+                      )}
 
                     {/* Quick price pills up to ceiling */}
                     {(() => {
@@ -1204,6 +1362,7 @@ export default function PublishResourcePage() {
                       </div>
                     </div>
                   </div>
+                  )}
 
                   <div className="flex gap-2 pt-2">
                     <button
@@ -1218,7 +1377,7 @@ export default function PublishResourcePage() {
                         (r) => r.isActive && (r.documentType === selectedCategory || r.documentType === 'ALL')
                       );
                       const ceilingPrice = activeRule?.maxPrice || 2000;
-                      const isInvalid = price < 50 || price > ceilingPrice;
+                      const isInvalid = pricingModel === 'monetise' && (price < 50 || price > ceilingPrice);
 
                       return (
                         <button
@@ -1233,8 +1392,8 @@ export default function PublishResourcePage() {
                           }}
                           type="button"
                         >
-                          <span>{price < 50 ? 'Prix min 50 FCFA obligatoire' : 'Valider la Charte'}</span>
-                          <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                          <span>{isInvalid ? 'Tarif min 50 FCFA requis' : 'Continuer vers l’Aperçu'}</span>
+                          <Icon name="arrow_forward" size={18} />
                         </button>
                       );
                     })()}
@@ -1243,41 +1402,75 @@ export default function PublishResourcePage() {
               </section>
             )}
 
-            {/* STEP 4: Charte & Propriété */}
+            {/* STEP 4: Aperçu & Confirmation (Charte & Propriété) */}
             {currentStep === 4 && (
               <section className="flex flex-col gap-space-md">
                 <div className="bg-surface-container-lowest rounded-2xl p-space-md shadow-xs border-2 border-outline-variant/40 flex flex-col gap-space-md">
                   <div className="flex items-center gap-space-xs text-primary">
-                    <span className="material-symbols-outlined text-[20px]">gavel</span>
+                    <Icon name="verified" size={20} />
                     <h2 className="font-headline-md text-headline-md text-on-surface font-bold">
-                      4. Charte & Propriété
+                      4. Aperçu & Validation Finale
                     </h2>
                   </div>
 
-                  {/* Contract Version v2.1 card */}
-                  <div className="bg-surface-container-low rounded-2xl p-4 flex flex-col gap-2 border-2 border-primary/20 ring-1 ring-primary/10">
-                    <div className="flex items-center gap-2 text-on-surface">
-                      <span className="material-symbols-outlined text-primary text-[20px]">
-                        shield_person
+                  {/* PREVIEW SUMMARY CARD */}
+                  <div className="bg-surface-container-low rounded-2xl p-4 flex flex-col gap-3 border border-outline-variant/30">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-primary uppercase tracking-wider">
+                        Récapitulatif de la ressource
                       </span>
+                      <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+                        {pricingModel === 'gratuit' ? 'GRATUIT (0 FCFA)' : `${price.toLocaleString('fr-FR')} FCFA`}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <h3 className="font-black text-sm text-on-surface leading-snug">
+                        {title || 'Titre non renseigné'}
+                      </h3>
+                      <div className="flex flex-wrap items-center gap-2 text-[11px] text-on-surface-variant mt-1">
+                        <span className="px-2 py-0.5 rounded-md bg-surface-container font-semibold">
+                          {institutions.find((i) => i.id === selectedUniv)?.shortName || 'Université'}
+                        </span>
+                        <span>•</span>
+                        <span>Niveau {selectedLevel}</span>
+                        <span>•</span>
+                        <span className="text-primary font-bold">
+                          {targetAudience === 'STUDENTS'
+                            ? 'Destiné aux Étudiants'
+                            : (targetAudience === 'PUBLIC'
+                            ? 'Accessible au Public'
+                            : 'Étudiants & Grand Public')}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="border-t border-outline-variant/20 pt-2 flex flex-wrap items-center justify-between gap-2 text-[11px]">
+                      <span className="flex items-center gap-1 text-on-surface font-semibold">
+                        <Icon name="attach_file" size={14} className="text-outline" />
+                        <span>{attachedFiles.length} fichier{attachedFiles.length > 1 ? 's' : ''} joint{attachedFiles.length > 1 ? 's' : ''}</span>
+                      </span>
+                      {youtubeUrl.trim() && (
+                        <span className="flex items-center gap-1 text-error font-bold">
+                          <Icon name="smart_display" size={14} />
+                          <span>Vidéo YouTube intégrée</span>
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Contract Version v2.1 card */}
+                  <div className="bg-surface-container-low rounded-2xl p-4 flex flex-col gap-2 border border-primary/20 ring-1 ring-primary/10">
+                    <div className="flex items-center gap-2 text-on-surface">
+                      <Icon name="verified" size={20} className="text-primary" />
                       <span className="font-label-md text-label-md font-bold">
                         Contrat Contributeur Certifié v2.1
                       </span>
                     </div>
                     <p className="font-body-sm text-[12px] leading-relaxed text-on-surface-variant">
-                      En publiant sur Campus Folder, vous garantissez que ces notes, enregistrements
-                      et corrigés résultent de votre production ou ont été explicitement autorisés
-                      au partage libre. Tout plagiat intégral ou document officiel confidentiel
-                      entraîne la suspension immédiate du solde contributeur.
+                      En publiant sur Campus Folder, vous garantissez que ces documents et corrigés
+                      résultent de votre production ou ont été explicitement autorisés au partage.
                     </p>
-                    <div className="flex items-center gap-2 pt-1">
-                      <span className="font-label-sm text-[10px] text-primary bg-primary-fixed border border-primary/20 px-2 py-0.5 rounded-md font-bold">
-                        Anti-plagiat actif
-                      </span>
-                      <span className="font-label-sm text-[10px] text-secondary bg-secondary-fixed border border-secondary/20 px-2 py-0.5 rounded-md font-bold">
-                        Reversement Garanti
-                      </span>
-                    </div>
                   </div>
 
                   {/* Honor commitment checkbox */}
@@ -1295,28 +1488,10 @@ export default function PublishResourcePage() {
                       </span>
                       <span className="font-body-sm text-[12px] text-on-surface-variant leading-tight">
                         Je certifie être l'auteur principal ou détenir les droits d'exploitation
-                        académique conformément à la législation burkinabè et au règlement Campus
-                        Folder.
+                        académique conformément à la charte Campus Folder.
                       </span>
                     </div>
                   </label>
-
-                  {/* Committee badge */}
-                  <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-surface-container-high border border-outline-variant/30">
-                    <img
-                      className="w-10 h-10 rounded-full object-cover shrink-0"
-                      alt="Comité étudiant"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcpJ06I2MX2pYy6ZGrzSu0rgMZrq3DNOY2AvY8DYCUI57hgKjdJlt9em_aZGvhwYGy9q3h8E7zN0siGcr4A6S1FIEo4P2fMVpZLw7I6PjS21CLz97Pz7G7Er8FXWrzSm-cepsa4cddXHWhWfM8Mpnc-L38MKC9ER-P9-2Z4c5No8yyZ6CsTD6AK5Oa7Cww5J9Mbs0SB3z_iFcbvYO960qBAcAzfNXJdqPh2-Q5KAYikHE1yajb-AhDrg"
-                    />
-                    <div className="flex flex-col min-w-0">
-                      <span className="font-label-sm text-label-sm text-on-surface font-bold truncate">
-                        Comité des Pairs Étudiants
-                      </span>
-                      <span className="font-body-sm text-[11px] text-on-surface-variant">
-                        Une validation express est lancée dès soumission.
-                      </span>
-                    </div>
-                  </div>
 
                   <div className="flex flex-col gap-2 pt-2">
                     <button
@@ -1328,14 +1503,17 @@ export default function PublishResourcePage() {
                           : 'bg-primary-container/60 text-on-primary/70 pointer-events-none opacity-60'
                       }`}
                     >
-                      <span className={`material-symbols-outlined text-[22px] ${isSubmitting ? 'animate-spin' : ''}`}>
-                        {isSubmitting ? 'sync' : 'verified_user'}
-                      </span>
-                      <span>
-                        {isSubmitting
-                          ? 'Indexation en base de données...'
-                          : 'Soumettre à la validation académique'}
-                      </span>
+                      {isSubmitting ? (
+                        <>
+                          <Icon name="autorenew" size={22} className="animate-spin" />
+                          <span>Indexation en base de données...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Icon name="check_circle" size={22} />
+                          <span>Confirmer & Publier la ressource</span>
+                        </>
+                      )}
                     </button>
                     <button
                       className="w-full py-2.5 text-center font-label-md text-label-md text-on-surface-variant active:opacity-75 font-semibold"

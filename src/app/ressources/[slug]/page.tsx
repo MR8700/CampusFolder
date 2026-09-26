@@ -4,6 +4,24 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useParams } from 'next/navigation';
 import Header from '@/components/Header';
+import Icon from '@/components/ui/Icon';
+
+function getYouTubeEmbedUrl(url?: string | null): string | null {
+  if (!url) return null;
+  try {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|shorts\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    if (match && match[2].length === 11) {
+      return `https://www.youtube-nocookie.com/embed/${match[2]}`;
+    }
+    if (url.includes('youtube.com/embed/')) {
+      return url;
+    }
+  } catch (e) {
+    console.error('Error parsing YouTube URL:', e);
+  }
+  return null;
+}
 
 export default function ResourceDetailsPage() {
   const router = useRouter();
@@ -12,6 +30,8 @@ export default function ResourceDetailsPage() {
 
   const [resource, setResource] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [isRestricted, setIsRestricted] = useState(false);
+  const [restrictionReason, setRestrictionReason] = useState<string | null>(null);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [whatsappEnabled, setWhatsappEnabled] = useState(true);
   const [isZoomModalOpen, setIsZoomModalOpen] = useState(false);
@@ -22,7 +42,10 @@ export default function ResourceDetailsPage() {
     fetch(`/api/v1/resources/${slug}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && data.resource) {
+        if (data.isRestrictedForUser) {
+          setIsRestricted(true);
+          setRestrictionReason(data.restrictionReason);
+        } else if (data.success && data.resource) {
           setResource(data.resource);
         }
         setLoading(false);
@@ -39,12 +62,41 @@ export default function ResourceDetailsPage() {
         <Header showBack title="Chargement..." />
         <div className="flex-1 flex items-center justify-center pt-16">
           <div className="flex flex-col items-center gap-2">
-            <span className="material-symbols-outlined animate-spin text-primary text-[32px]">
-              sync
-            </span>
+            <Icon name="sync" size={32} className="animate-spin text-primary" />
             <span className="text-body-sm text-on-surface-variant font-medium">
               Chargement du document académique...
             </span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isRestricted) {
+    return (
+      <div className="flex flex-col min-h-screen bg-surface">
+        <Header showBack title="Accès Restreint" />
+        <div className="flex-1 flex flex-col items-center justify-center p-6 text-center pt-16 max-w-md mx-auto">
+          <div className="w-16 h-16 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center mb-4">
+            <Icon name="school" size={36} />
+          </div>
+          <h2 className="font-headline-md font-bold text-on-surface">Ressource réservée aux étudiants</h2>
+          <p className="text-body-md text-on-surface-variant mt-2 mb-6 leading-relaxed">
+            {restrictionReason || "Ce document académique est réservé aux étudiants inscrits avec leur numéro INE."}
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 w-full">
+            <Link
+              href="/connexion"
+              className="flex-1 py-3 px-4 bg-primary text-on-primary rounded-xl font-bold text-center shadow-xs"
+            >
+              Se connecter (Étudiant)
+            </Link>
+            <Link
+              href="/"
+              className="flex-1 py-3 px-4 bg-surface-container-high text-on-surface rounded-xl font-bold text-center border border-outline-variant/30"
+            >
+              Ressources publiques
+            </Link>
           </div>
         </div>
       </div>
@@ -56,9 +108,7 @@ export default function ResourceDetailsPage() {
       <div className="flex flex-col min-h-screen bg-surface">
         <Header showBack title="Erreur" />
         <div className="flex-1 flex flex-col items-center justify-center p-6 text-center pt-16">
-          <span className="material-symbols-outlined text-[48px] text-secondary mb-2">
-            description
-          </span>
+          <Icon name="description" size={48} className="text-secondary mb-2" />
           <h2 className="font-headline-md font-bold">Document introuvable</h2>
           <p className="text-body-sm text-on-surface-variant mt-1 mb-4">
             Ce fichier n'est plus disponible ou a été déplacé.
@@ -79,8 +129,18 @@ export default function ResourceDetailsPage() {
   const pdfMedia = resource.media?.find((m: any) => m.mediaType === 'PDF');
   const audioMedia = resource.media?.find((m: any) => m.mediaType === 'AUDIO');
   const imageMedia = resource.media?.find((m: any) => m.mediaType === 'IMAGE');
+  const videoMedia = resource.media?.find((m: any) => m.mediaType === 'VIDEO');
+  const videoEmbedUrl = getYouTubeEmbedUrl(videoMedia?.fileUrl || videoMedia?.storagePath || resource.youtubeUrl);
 
   const handleUnlockClick = () => {
+    if (!isPaid) {
+      if (pdfMedia?.fileUrl) {
+        window.open(pdfMedia.fileUrl, '_blank');
+      } else {
+        router.push(`/lecteur/${slug}`);
+      }
+      return;
+    }
     setIsUnlocking(true);
     setTimeout(() => {
       router.push(`/paiement?resourceId=${resource.id}`);
@@ -136,18 +196,30 @@ export default function ResourceDetailsPage() {
           {/* Resource Title & Author Card */}
           <section className="px-margin mt-space-md flex flex-col gap-space-sm">
             <div className="flex items-center gap-space-xs flex-wrap">
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-primary-container text-on-primary font-label-sm text-label-sm font-bold shadow-xs">
-                <span className="material-symbols-outlined text-[14px]">school</span>
-                {resource.academicLevel?.code} {resource.faculty?.name}
-              </span>
+              {resource.academicLevel && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-primary-container text-on-primary font-label-sm text-label-sm font-bold shadow-xs">
+                  <Icon name="school" size={14} />
+                  {resource.academicLevel?.code} {resource.faculty?.name}
+                </span>
+              )}
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-secondary-fixed text-on-secondary-fixed-variant font-label-sm text-label-sm font-bold border border-secondary/20 shadow-xs">
-                <span className="material-symbols-outlined text-[14px]">folder_zip</span>
-                Pack {resource.media?.length || 3} Médias
+                <Icon name="folder_zip" size={14} />
+                Pack {resource.media?.length || 1} Média{(resource.media?.length || 1) > 1 ? 's' : ''}
               </span>
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm font-bold border border-outline-variant/30">
-                <span className="material-symbols-outlined text-[14px]">verified</span>
-                Certifié {resource.institution?.shortName?.split(' ')[1] || 'UJKZ'}
+                <Icon name={resource.targetAudience === 'PUBLIC' ? 'public' : 'school'} size={14} />
+                {resource.targetAudience === 'PUBLIC'
+                  ? 'Tout public'
+                  : resource.targetAudience === 'STUDENTS'
+                  ? 'Étudiants'
+                  : 'Étudiants & Public'}
               </span>
+              {resource.institution && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm font-bold border border-outline-variant/30">
+                  <Icon name="verified" size={14} />
+                  Certifié {resource.institution?.shortName?.split(' ')[1] || 'UJKZ'}
+                </span>
+              )}
             </div>
 
             <h2 className="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-extrabold tracking-tight">
@@ -167,7 +239,7 @@ export default function ResourceDetailsPage() {
                     }
                   />
                   <div className="absolute -bottom-1 -right-1 bg-secondary-container text-on-secondary w-5 h-5 rounded-full flex items-center justify-center shadow-xs">
-                    <span className="material-symbols-outlined text-[13px]">star</span>
+                    <Icon name="star" size={12} />
                   </div>
                 </div>
                 <div className="flex flex-col min-w-0">
@@ -175,9 +247,7 @@ export default function ResourceDetailsPage() {
                     <h3 className="font-label-lg text-label-lg text-on-surface truncate font-bold">
                       {resource.author?.profile?.displayName || 'Moussa O.'}
                     </h3>
-                    <span className="material-symbols-outlined text-primary text-[16px]">
-                      verified
-                    </span>
+                    <Icon name="verified" size={16} className="text-primary" />
                   </div>
                   <p className="font-body-sm text-body-sm text-on-surface-variant truncate">
                     {resource.author?.profile?.bio || 'Major de promo 2024 • UJKZ Ouagadougou'}
@@ -207,7 +277,7 @@ export default function ResourceDetailsPage() {
             <section className="px-margin mt-space-md">
               <div className="bg-surface-container-lowest p-5 rounded-2xl shadow-xs border-2 border-primary/20 ring-1 ring-primary/10">
                 <div className="flex items-center gap-2 mb-3 pb-2 border-b border-outline-variant/30">
-                  <span className="material-symbols-outlined text-[20px] text-primary">menu_book</span>
+                  <Icon name="menu_book" size={20} className="text-primary" />
                   <h3 className="font-label-lg text-sm font-bold text-on-surface">
                     Présentation Pédagogique & Objectifs d'Amphi
                   </h3>
@@ -223,9 +293,7 @@ export default function ResourceDetailsPage() {
           <section className="mt-space-lg">
             <div className="px-margin flex items-center justify-between mb-space-sm">
               <div className="flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-primary text-[20px]">
-                  visibility
-                </span>
+                <Icon name="visibility" size={20} className="text-primary" />
                 <h4 className="font-headline-md text-headline-md text-on-surface font-bold">
                   Aperçu interactif
                 </h4>
@@ -258,9 +326,7 @@ export default function ResourceDetailsPage() {
                   </div>
                   {/* Teaser Highlight Floating Badge */}
                   <div className="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-sm border border-outline-variant/30 flex items-center gap-2">
-                    <span className="material-symbols-outlined text-primary text-[18px]">
-                      auto_stories
-                    </span>
+                    <Icon name="auto_stories" size={18} className="text-primary" />
                     <span className="font-label-sm text-label-sm text-on-surface font-semibold">
                       Extrait Exercice 1 : Phonétique combinatoire
                     </span>
@@ -269,9 +335,7 @@ export default function ResourceDetailsPage() {
                   <div className="absolute inset-x-3 bottom-3 bg-surface-container-lowest/95 backdrop-blur-xl p-space-md rounded-xl shadow-md border border-primary/20 flex flex-col gap-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="material-symbols-outlined text-secondary text-[20px]">
-                          lock
-                        </span>
+                        <Icon name="lock" size={20} className="text-secondary" />
                         <span className="font-label-lg text-label-lg text-on-surface font-bold">
                           {Math.max((resource.pageCount || 14) - 1, 1)} pages restantes verrouillées
                         </span>
@@ -300,7 +364,7 @@ export default function ResourceDetailsPage() {
                     onClick={() => router.push('/lecteur/CF-8921-UJKZ-SSL')}
                   >
                     Feuilleter l'index
-                    <span className="material-symbols-outlined text-[16px]">chevron_right</span>
+                    <Icon name="chevron_right" size={16} />
                   </button>
                 </div>
               </div>
@@ -319,16 +383,63 @@ export default function ResourceDetailsPage() {
                 </span>
               </div>
               <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
-                Ce dossier combine cours rédigé, mémo oral et schéma haute définition.
+                Ce dossier combine cours rédigé, mémo oral, vidéo et schémas.
               </p>
             </div>
+
+            {/* Media Item: YouTube / Video Lecture */}
+            {videoEmbedUrl ? (
+              <div className="bg-surface-container-lowest p-space-md rounded-2xl shadow-xs border-2 border-red-500/35 hover:border-red-500/55 transition-colors flex flex-col gap-space-sm">
+                <div className="flex items-start justify-between gap-space-sm">
+                  <div className="flex items-center gap-space-sm min-w-0">
+                    <div className="w-11 h-11 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shrink-0 shadow-xs">
+                      <Icon name="smart_display" size={24} className="text-red-600" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-label-sm text-label-sm bg-red-100 text-red-700 px-1.5 py-0.5 rounded font-bold uppercase">
+                          Vidéo
+                        </span>
+                        <p className="font-label-lg text-label-lg text-on-surface truncate font-bold">
+                          {videoMedia?.originalFilename || 'Vidéo explicative du cours (YouTube)'}
+                        </p>
+                      </div>
+                      <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                        Explication magistrale & méthode de résolution
+                      </p>
+                    </div>
+                  </div>
+                  <span className="font-label-sm text-label-sm bg-red-50 text-red-600 border border-red-200 px-2 py-0.5 rounded-full shrink-0 font-bold">
+                    YouTube HD
+                  </span>
+                </div>
+
+                <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-black shadow-inner">
+                  <iframe
+                    src={videoEmbedUrl}
+                    title={videoMedia?.originalFilename || 'Vidéo du cours'}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    className="absolute inset-0 w-full h-full border-0"
+                  />
+                </div>
+              </div>
+            ) : videoMedia ? (
+              <div className="bg-surface-container-lowest p-space-md rounded-2xl shadow-xs border-2 border-red-500/35 flex flex-col gap-space-sm">
+                <video
+                  controls
+                  className="w-full rounded-xl bg-black max-h-80"
+                  src={videoMedia.fileUrl || videoMedia.storagePath}
+                />
+              </div>
+            ) : null}
 
             {/* Media Item 1: Master PDF */}
             <div className="bg-surface-container-lowest p-space-md rounded-2xl shadow-xs border-2 border-red-500/30 hover:border-red-500/50 transition-colors flex flex-col gap-space-sm">
               <div className="flex items-start justify-between gap-space-sm">
                 <div className="flex items-center gap-space-sm min-w-0">
                   <div className="w-11 h-11 rounded-xl bg-error-container text-on-error-container flex items-center justify-center shrink-0 shadow-xs">
-                    <span className="material-symbols-outlined text-[24px]">picture_as_pdf</span>
+                    <Icon name="picture_as_pdf" size={24} />
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5">
@@ -344,11 +455,11 @@ export default function ResourceDetailsPage() {
                     </p>
                   </div>
                 </div>
-                <span className="material-symbols-outlined text-primary shrink-0">check_circle</span>
+                <Icon name="check_circle" size={20} className="text-primary shrink-0" />
               </div>
               <div className="bg-red-500/5 border border-red-500/20 px-3 py-2 rounded-xl flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm">
                 <span className="flex items-center gap-1.5 truncate">
-                  <span className="material-symbols-outlined text-[16px] text-primary">psychology</span>
+                  <Icon name="psychology" size={16} className="text-primary" />
                   Astuces barème & pièges des profs
                 </span>
                 <span className="font-label-sm text-label-sm text-primary shrink-0 font-bold">
@@ -362,7 +473,7 @@ export default function ResourceDetailsPage() {
               <div className="flex items-start justify-between gap-space-sm">
                 <div className="flex items-center gap-space-sm min-w-0">
                   <div className="w-11 h-11 rounded-xl bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center shrink-0 shadow-xs">
-                    <span className="material-symbols-outlined text-[24px]">graphic_eq</span>
+                    <Icon name="graphic_eq" size={24} />
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5">
@@ -394,9 +505,7 @@ export default function ResourceDetailsPage() {
                       isPlayingAudio ? 'animate-pulse' : ''
                     }`}
                   >
-                    <span className="material-symbols-outlined text-[22px]">
-                      {isPlayingAudio ? 'pause' : 'play_arrow'}
-                    </span>
+                    <Icon name={isPlayingAudio ? 'close' : 'play_arrow'} size={22} />
                   </button>
 
                   {/* Waveform Bars */}
@@ -419,7 +528,7 @@ export default function ResourceDetailsPage() {
                 </div>
                 <div className="flex items-center justify-between px-1">
                   <p className="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[15px] text-tertiary">mic</span>
+                    <Icon name="mic" size={15} className="text-tertiary" />
                     "Écoutez bien l'explication sur la morphologie dérivationnelle..."
                   </p>
                 </div>
@@ -431,7 +540,7 @@ export default function ResourceDetailsPage() {
               <div className="flex items-start justify-between gap-space-sm">
                 <div className="flex items-center gap-space-sm min-w-0">
                   <div className="w-11 h-11 rounded-xl bg-secondary-fixed text-on-secondary-fixed-variant flex items-center justify-center shrink-0 shadow-xs">
-                    <span className="material-symbols-outlined text-[24px]">schema</span>
+                    <Icon name="schema" size={24} />
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5">
@@ -447,7 +556,7 @@ export default function ResourceDetailsPage() {
                     </p>
                   </div>
                 </div>
-                <span className="material-symbols-outlined text-primary shrink-0">check_circle</span>
+                <Icon name="check_circle" size={20} className="text-primary shrink-0" />
               </div>
               <div
                 className="relative rounded-xl overflow-hidden h-32 bg-surface-container border border-blue-500/20 cursor-pointer group"
@@ -460,9 +569,7 @@ export default function ResourceDetailsPage() {
                 />
                 <div className="absolute inset-0 bg-inverse-surface/40 flex items-center justify-center">
                   <div className="bg-surface-container-lowest/90 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm border border-blue-500/20">
-                    <span className="material-symbols-outlined text-primary text-[16px]">
-                      zoom_in
-                    </span>
+                    <Icon name="zoom_in" size={16} className="text-primary" />
                     <span className="font-label-sm text-label-sm text-on-surface font-semibold">
                       Cliquer pour zoom HD
                     </span>
@@ -478,7 +585,7 @@ export default function ResourceDetailsPage() {
               <div className="flex items-start justify-between gap-space-sm">
                 <div className="flex items-center gap-2.5">
                   <div className="w-9 h-9 rounded-full bg-[#DCFCE7] text-[#15803D] flex items-center justify-center shrink-0 shadow-xs">
-                    <span className="material-symbols-outlined text-[20px]">groups</span>
+                    <Icon name="groups" size={20} />
                   </div>
                   <div>
                     <h4 className="font-headline-md text-headline-md text-on-surface font-bold">
@@ -530,7 +637,7 @@ export default function ResourceDetailsPage() {
           <section className="px-margin mt-space-md">
             <div className="bg-surface-container-lowest p-space-md rounded-2xl flex items-center gap-space-sm shadow-xs border-2 border-primary/20 ring-1 ring-primary/10">
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 text-primary border border-primary/20">
-                <span className="material-symbols-outlined text-[22px]">verified_user</span>
+                <Icon name="verified_user" size={22} />
               </div>
               <div className="min-w-0">
                 <h5 className="font-label-lg text-label-lg text-on-surface font-bold">
@@ -607,7 +714,7 @@ export default function ResourceDetailsPage() {
                     )}
                   </div>
                   <p className="font-label-sm text-label-sm text-primary flex items-center gap-1 font-bold">
-                    <span className="material-symbols-outlined text-[13px]">bolt</span> Accès illimité à vie
+                    <Icon name="bolt" size={13} /> Accès illimité à vie
                   </p>
                 </div>
                 <div className="flex items-center gap-1.5">
@@ -628,9 +735,11 @@ export default function ResourceDetailsPage() {
                   disabled={isUnlocking}
                   className="flex-1 h-12 bg-secondary-container text-on-secondary rounded-xl font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-md active:scale-98 transition-all font-bold cursor-pointer"
                 >
-                  <span className={`material-symbols-outlined text-[20px] ${isUnlocking ? 'animate-spin' : ''}`}>
-                    {isUnlocking ? 'sync' : isPaid ? 'download' : 'menu_book'}
-                  </span>
+                  <Icon
+                    name={isUnlocking ? 'sync' : isPaid ? 'download' : 'menu_book'}
+                    size={20}
+                    className={isUnlocking ? 'animate-spin' : ''}
+                  />
                   <span>
                     {isUnlocking
                       ? 'Connexion Orange/Moov...'
@@ -647,12 +756,12 @@ export default function ResourceDetailsPage() {
                   aria-label="Échanger directement avec l’auteur sur Campus Folder"
                   className="w-12 h-12 rounded-xl bg-primary-fixed border border-primary/30 text-primary flex items-center justify-center shrink-0 shadow-sm active:scale-95 transition-transform"
                 >
-                  <span className="material-symbols-outlined text-[24px]">chat</span>
+                  <Icon name="chat" size={24} />
                 </button>
               </div>
 
               <p className="text-center font-body-sm text-body-sm text-on-surface-variant flex items-center justify-center gap-1 text-[11px]">
-                <span className="material-symbols-outlined text-[14px] text-outline">lock</span>
+                <Icon name="lock" size={14} className="text-outline" />
                 Paiement mobile instantané • Pas de carte bancaire requise
               </p>
             </div>
@@ -692,9 +801,11 @@ export default function ResourceDetailsPage() {
               disabled={isUnlocking}
               className="w-full h-13 py-3.5 bg-secondary-container hover:bg-[#c94b0a] text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-md active:scale-98 transition-all cursor-pointer"
             >
-              <span className="material-symbols-outlined text-[20px]">
-                {isUnlocking ? 'sync' : isPaid ? 'shopping_bag' : 'menu_book'}
-              </span>
+              <Icon
+                name={isUnlocking ? 'sync' : isPaid ? 'shopping_bag' : 'menu_book'}
+                size={20}
+                className={isUnlocking ? 'animate-spin' : ''}
+              />
               <span>
                 {isUnlocking
                   ? 'Connexion sécurisée...'
@@ -727,7 +838,7 @@ export default function ResourceDetailsPage() {
           <div className="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border-2 border-[#15803D]/30 ring-1 ring-[#15803D]/15 flex flex-col gap-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#15803D] text-[20px]">diversity_3</span>
+                <Icon name="diversity_3" size={20} className="text-[#15803D]" />
                 <h4 className="text-sm font-bold text-on-surface">Remise physique ou WhatsApp</h4>
               </div>
               <span className="text-[10px] bg-[#DCFCE7] border border-[#15803D]/25 text-[#15803D] px-2 py-0.5 rounded-full font-bold">
@@ -742,7 +853,7 @@ export default function ResourceDetailsPage() {
               onClick={handleContactAuthorInApp}
               className="w-full py-2.5 rounded-xl bg-primary text-on-primary font-bold text-xs flex items-center justify-center gap-2 active:scale-98 transition-all shadow-xs"
             >
-              <span className="material-symbols-outlined text-[18px]">forum</span>
+              <Icon name="forum" size={18} />
               <span>Discuter avec l'auteur sur Campus Folder</span>
             </button>
             <a
@@ -753,7 +864,7 @@ export default function ResourceDetailsPage() {
               rel="noopener noreferrer"
               className="w-full py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface border border-outline-variant/30 font-bold text-xs flex items-center justify-center gap-2 active:scale-98 transition-all"
             >
-              <span className="material-symbols-outlined text-[18px]">chat</span>
+              <Icon name="chat" size={18} />
               <span>Échanger par WhatsApp (+226)</span>
             </a>
           </div>
@@ -761,14 +872,14 @@ export default function ResourceDetailsPage() {
           {/* Academic Trust Badges */}
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-surface-container-low p-3 rounded-xl border border-outline-variant/40 flex items-center gap-2.5">
-              <span className="material-symbols-outlined text-primary text-[22px]">all_inclusive</span>
+              <Icon name="all_inclusive" size={22} className="text-primary" />
               <div>
                 <p className="text-[11px] font-bold text-on-surface leading-tight">Accès à vie</p>
                 <p className="text-[10px] text-on-surface-variant leading-tight">Toujours synchronisé</p>
               </div>
             </div>
             <div className="bg-surface-container-low p-3 rounded-xl border border-outline-variant/40 flex items-center gap-2.5">
-              <span className="material-symbols-outlined text-primary text-[22px]">cloud_download</span>
+              <Icon name="cloud_download" size={22} className="text-primary" />
               <div>
                 <p className="text-[11px] font-bold text-on-surface leading-tight">Mode hors-ligne</p>
                 <p className="text-[10px] text-on-surface-variant leading-tight">Lecture sans datas</p>
@@ -790,7 +901,7 @@ export default function ResourceDetailsPage() {
                 className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-black/60 text-white flex items-center justify-center"
                 onClick={() => setIsZoomModalOpen(false)}
               >
-                <span className="material-symbols-outlined text-[20px]">close</span>
+                <Icon name="close" size={20} />
               </button>
               <img
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUeNOmRkjhIiWurH8UEA2THc-a8167rdsJQaSzMPhb1qOkmrkgcVtLq-x1EXSQrQoXxsEI3zPah1qxfYSbOC89FM0OSUk3PcXu8HKJ9gtrGL3NcpCaNKwP_dglqVV-jR6jao8gBIsCf6Qp_e2mC_QhoKxnobPFXgX2bXdcDMU1n1ZASAIbjjgVG5srkdIhRXIrRzvrdwMtbRMcLRxGFQjAoGxYyXEnBTQ-Q086Ti_jSNtCfFpZX9FpPA"

@@ -82,6 +82,8 @@ model Profile {
   displayName     String
   avatarUrl       String
   bio             String?
+  profileType     String   @default("STUDENT") // STUDENT, TEACHER, TRAINER, PROFESSIONAL, CONTRIBUTOR, OTHER
+  profession      String?
   countryCode     String   @default("BF")
   region          String?  @default("Centre")
   city            String?  @default("Ouagadougou")
@@ -254,9 +256,10 @@ model AcademicResource {
   lastReminderAt   DateTime?
   priorityScore    Int          @default(1)
 
-  // Visibilité & Archivage (Auteur & Admin)
+  // Visibilité & Destination Cible (Étudiants, Public, Étudiants et Public)
   isArchived       Boolean      @default(false)
   visibility       String       @default("PUBLIC") // PUBLIC, UNLISTED, PRIVATE
+  targetAudience   String       @default("STUDENTS_AND_PUBLIC") // STUDENTS, PUBLIC, STUDENTS_AND_PUBLIC
 
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt

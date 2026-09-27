@@ -719,10 +719,10 @@ export default function PublishResourcePage() {
                           icon: 'workspace_premium',
                         },
                         {
-                          id: 'CONCOURS_TEST',
-                          title: 'Annales Concours',
-                          sub: 'Fonction publique BF',
-                          icon: 'quiz',
+                          id: 'TP_PROJET',
+                          title: 'Rapport TP & Projet',
+                          sub: 'Travaux pratiques guidés',
+                          icon: 'science',
                         },
                         {
                           id: 'FORMATION_ATELIER',

@@ -57,9 +57,9 @@ const PROFILES = [
   {
     type: 'PROFESSIONAL',
     title: 'Professionnel',
-    badge: 'Concours & Carrière',
+    badge: 'Expert & Métiers',
     icon: 'work',
-    desc: 'Préparation aux concours d’État, mémoires et documentation',
+    desc: 'Documentation professionnelle, études de cas et perfectionnement',
     isStudent: false,
   },
   {

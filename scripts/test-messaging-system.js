@@ -141,7 +141,7 @@ async function runAutomatedTests() {
       data: {
         initiatorId: aminata.id,
         type: 'VIDEO',
-        title: 'Masterclass Préparation Concours ENA 2026',
+        title: 'Masterclass Révision Partiels & Méthodologie UJKZ 2026',
         channelName: `mc-${Date.now()}`,
         status: 'CREATED',
       },

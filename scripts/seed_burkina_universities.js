@@ -369,14 +369,14 @@ async function main() {
       notes: 'Notes de cours rédigées et synthèses amphi.',
     },
     {
-      id: 'rule-concours',
-      title: 'Barème Annales Concours Directs Fonction Publique BF',
-      documentType: 'CONCOURS_TEST',
+      id: 'rule-tp-projet',
+      title: 'Barème Rapports TP & Projets Universitaires',
+      documentType: 'TP_PROJET',
       mediaFormat: 'ALL',
       minPrice: 0,
-      maxPrice: 1200,
-      suggestedPrice: 500,
-      notes: 'Préparations tests d’intégration, douanes, ENAREF, santé, éducation.',
+      maxPrice: 1500,
+      suggestedPrice: 600,
+      notes: 'Travaux pratiques guidés, rapports de stage académique et projets de fin de module.',
     },
     {
       id: 'rule-formation',
@@ -389,6 +389,12 @@ async function main() {
       notes: 'Sessions interactives animées par des majors et professionnels.',
     },
   ];
+
+  await prisma.pricingCeilingRule.deleteMany({
+    where: {
+      OR: [{ id: 'rule-concours' }, { documentType: 'CONCOURS_TEST' }],
+    },
+  }).catch(() => {});
 
   for (const rule of pricingRules) {
     await prisma.pricingCeilingRule.upsert({

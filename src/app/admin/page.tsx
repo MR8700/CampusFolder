@@ -44,7 +44,7 @@ const DOC_TYPES = [
   { id: 'TUTORIAL_SHEET', label: 'Fiche de TD & Exercices' },
   { id: 'MEMOIRE_MASTER', label: 'Mémoire de Master' },
   { id: 'THESE_SOUTENANCE', label: 'Thèse de Soutenance (Doctorat/Médecine)' },
-  { id: 'CONCOURS_TEST', label: 'Annales Concours Fonction Publique' },
+  { id: 'TP_PROJET', label: 'Rapport TP & Projet Universitaire' },
   { id: 'FORMATION_ATELIER', label: 'Formation & Atelier Pratique' },
   { id: 'SUMMARY_MEMO', label: 'Fiche Mémo / Synthèse' },
 ];

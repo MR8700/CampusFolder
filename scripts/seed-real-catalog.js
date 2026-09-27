@@ -127,7 +127,7 @@ async function main() {
     } else if (lowerName.includes('sujet') || lowerName.includes('reponse') || lowerName.includes('pm') || lowerName.includes('explication')) {
       moduleName = 'Annales & Corrigés Examens Bac';
       resourceType = 'EXAM_CORRECTION';
-      title = `Annales Bac & Concours : ${title}`;
+      title = `Annales & Sujets d'Examen : ${title}`;
       priceAmount = isFree ? 0 : 500;
     }
 

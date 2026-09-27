@@ -231,7 +231,7 @@ model AcademicResource {
   title           String        // "L1 Linguistique Générale - Corrigé Examen S1"
   slug            String        @unique
   description     String
-  resourceType    String        // EXAM_CORRECTION, COURSE_NOTES, TUTORIAL_SHEET, SUMMARY_MEMO, OFFICIAL_EXAM, THESE_SOUTENANCE, MEMOIRE_MASTER, CONCOURS_TEST, FORMATION_ATELIER
+  resourceType    String        // EXAM_CORRECTION, COURSE_NOTES, TUTORIAL_SHEET, SUMMARY_MEMO, OFFICIAL_EXAM, THESE_SOUTENANCE, MEMOIRE_MASTER, TP_PROJET, FORMATION_ATELIER
   moduleName      String        // "Linguistique Générale"
   academicYear    String        @default("2024-2025")
   semester        String        @default("S1")
@@ -557,7 +557,7 @@ model EmailNotification {
 model PricingCeilingRule {
   id              String   @id @default(uuid())
   title           String   // e.g. "Plafond Général Corrigés d'Examens L1-L3"
-  documentType    String?  // THESE_SOUTENANCE, MEMOIRE_MASTER, CORRIGE_DEVOIR, COURS_SYNTHESE, CONCOURS_TEST, FORMATION_ATELIER, ALL
+  documentType    String?  // THESE_SOUTENANCE, MEMOIRE_MASTER, CORRIGE_DEVOIR, COURS_SYNTHESE, TP_PROJET, FORMATION_ATELIER, ALL
   mediaFormat     String?  // PDF, AUDIO, VIDEO, BUNDLE, ALL
   minPrice        Int      @default(0)     // FCFA
   maxPrice        Int      @default(2000)  // Plafond strict FCFA

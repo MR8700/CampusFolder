@@ -486,7 +486,7 @@ async function main() {
           lastName: 'Traoré',
           displayName: 'Dr. Idriss Traoré',
           avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80',
-          bio: 'Enseignant-Chercheur en Économie & Formateur Préparation Concours Nationaux (ENA, Douanes)',
+          bio: 'Enseignant-Chercheur en Sciences Économiques & Formateur Universitaire (Méthodologie & Analyse Empirique)',
           countryCode: 'BF',
           region: 'Centre',
           city: 'Ouagadougou',
@@ -537,8 +537,8 @@ async function main() {
         mode: 'PAID',
         priceAmount: 500,
         currency: 'XOF',
-        platformFeeRate: 0.15,
-        contributorRate: 0.85,
+        platformFeeRate: 0.40,
+        contributorRate: 0.60,
       },
     },
     contactChannel: {
@@ -583,44 +583,55 @@ async function main() {
         mode: 'PAID',
         priceAmount: 500,
         currency: 'XOF',
-        platformFeeRate: 0.15,
-        contributorRate: 0.85,
+        platformFeeRate: 0.40,
+        contributorRate: 0.60,
       },
     },
   });
 
-  // Publication 3 : Fascicule Préparation Concours Directs Fonction Publique 2026 (PUBLIC - OUVERT À TOUS)
+  // Nettoyage proactif de tout enregistrement obsolète de concours directs
+  await prisma.academicResource.deleteMany({
+    where: {
+      OR: [
+        { id: 'res-concours-fp-2026' },
+        { slug: 'fascicule-concours-fonction-publique-2026-burkina' },
+        { resourceType: 'CONCOURS_TEST' },
+      ],
+    },
+  }).catch(() => {});
+
+  // Publication 3 : Recueil des Sujets d’Examens & Corrigés Types : Sciences Économiques & Gestion L3 (PUBLIC - OUVERT À TOUS)
   await safeUpsertResource({
-    id: 'res-concours-fp-2026',
+    id: 'res-recueil-seg-l3',
     authorId: userIdriss.id,
     institutionId: ujkz.id,
     facultyId: facultyMap['seg'],
     academicLevelId: levelMap['L3'],
-    title: 'Fascicule Préparation Concours Fonction Publique 2026 : Culture Générale & QCM (ENA, Douanes, Police)',
-    slug: 'fascicule-concours-fonction-publique-2026-burkina',
-    description: 'Guide stratégique officiel de préparation aux concours directs : 500 QCM corrigés sur les institutions du Burkina, l’actualité sahélienne, et tests psychotechniques.',
-    resourceType: 'CONCOURS_TEST',
-    moduleName: 'Culture Générale & Concours Directs',
-    academicYear: '2025-2026',
-    semester: 'Annuel',
-    urgencyBanner: 'Concours Directs 2026 • Candidatures Ouvertes',
+    title: 'Recueil des Sujets d’Examens & Corrigés Types : Sciences Économiques & Gestion (Licence 3 UJKZ)',
+    slug: 'recueil-examens-corriges-sciences-economiques-l3-ujkz',
+    description: 'Annales complètes et corrigés méthodologiques détaillés des sessions normales et rattrapages : Macroéconomie approfondie, Économétrie et Gestion financière.',
+    resourceType: 'EXAM_CORRECTION',
+    moduleName: 'Analyse Économique & Macroéconomie Approfondie',
+    academicYear: '2024-2025',
+    semester: 'S5 & S6',
+    urgencyBanner: 'Session Partiels & Examens • UJKZ Ouaga',
     badgeQuality: 'Officiel',
     isCertified: true,
     isTrending: true,
     visibility: 'PUBLIC', // Ouvert au grand public et aux étudiants
-    pageCount: 65,
-    ratingAverage: 5.0,
-    ratingCount: 480,
-    downloadsCount: 1120,
-    viewsCount: 5600,
+    pageCount: 54,
+    ratingAverage: 4.9,
+    ratingCount: 380,
+    downloadsCount: 890,
+    viewsCount: 4200,
     thumbnailUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=500&auto=format&fit=crop&q=80',
     accessPolicy: {
       create: {
         mode: 'PAID',
         priceAmount: 1000,
         currency: 'XOF',
-        platformFeeRate: 0.15,
-        contributorRate: 0.85,
+        platformFeeRate: 0.40,
+        contributorRate: 0.60,
       },
     },
   });
@@ -654,8 +665,8 @@ async function main() {
         mode: 'PAID',
         priceAmount: 750,
         currency: 'XOF',
-        platformFeeRate: 0.15,
-        contributorRate: 0.85,
+        platformFeeRate: 0.40,
+        contributorRate: 0.60,
       },
     },
   });
@@ -724,8 +735,8 @@ async function main() {
         mode: 'PAID',
         priceAmount: 300,
         currency: 'XOF',
-        platformFeeRate: 0.15,
-        contributorRate: 0.85,
+        platformFeeRate: 0.40,
+        contributorRate: 0.60,
       },
     },
   });

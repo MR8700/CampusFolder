@@ -1795,18 +1795,18 @@ export default function PublishResourcePage() {
                     type="button"
                     onClick={handleSendReminder}
                     disabled={reminderLoading || reminderSent}
-                    className={`w-full py-2.5 px-4 rounded-xl font-label-md text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                    className={`w-full min-h-11 py-2.5 px-3 sm:px-4 rounded-xl font-label-md text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all text-center leading-snug ${
                       reminderSent
                         ? 'bg-[#DCFCE7] text-[#15803D] border border-[#15803D]/40'
                         : 'bg-error/10 hover:bg-error/20 text-error border border-error/30 active:scale-98'
                     }`}
                   >
-                    <Icon name={reminderSent ? 'done_all' : 'notifications_active'} className="text-[18px]" />
-                    <span>
+                    <Icon name={reminderSent ? 'done_all' : 'notifications_active'} className="text-[18px] shrink-0" />
+                    <span className="break-words max-w-full text-center">
                       {reminderLoading
                         ? 'Transmission du rappel...'
                         : reminderSent
-                        ? `Rappel #${reminderCount} envoyé ! (Reclassé en tête de file d'examen)`
+                        ? `Rappel #${reminderCount} envoyé ! (Reclassé en tête de file)`
                         : 'Envoyer un Rappel de ma publication (Priorité Haute)'}
                     </span>
                   </button>
@@ -1816,18 +1816,18 @@ export default function PublishResourcePage() {
                   <button
                     type="button"
                     onClick={() => router.push('/')}
-                    className="flex-1 h-12 rounded-xl bg-primary-container text-on-primary font-label-lg text-xs sm:text-sm flex items-center justify-center gap-2 active:scale-98 transition-transform font-bold shadow-md"
+                    className="flex-1 min-h-11 py-2 px-3 rounded-xl bg-primary-container text-on-primary font-label-lg text-xs sm:text-sm flex items-center justify-center gap-1.5 sm:gap-2 active:scale-98 transition-transform font-bold shadow-md text-center leading-tight"
                   >
                     <span>Voir l'accueil</span>
-                    <Icon name="home" className="text-[18px]" />
+                    <Icon name="home" className="text-[18px] shrink-0" />
                   </button>
                   <button
                     type="button"
                     onClick={() => router.push('/explorer')}
-                    className="flex-1 h-12 rounded-xl bg-surface-container text-on-surface font-label-lg text-xs sm:text-sm flex items-center justify-center gap-2 active:scale-98 transition-transform font-bold hover:bg-surface-container-high"
+                    className="flex-1 min-h-11 py-2 px-3 rounded-xl bg-surface-container text-on-surface font-label-lg text-xs sm:text-sm flex items-center justify-center gap-1.5 sm:gap-2 active:scale-98 transition-transform font-bold hover:bg-surface-container-high text-center leading-tight"
                   >
                     <span>Explorer</span>
-                    <Icon name="explore" className="text-[18px]" />
+                    <Icon name="explore" className="text-[18px] shrink-0" />
                   </button>
                 </div>
               </div>

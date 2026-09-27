@@ -27,9 +27,9 @@ const VARIANT_CLASSES: Record<ButtonVariant, string> = {
 };
 
 const SIZE_CLASSES: Record<ButtonSize, string> = {
-  sm: 'h-8 px-3 text-xs rounded-xl font-bold gap-1.5',
-  md: 'h-10 px-4 text-xs sm:text-sm rounded-xl font-bold gap-2',
-  lg: 'h-12 px-5 text-sm sm:text-base rounded-2xl font-bold gap-2.5',
+  sm: 'min-h-8 py-1.5 px-2.5 sm:px-3 text-[11px] sm:text-xs rounded-xl font-bold gap-1 sm:gap-1.5',
+  md: 'min-h-10 py-2 px-3 sm:px-4 text-xs sm:text-sm rounded-xl font-bold gap-1.5 sm:gap-2',
+  lg: 'min-h-12 py-2.5 px-3.5 sm:px-5 text-xs sm:text-sm md:text-base rounded-2xl font-bold gap-2 sm:gap-2.5',
 };
 
 export default function Button({
@@ -48,19 +48,19 @@ export default function Button({
   return (
     <button
       disabled={isDisabled}
-      className={`inline-flex items-center justify-center transition-all select-none cursor-pointer outline-hidden disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 ${VARIANT_CLASSES[variant]} ${SIZE_CLASSES[size]} ${className}`}
+      className={`inline-flex items-center justify-center text-center leading-snug transition-all select-none cursor-pointer outline-hidden disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 max-w-full ${VARIANT_CLASSES[variant]} ${SIZE_CLASSES[size]} ${className}`}
       {...props}
     >
       {isLoading ? (
         <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin shrink-0" />
       ) : leftIcon ? (
-        <Icon name={leftIcon} size={size === 'sm' ? 15 : size === 'md' ? 18 : 20} />
+        <Icon name={leftIcon} size={size === 'sm' ? 14 : size === 'md' ? 16 : 18} className="shrink-0" />
       ) : null}
 
-      <span>{children}</span>
+      <span className="truncate max-w-full text-center leading-tight">{children}</span>
 
       {!isLoading && rightIcon && (
-        <Icon name={rightIcon} size={size === 'sm' ? 15 : size === 'md' ? 18 : 20} />
+        <Icon name={rightIcon} size={size === 'sm' ? 14 : size === 'md' ? 16 : 18} className="shrink-0" />
       )}
     </button>
   );

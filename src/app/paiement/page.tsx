@@ -739,12 +739,12 @@ function PaymentContent() {
                   type="button"
                   onClick={handleCheckout}
                   disabled={isProcessing}
-                  className="w-full bg-primary text-on-primary py-space-md rounded-xl font-label-lg text-label-lg flex items-center justify-center gap-space-sm shadow-lg active:scale-98 transition-all duration-150 relative overflow-hidden group disabled:opacity-75 cursor-pointer"
+                  className="w-full bg-primary text-on-primary min-h-12 py-3 px-3 sm:px-4 rounded-xl font-label-lg text-xs sm:text-sm md:text-base flex items-center justify-center gap-2 shadow-lg active:scale-98 transition-all duration-150 relative overflow-hidden group disabled:opacity-75 cursor-pointer text-center leading-tight"
                 >
                   <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <Icon name="lock" className="text-[20px] text-primary-fixed animate-pulse" />
-                  <span className="font-bold tracking-wide">{getCtaLabel()}</span>
-                  <Icon name="arrow_forward" className="text-[18px]" />
+                  <Icon name="lock" className="text-[18px] sm:text-[20px] text-primary-fixed animate-pulse shrink-0" />
+                  <span className="font-bold tracking-wide break-words text-center">{getCtaLabel()}</span>
+                  <Icon name="arrow_forward" className="text-[16px] sm:text-[18px] shrink-0" />
                 </button>
                 <div className="mt-space-xs text-center flex items-center justify-center gap-1.5 text-on-surface-variant">
                   <Icon name="verified" className="text-[14px] text-primary" />

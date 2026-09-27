@@ -217,17 +217,17 @@ export default function LoginPage() {
                 <button
                   type="submit"
                   disabled={loading || !identifier.trim() || !password}
-                  className="mt-2 w-full py-3.5 rounded-2xl bg-primary text-on-primary font-bold text-xs sm:text-sm shadow-md hover:bg-primary/90 active:scale-98 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="mt-2 w-full min-h-12 py-3 px-4 rounded-2xl bg-primary text-on-primary font-bold text-xs sm:text-sm md:text-base shadow-md hover:bg-primary/90 active:scale-98 transition-all disabled:opacity-50 flex items-center justify-center gap-2 text-center leading-tight"
                 >
                   {loading ? (
                     <>
-                      <Icon name="autorenew" className="text-[18px] animate-spin" />
-                      <span>Connexion en cours...</span>
+                      <Icon name="autorenew" className="text-[18px] animate-spin shrink-0" />
+                      <span className="truncate max-w-full">Connexion en cours...</span>
                     </>
                   ) : (
                     <>
-                      <Icon name="lock_open" className="text-[18px]" />
-                      <span>Se Connecter à Mon Espace</span>
+                      <Icon name="lock_open" className="text-[18px] shrink-0" />
+                      <span className="truncate max-w-full">Se Connecter à Mon Espace</span>
                     </>
                   )}
                 </button>

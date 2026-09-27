@@ -733,14 +733,14 @@ export default function ResourceDetailsPage() {
                   type="button"
                   onClick={handleUnlockClick}
                   disabled={isUnlocking}
-                  className="flex-1 h-12 bg-secondary-container text-on-secondary rounded-xl font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-md active:scale-98 transition-all font-bold cursor-pointer"
+                  className="flex-1 min-h-12 py-2 px-3 bg-secondary-container text-on-secondary rounded-xl font-label-lg text-xs sm:text-sm md:text-base flex items-center justify-center gap-2 shadow-md active:scale-98 transition-all font-bold cursor-pointer text-center leading-tight"
                 >
                   <Icon
                     name={isUnlocking ? 'sync' : isPaid ? 'download' : 'menu_book'}
                     size={20}
-                    className={isUnlocking ? 'animate-spin' : ''}
+                    className={`shrink-0 ${isUnlocking ? 'animate-spin' : ''}`}
                   />
-                  <span>
+                  <span className="truncate sm:whitespace-normal">
                     {isUnlocking
                       ? 'Connexion Orange/Moov...'
                       : isPaid
@@ -799,14 +799,14 @@ export default function ResourceDetailsPage() {
               type="button"
               onClick={handleUnlockClick}
               disabled={isUnlocking}
-              className="w-full h-13 py-3.5 bg-secondary-container hover:bg-[#c94b0a] text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-md active:scale-98 transition-all cursor-pointer"
+              className="w-full min-h-12 py-3 px-4 bg-secondary-container hover:bg-[#c94b0a] text-white rounded-xl font-bold text-xs sm:text-sm md:text-base flex items-center justify-center gap-2 shadow-md active:scale-98 transition-all cursor-pointer text-center leading-tight"
             >
               <Icon
                 name={isUnlocking ? 'sync' : isPaid ? 'shopping_bag' : 'menu_book'}
                 size={20}
-                className={isUnlocking ? 'animate-spin' : ''}
+                className={`shrink-0 ${isUnlocking ? 'animate-spin' : ''}`}
               />
-              <span>
+              <span className="truncate sm:whitespace-normal">
                 {isUnlocking
                   ? 'Connexion sécurisée...'
                   : isPaid
@@ -851,10 +851,10 @@ export default function ResourceDetailsPage() {
             <button
               type="button"
               onClick={handleContactAuthorInApp}
-              className="w-full py-2.5 rounded-xl bg-primary text-on-primary font-bold text-xs flex items-center justify-center gap-2 active:scale-98 transition-all shadow-xs"
+              className="w-full min-h-10 py-2.5 px-3 rounded-xl bg-primary text-on-primary font-bold text-xs sm:text-sm flex items-center justify-center gap-2 active:scale-98 transition-all shadow-xs text-center leading-tight"
             >
-              <Icon name="forum" size={18} />
-              <span>Discuter avec l'auteur sur Campus Folder</span>
+              <Icon name="forum" size={18} className="shrink-0" />
+              <span className="truncate sm:whitespace-normal">Discuter avec l'auteur sur Campus Folder</span>
             </button>
             <a
               href={`https://wa.me/${resource.contactChannel?.phoneNumber?.replace(/[^0-9]/g, '') || '22670112233'}?text=${encodeURIComponent(
@@ -862,10 +862,10 @@ export default function ResourceDetailsPage() {
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface border border-outline-variant/30 font-bold text-xs flex items-center justify-center gap-2 active:scale-98 transition-all"
+              className="w-full min-h-10 py-2.5 px-3 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface border border-outline-variant/30 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 active:scale-98 transition-all text-center leading-tight"
             >
-              <Icon name="chat" size={18} />
-              <span>Échanger par WhatsApp (+226)</span>
+              <Icon name="chat" size={18} className="shrink-0" />
+              <span className="truncate sm:whitespace-normal">Échanger par WhatsApp (+226)</span>
             </a>
           </div>
 

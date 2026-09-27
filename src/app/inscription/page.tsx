@@ -770,17 +770,17 @@ export default function RegisterPage() {
               <button
                 type="submit"
                 disabled={loading || !firstName || !lastName || !email || !phone || !password || !passwordsMatch || !passwordResult.isValid}
-                className="mt-2 w-full py-4 rounded-2xl bg-primary text-on-primary font-bold text-xs sm:text-sm shadow-md hover:bg-primary/90 active:scale-98 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                className="mt-2 w-full min-h-12 py-3 px-3 sm:px-4 rounded-2xl bg-primary text-on-primary font-bold text-xs sm:text-sm md:text-base shadow-md hover:bg-primary/90 active:scale-98 transition-all disabled:opacity-50 flex items-center justify-center gap-2 text-center leading-tight"
               >
                 {loading ? (
                   <>
-                    <Icon name="autorenew" size={18} className="animate-spin" />
-                    <span>Création du compte en cours...</span>
+                    <Icon name="autorenew" size={18} className="animate-spin shrink-0" />
+                    <span className="truncate max-w-full">Création du compte en cours...</span>
                   </>
                 ) : (
                   <>
-                    <Icon name="how_to_reg" size={18} />
-                    <span>S'inscrire et Recevoir mon Code de Vérification</span>
+                    <Icon name="how_to_reg" size={18} className="shrink-0" />
+                    <span className="break-words max-w-full text-center">S'inscrire et Recevoir mon Code</span>
                   </>
                 )}
               </button>
@@ -825,15 +825,15 @@ export default function RegisterPage() {
               type="button"
               onClick={handleVerifyOtp}
               disabled={loading || otpCode.length !== 6}
-              className="w-full py-3.5 rounded-2xl bg-primary text-on-primary font-bold text-xs sm:text-sm shadow-md hover:bg-primary/90 active:scale-98 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full min-h-12 py-3 px-3 sm:px-4 rounded-2xl bg-primary text-on-primary font-bold text-xs sm:text-sm md:text-base shadow-md hover:bg-primary/90 active:scale-98 transition-all disabled:opacity-50 flex items-center justify-center gap-2 text-center leading-tight"
             >
               {loading ? (
                 <>
-                  <Icon name="autorenew" size={18} className="animate-spin" />
-                  <span>Validation du code...</span>
+                  <Icon name="autorenew" size={18} className="animate-spin shrink-0" />
+                  <span className="truncate max-w-full">Validation du code...</span>
                 </>
               ) : (
-                <span>Confirmer et Activer mon Compte</span>
+                <span className="break-words max-w-full text-center">Confirmer et Activer mon Compte</span>
               )}
             </button>
 

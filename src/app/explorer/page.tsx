@@ -819,9 +819,9 @@ export default function ExplorerPage() {
                     <button
                       type="button"
                       onClick={() => router.push(`/ressources/${spotlightResource.slug}`)}
-                      className="px-3.5 py-1.5 rounded-xl bg-surface-container-lowest text-primary font-label-md text-xs font-bold shadow-sm active:scale-95 transition-transform inline-flex items-center gap-1"
+                      className="min-h-9 px-3.5 py-1.5 rounded-xl bg-surface-container-lowest text-primary font-label-md text-xs font-bold shadow-sm active:scale-95 transition-transform inline-flex items-center gap-1 shrink-0 text-center leading-tight"
                     >
-                      <Icon name="visibility" className="text-[16px]" />
+                      <Icon name="visibility" className="text-[16px] shrink-0" />
                       <span>Aperçu rapide</span>
                     </button>
                   </div>
@@ -1228,14 +1228,14 @@ export default function ExplorerPage() {
               <button
                 type="button"
                 onClick={resetAllFilters}
-                className="px-4 py-2.5 rounded-xl bg-surface-container text-on-surface font-bold text-xs"
+                className="px-4 min-h-10 py-2 rounded-xl bg-surface-container text-on-surface font-bold text-xs shrink-0 text-center leading-tight"
               >
                 Réinitialiser
               </button>
               <button
                 type="button"
                 onClick={() => setShowMobileFilters(false)}
-                className="flex-1 py-2.5 rounded-xl bg-primary text-on-primary font-bold text-xs shadow-md text-center"
+                className="flex-1 min-h-10 py-2 px-3 rounded-xl bg-primary text-on-primary font-bold text-xs sm:text-sm shadow-md text-center leading-tight truncate"
               >
                 Afficher ({searchResults.length})
               </button>

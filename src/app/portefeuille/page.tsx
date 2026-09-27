@@ -124,17 +124,17 @@ export default function WalletPage() {
                 <button
                   type="button"
                   onClick={() => setShowAuthModal(true)}
-                  className="py-3 px-4 rounded-xl bg-primary text-on-primary font-bold text-xs sm:text-sm shadow-md hover:bg-primary/90 active:scale-95 transition-all flex items-center justify-center gap-2"
+                  className="min-h-11 py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl bg-primary text-on-primary font-bold text-xs sm:text-sm shadow-md hover:bg-primary/90 active:scale-95 transition-all flex items-center justify-center gap-2 text-center leading-tight"
                 >
-                  <Icon name="badge" className="text-[18px]" />
+                  <Icon name="badge" className="text-[18px] shrink-0" />
                   <span>Comptes Étudiants (DB)</span>
                 </button>
 
                 <Link
                   href="/connexion"
-                  className="py-3 px-4 rounded-xl bg-surface-container text-on-surface font-bold text-xs sm:text-sm border border-outline-variant/40 hover:bg-surface-container-high active:scale-95 transition-all flex items-center justify-center gap-2"
+                  className="min-h-11 py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl bg-surface-container text-on-surface font-bold text-xs sm:text-sm border border-outline-variant/40 hover:bg-surface-container-high active:scale-95 transition-all flex items-center justify-center gap-2 text-center leading-tight"
                 >
-                  <Icon name="login" className="text-[18px]" />
+                  <Icon name="login" className="text-[18px] shrink-0" />
                   <span>Connexion Manuelle</span>
                 </Link>
               </div>
@@ -230,21 +230,21 @@ export default function WalletPage() {
               </section>
 
               {/* Action Buttons */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2 sm:gap-3">
                 <button
                   type="button"
                   onClick={() => setIsWithdrawOpen(true)}
-                  className="py-3 px-4 rounded-xl bg-primary text-on-primary font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md hover:bg-primary/90 active:scale-98 transition-all"
+                  className="min-h-11 py-2 sm:py-3 px-2 sm:px-4 rounded-xl bg-primary text-on-primary font-bold text-[11px] sm:text-xs md:text-sm flex items-center justify-center gap-1.5 sm:gap-2 shadow-md hover:bg-primary/90 active:scale-98 transition-all text-center leading-tight"
                 >
-                  <Icon name="payments" className="text-[18px]" />
-                  <span>Retirer des gains</span>
+                  <Icon name="payments" className="text-[17px] shrink-0" />
+                  <span className="truncate sm:whitespace-normal">Retirer des gains</span>
                 </button>
                 <Link
                   href="/publier"
-                  className="py-3 px-4 rounded-xl bg-surface-container text-on-surface font-bold text-xs sm:text-sm border-2 border-outline-variant/40 flex items-center justify-center gap-2 hover:bg-surface-container-high active:scale-98 transition-all"
+                  className="min-h-11 py-2 sm:py-3 px-2 sm:px-4 rounded-xl bg-surface-container text-on-surface font-bold text-[11px] sm:text-xs md:text-sm border-2 border-outline-variant/40 flex items-center justify-center gap-1.5 sm:gap-2 hover:bg-surface-container-high active:scale-98 transition-all text-center leading-tight"
                 >
-                  <Icon name="add_circle" className="text-[18px]" />
-                  <span>Publier un cours</span>
+                  <Icon name="add_circle" className="text-[17px] text-primary shrink-0" />
+                  <span className="truncate sm:whitespace-normal">Publier un cours</span>
                 </Link>
               </div>
 

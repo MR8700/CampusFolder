@@ -17,15 +17,30 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* TYPOGRAPHIE NATURELLE ET LISIBLE (MOBILE-FIRST) */
+  /* TYPOGRAPHIE NATURELLE ET LISIBLE (AUCUN TEXTE JUSTIFIÉ) */
   p {
     margin: 0;
     line-height: 1.5;
     text-align: left;
   }
 
-  /* Préservation de l'alignement et de la lisibilité des boutons et composants */
+  /* ADAPTATION INTELLIGENTE DES TEXTES AUX BOUTONS & COMPOSANTS */
   button, 
+  .btn,
+  [role="button"] {
+    text-align: center;
+    line-height: 1.25;
+    text-justify: none !important;
+  }
+
+  button span,
+  .btn span {
+    display: inline-block;
+    max-width: 100%;
+    line-height: inherit;
+    text-align: inherit;
+  }
+
   nav,
   .badge,
   .btn-text,
@@ -43,18 +58,18 @@
   }
 }
 
-/* Classes utilitaires académiques optionnelles (réservées aux documents rédigés) */
-.text-justified-academic {
-  text-align: left;
-  line-height: 1.6;
+/* RÈGLE ABSOLUE : STRICTEMENT AUCUN TEXTE JUSTIFIÉ SUR TOUTE LA PLATEFORME */
+*, *::before, *::after {
+  text-justify: none !important;
 }
 
-@media (min-width: 640px) {
-  .text-justified-academic {
-    text-align: justify;
-    text-justify: inter-word;
-    line-height: 1.7;
-  }
+[class*="text-justify"],
+.text-justify,
+.text-justified,
+.text-justified-academic {
+  text-align: left !important;
+  text-justify: none !important;
+  line-height: 1.6;
 }
 
 .interligne-2 {

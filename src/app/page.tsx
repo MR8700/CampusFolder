@@ -404,7 +404,7 @@ export default function HomeFeedPage() {
                           else if (isInPerson) router.push(`/ressources/${res.slug}`);
                           else router.push(`/lecteur/CF-8921-UJKZ-SSL`);
                         }}
-                        className={`h-9 px-3 rounded-lg font-label-sm text-label-sm flex items-center gap-1 shadow-sm active:scale-95 transition-transform ${
+                        className={`min-h-9 py-1 px-2.5 sm:px-3 rounded-lg font-label-sm text-[11px] sm:text-xs flex items-center justify-center gap-1 shadow-sm active:scale-95 transition-transform shrink-0 font-bold text-center leading-tight ${
                           isPaid
                             ? 'bg-secondary text-on-secondary'
                             : isInPerson
@@ -412,8 +412,8 @@ export default function HomeFeedPage() {
                             : 'bg-primary-container text-on-primary'
                         }`}
                       >
-                        <Icon name={isPaid ? 'lock_open' : isInPerson ? 'chat' : 'download'} size={16} />
-                        <span>
+                        <Icon name={isPaid ? 'lock_open' : isInPerson ? 'chat' : 'download'} size={15} className="shrink-0" />
+                        <span className="truncate max-w-full text-center">
                           {isPaid ? 'Débloquer' : isInPerson ? 'WhatsApp' : '1-Clic'}
                         </span>
                       </button>
@@ -572,10 +572,10 @@ export default function HomeFeedPage() {
                             if (isPaid) router.push(`/paiement?resourceId=${item.id}`);
                             else router.push(`/lecteur/CF-8921-UJKZ-SSL`);
                           }}
-                          className="h-8 px-3 rounded-lg bg-primary-container text-on-primary font-label-sm text-[11px] flex items-center gap-1 shadow-sm active:scale-95 transition-transform font-bold"
+                          className="min-h-8 py-1 px-2.5 sm:px-3 rounded-lg bg-primary-container text-on-primary font-label-sm text-[11px] flex items-center justify-center gap-1 shadow-sm active:scale-95 transition-transform font-bold shrink-0 text-center leading-tight"
                         >
-                          <Icon name={isPaid ? 'shopping_bag' : 'play_arrow'} size={15} />
-                          <span>{isPaid ? 'Acheter' : 'Consulter'}</span>
+                          <Icon name={isPaid ? 'shopping_bag' : 'play_arrow'} size={15} className="shrink-0" />
+                          <span className="truncate max-w-full text-center">{isPaid ? 'Acheter' : 'Consulter'}</span>
                         </button>
                       </div>
                     </div>

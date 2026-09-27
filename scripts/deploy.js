@@ -1,51 +1,40 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const { detectAndConfigureDatabase } = require('./prepare-prisma');
 
-console.log('--- CampusFolder Automated Deployment ---');
+console.log('--- CampusFolder Automated Production Deployment ---');
 
-// 1. Resolve connection strings from Vercel / Supabase environment variables
-const pooledUrl =
-  process.env.DATABASE_URL ||
-  process.env.POSTGRES_PRISMA_URL ||
-  process.env.POSTGRES_URL;
+// 1. Automatically adapt schema and generate correct Prisma Client (PostgreSQL vs SQLite)
+detectAndConfigureDatabase();
 
-const directUrl =
-  process.env.DIRECT_URL ||
-  process.env.POSTGRES_URL_NON_POOLING ||
-  pooledUrl;
+const isPostgres =
+  Boolean(process.env.DATABASE_URL && (process.env.DATABASE_URL.startsWith('postgres://') || process.env.DATABASE_URL.startsWith('postgresql://'))) ||
+  Boolean(process.env.DIRECT_URL && (process.env.DIRECT_URL.startsWith('postgres://') || process.env.DIRECT_URL.startsWith('postgresql://')));
 
-// For schema changes and index creation, direct connection is optimal
-const migrationUrl = directUrl || pooledUrl;
+const migrationUrl = process.env.DIRECT_URL || process.env.DATABASE_URL;
 
-if (migrationUrl) {
-  console.log('✅ Database connection detected.');
+if (isPostgres && migrationUrl) {
+  console.log('🐘 PostgreSQL production database target detected.');
 
-  // Ensure .env has DATABASE_URL for Prisma CLI
-  const envPath = path.join(process.cwd(), '.env');
-  let envContent = fs.existsSync(envPath) ? fs.readFileSync(envPath, 'utf8') : '';
-
-  if (!envContent.includes('DATABASE_URL=')) {
-    envContent += `\nDATABASE_URL="${migrationUrl}"\n`;
-  } else {
-    envContent = envContent.replace(/DATABASE_URL=.*/g, `DATABASE_URL="${migrationUrl}"`);
-  }
-  fs.writeFileSync(envPath, envContent);
-
-  // 2. Automate schema and index creation
+  // 2. Synchronize schema & 25+ indexes with PostgreSQL database
   try {
-    console.log('🚀 Synchronizing Prisma schema and 25+ indexes with database...');
-    execSync('npx prisma db push --skip-generate', {
+    console.log('🚀 Synchronizing Prisma schema and indexes with PostgreSQL...');
+    execSync('npx prisma db push --skip-generate --accept-data-loss', {
       stdio: 'inherit',
       env: {
         ...process.env,
         DATABASE_URL: migrationUrl,
       },
     });
-    console.log('✅ Database schema and indexes synchronized successfully!');
+    console.log('✅ PostgreSQL schema and indexes synchronized successfully!');
+  } catch (error) {
+    console.warn('⚠️ Warning during PostgreSQL schema push (continuing build):', error.message);
+  }
 
-    // Seed/Update production referentials, real Super Admin and Burkina resources
-    console.log('🌱 Synchronizing real production actors, universities and publications...');
+  // 3. Seed referentials, Super Admin, and academic resources
+  try {
+    console.log('🌱 Synchronizing real actors, Burkina institutions, and resources...');
     execSync('node prisma/seed.js', {
       stdio: 'inherit',
       env: {
@@ -53,16 +42,43 @@ if (migrationUrl) {
         DATABASE_URL: migrationUrl,
       },
     });
-    console.log('✅ Production database fully seeded with real data!');
-  } catch (error) {
-    console.warn('⚠️ Warning during db push/seed (continuing build):', error.message);
+    console.log('✅ Database seeding completed successfully!');
+  } catch (seedErr) {
+    console.warn('⚠️ Warning during database seed (continuing build):', seedErr.message);
   }
 } else {
-  console.warn('⚠️ Warning: No database connection found in environment variables.');
-  console.warn('   (DATABASE_URL, POSTGRES_PRISMA_URL, or POSTGRES_URL).');
-  console.warn('   Please connect Supabase in your Vercel project Storage/Integrations.');
+  console.log('📁 SQLite target detected.');
+  const isVercel = process.env.VERCEL === '1' || Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME);
+
+  if (isVercel) {
+    console.log('☁️ Vercel serverless environment detected. Initializing SQLite in /tmp/dev.db...');
+    try {
+      execSync('npx prisma db push --skip-generate --accept-data-loss', {
+        stdio: 'inherit',
+        env: {
+          ...process.env,
+          DATABASE_URL: 'file:/tmp/dev.db',
+        },
+      });
+      execSync('node prisma/seed.js', {
+        stdio: 'inherit',
+        env: {
+          ...process.env,
+          DATABASE_URL: 'file:/tmp/dev.db',
+        },
+      });
+      console.log('✅ /tmp/dev.db ready for serverless build.');
+    } catch (e) {
+      console.warn('⚠️ Notice during serverless SQLite setup:', e.message);
+    }
+  } else {
+    console.log('💻 Local development environment detected.');
+  }
 }
 
-// 3. Build Next.js
+// 4. Build Next.js 15 application
 console.log('🏗️ Building Next.js 15 application...');
-execSync('npx next build', { stdio: 'inherit', env: process.env });
+execSync('npx next build', {
+  stdio: 'inherit',
+  env: process.env,
+});

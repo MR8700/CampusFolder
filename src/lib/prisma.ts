@@ -4,6 +4,13 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
+if (!process.env.DATABASE_URL) {
+  process.env.DATABASE_URL =
+    process.env.POSTGRES_PRISMA_URL ||
+    process.env.POSTGRES_URL ||
+    (process.env.VERCEL ? 'file:/tmp/dev.db' : 'file:./dev.db');
+}
+
 export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
